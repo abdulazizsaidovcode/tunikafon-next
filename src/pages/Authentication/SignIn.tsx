@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
 import useLogin from '../../hooks/useLogin';
 
 const SignIn: React.FC = () => {
   const [val, setVal] = useState({ phoneNumber: '', password: '' });
-  const { data, login, isLoading } = useLogin();
+  const { error, login, isLoading } = useLogin();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login(val.phoneNumber, val.password);
-    console.log(val.phoneNumber, val.password);
   };
 
   return (

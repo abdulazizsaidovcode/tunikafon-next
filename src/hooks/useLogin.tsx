@@ -9,9 +9,13 @@ const useLogin = () => {
   const login = async (phoneNumber: string, password: string) => {
     setIsLoading(true);
     try {
-      const { data } = await axios.post('/auth/login', { phoneNumber, password });
+      const { data } = await axios.post('/auth/login', {
+        phoneNumber,
+        password,
+      });
       setData(data);
       localStorage.setItem('token', data.body);
+      window.location.pathname = '/';
     } catch (error) {
       setError(error);
     } finally {

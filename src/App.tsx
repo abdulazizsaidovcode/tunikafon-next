@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (token) navigate('/');
-    else navigate('login');
+    else navigate('/login');
   }, [pathname]);
 
   useEffect(() => {
@@ -141,15 +141,6 @@ function App() {
               <>
                 <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                 <SignIn />
-              </>
-            }
-          />
-          <Route
-            path="/auth/signup"
-            element={
-              <>
-                <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                <SignUp />
               </>
             }
           />
