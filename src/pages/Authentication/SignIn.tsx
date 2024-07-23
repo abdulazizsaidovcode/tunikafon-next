@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
 import useLogin from '../../hooks/useLogin';
+import toast from 'react-hot-toast';
 
 const SignIn: React.FC = () => {
   const [val, setVal] = useState({ phoneNumber: '', password: '' });
@@ -11,6 +12,14 @@ const SignIn: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login(val.phoneNumber, val.password);
+
+    toast.promise(error, {
+      loading: 'Loading...',
+      success: () => {
+        return `Succses`;
+      },
+      error: error.response.data.error,
+    });
   };
 
   return (
