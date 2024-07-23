@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -249,6 +249,15 @@ module.exports = {
         'spin-3': 'spin 3s linear infinite',
       },
     },
+    animation: {
+      animate: 'animate 0.4s linear',
+    },
+    keyframes: {
+      animate: {
+        '0%': { transform: 'translateY(20%)' },
+        '100%': { transform: 'translateY(0%)' },
+      },
+    },
   },
   plugins: [],
-}
+};
