@@ -44,12 +44,12 @@ const DetailCategory = () => {
 
       await post(`/attachment/upload`, formData);
 
-      if (postData) {
+      if (postData.body) {
         console.log('Hello');
 
         await post(`/detail-category`, {
           name: name,
-          attachmentId: postData,
+          attachmentId: postData.body,
         });
       }
       get('/detail-category/list');

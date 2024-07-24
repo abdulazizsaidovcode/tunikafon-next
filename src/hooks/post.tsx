@@ -11,7 +11,7 @@ const usePost = () => {
     try {
       const { data } = await axios.post(url, postData);
       if (data.success) {
-        setData(data.body);
+        setData(data);
       } else {
         setError(new Error('Error fetching'));
       }
