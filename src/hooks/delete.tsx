@@ -1,19 +1,19 @@
 import axios from '../service/api';
 import { useState } from 'react';
 
-const usePut = () => {
+const useDelete = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
 
-  const put = async (url: string, id: string, updateData: {}) => {
+  const remove = async (url: string, id: string) => {
     setIsLoading(true);
-    try {   
-      const { data } = await axios.put(`${url}/${id}`, updateData);
+    try {
+      const { data } = await axios.delete(`${url}/${id}`);
       if (data.success) {
         setData(data);
       } else {
-        setError('Feild to Fetch');
+        setError('Feild to fetch');
       }
     } catch (error) {
       setError(error);
@@ -22,7 +22,7 @@ const usePut = () => {
     }
   };
 
-  return { data, error, isLoading, put };
+  return { data, isLoading, error, remove };
 };
 
-export default usePut;
+export default useDelete;
