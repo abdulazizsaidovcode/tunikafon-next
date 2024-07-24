@@ -120,7 +120,6 @@ const DetailCategory = () => {
           setDeleteId={setDeleteId}
         />
       </div>
-      <AddModal isModal={toggle} onClose={toggleModal} />
       <DeleteModal
         isModal={deleteModal}
         onClose={deleteToggleModal}
