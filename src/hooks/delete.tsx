@@ -6,7 +6,7 @@ const useDelete = () => {
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
 
-  const remove = async (url: string, id: string) => {
+  const remove = async (url: string, id: any) => {
     setIsLoading(true);
     try {
       const { data } = await axios.delete(`${url}/${id}`);

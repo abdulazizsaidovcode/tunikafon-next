@@ -12,19 +12,26 @@ interface DataType {
 interface TableType {
   data: DataType[];
   name?: string;
-  updataData?: () => void;
-  deleteData?: () => void;
+  updataModal?: () => void;
+  deleteModal?: () => void;
   isLoading: boolean;
+  setDeleteId: (val: number) => void;
 }
 
 const Table = ({
   data,
   name,
   isLoading,
-  updataData,
-  deleteData,
+  updataModal,
+  deleteModal,
+  setDeleteId,
 }: TableType) => {
-  const [editModal, setEditModal] = useState(false);
+  // const [editModal, setEditModal] = useState(false);
+
+  const handleDelete = (id: number) => {
+    deleteModal();
+    setDeleteId(id);
+  };
 
   return (
     <>
@@ -48,53 +55,56 @@ const Table = ({
               </tr>
             </thead>
             <tbody>
-              {data && data.length ? (
-                data.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                  >
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {item.id}
-                    </th>
-                    <td className="px-6 py-4">
-                      <img
-                        className="w-20 h-20 rounded-full"
-                        src={attechment + item.attachmentId}
-                        alt=""
-                      />
-                    </td>
-                    <td className="px-6 py-4">{item.name}</td>
-                    <td className="px-6">
-                      <div
-                        onClick={() => setEditModal(!editModal)}
-                        className="cursor-pointer"
-                      >
-                        <FaRegEdit size={25} className="text-green-500" />
-                      </div>
-                    </td>
-                    <td className="px-6">
-                      <div className="cursor-pointer">
-                        <RiDeleteBinLine size={25} className="text-red-500" />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <td className="px-6">
-                    <FaRegFolderOpen size={50} />
-                  </td>
+              {isLoading && (
+                <tr className="px-6 py-4">
+                  <div className="w-10 h-10 animate-spin rounded-full border-4 border-white border-dotted" />
                 </tr>
               )}
+              {data && data.length
+                ? data.map((item, i) => (
+                    <tr
+                      key={item.id}
+                      className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    >
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {i + 1}
+                      </th>
+                      <td className="px-6 py-4">
+                        <img
+                          className="w-20 h-20 rounded-full object-cover"
+                          src={attechment + item.attachmentId}
+                          alt=""
+                        />
+                      </td>
+                      <td className="px-6 py-4">{item.name}</td>
+                      <td className="px-6">
+                        <button onClick={updataModal}>
+                          <FaRegEdit size={25} className="text-green-500" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="ml-5"
+                        >
+                          <RiDeleteBinLine size={25} className="text-red-500" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                : !isLoading && (
+                    <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      <td className="px-6">
+                        <FaRegFolderOpen size={50} />
+                      </td>
+                    </tr>
+                  )}
             </tbody>
           </table>
         </div>
       </div>
-      <GlobalModal
+      {/* <GlobalModal
         isOpen={editModal}
         onClose={() => setEditModal(false)}
         children={
@@ -127,7 +137,7 @@ const Table = ({
             </div>
           </div>
         }
-      />
+      /> */}
     </>
   );
 };

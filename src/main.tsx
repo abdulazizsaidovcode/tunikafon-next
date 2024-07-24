@@ -5,7 +5,7 @@ import App from './App';
 import './css/style.css';
 import './css/satoshi.css';
 import 'flatpickr/dist/flatpickr.min.css';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from 'sonner';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
