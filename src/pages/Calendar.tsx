@@ -7,6 +7,7 @@ import axios from '../service/api';
 import { attechment } from '../service/urls';
 import EditModal from '../components/modal/CatygoryEditmodal';
 import deleteModal from '../components/modal/deleteModal';
+import useGet from '../hooks/get';
 
 interface Item {
   id: number;
@@ -17,8 +18,9 @@ interface Item {
 const Category = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
-  const [category, setCategory] = useState<Item[]>([]);
+  // const [category, setCategory] = useState<Item[]>([]);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const { data, get, isLoading, error } = useGet();
 
   const toggleModal = () => setToggle(!toggle);
 
@@ -32,18 +34,8 @@ const Category = () => {
     setSelectedItem(null);
   };
 
-  const getCategories = async () => {
-    try {
-      const { data } = await axios.get(`/category/list?page=0&size=10`);
-      setCategory(data.body.object);
-      console.log(data.body);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
-
   useEffect(() => {
-    getCategories();
+    get('/category/list');
   }, []);
 
   return (
@@ -78,8 +70,9 @@ const Category = () => {
             </tr>
           </thead>
           <tbody>
-            {category.length ? (
-              category.map((item) => (
+            
+            {data && data.object.length ? (
+              data.object.map((item:Item, i: number) => (
                 <tr
                   key={item.id}
                   className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -88,29 +81,31 @@ const Category = () => {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {item.id}
+                    {i + 1}
                   </th>
                   <td className="px-6 py-4">
                     <img
                       src={attechment + item.attachmentId}
                       alt="Img not found"
-                      className="w-20 h-20"
+                      className="w-20 h-20 rounded-full bg-cover object-cover"
                     />
                   </td>
                   <td className="px-6 py-4">{item.name}</td>
-                  <td className="px-6">
-                    <div
+                  <td className="px-6  align-middle">
+                    <button
                       onClick={() => handleEditClick(item)}
                       className="cursor-pointer"
                     >
-                      <FaRegEdit size={25} className="text-green-500" />
-                    </div>
-                  </td>
-                  <td className="px-6">
-                    <button onClick={() => deleteModal()} className="cursor-pointer">
+                      <FaRegEdit size={25} className="text-green-500 mr-2" />
+                    </button>
+                    <button
+                      onClick={() => deleteModal()}
+                      className="cursor-pointer"
+                    >
                       <RiDeleteBinLine size={25} className="text-red-500" />
                     </button>
                   </td>
+                  <td className="px-6"></td>
                 </tr>
               ))
             ) : (
@@ -126,7 +121,7 @@ const Category = () => {
       <AddModal isModal={toggle} onClose={toggleModal} />
       {editModal && selectedItem && (
         <EditModal
-          getting={getCategories}
+          getting={() => get('/category/list')}
           isModal={editModal}
           onClose={handleCloseEditModal}
           item={selectedItem}
