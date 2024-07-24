@@ -6,18 +6,12 @@ const usePut = () => {
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
 
-  const put = async (
-    url: string,
-    id: string,
-    updateData: {},
-    getFunction: () => void,
-  ) => {
+  const put = async (url: string, id: string, updateData: {}) => {
     setIsLoading(true);
-    try {   
+    try {
       const { data } = await axios.put(`${url}/${id}`, updateData);
       if (data.success) {
         setData(data);
-        getFunction();
       } else {
         setError('Feild to Fetch');
       }

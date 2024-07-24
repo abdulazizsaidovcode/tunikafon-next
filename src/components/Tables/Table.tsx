@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { FaRegEdit, FaRegFolderOpen } from 'react-icons/fa';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import GlobalModal from '../modal';
 import { attechment } from '../../service/urls';
 
 interface DataType {
@@ -16,6 +14,7 @@ interface TableType {
   deleteModal?: () => void;
   isLoading: boolean;
   setDeleteId: (val: number) => void;
+  setUpdate: (val: number) => void;
 }
 
 const Table = ({
@@ -25,12 +24,18 @@ const Table = ({
   updataModal,
   deleteModal,
   setDeleteId,
+  setUpdate,
 }: TableType) => {
   // const [editModal, setEditModal] = useState(false);
 
   const handleDelete = (id: number) => {
     deleteModal();
     setDeleteId(id);
+  };
+
+  const handleEdit = (data: any) => {
+    updataModal();
+    setUpdate(data);
   };
 
   return (
@@ -81,7 +86,7 @@ const Table = ({
                       </td>
                       <td className="px-6 py-4">{item.name}</td>
                       <td className="px-6">
-                        <button onClick={updataModal}>
+                        <button onClick={() => handleEdit(item)}>
                           <FaRegEdit size={25} className="text-green-500" />
                         </button>
                         <button

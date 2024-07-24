@@ -1,4 +1,4 @@
-import { HtmlHTMLAttributes, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import Table from '../components/Tables/Table';
 import AddModal from '../components/modal/add-modal';
@@ -8,22 +8,23 @@ import useDelete from '../hooks/delete';
 import { toast } from 'sonner';
 import GlobalModal from '../components/modal';
 import Input from '../components/inputs/input';
+import usePut from '../hooks/put';
 import usePost from '../hooks/post';
 
 const DetailCategory = () => {
   // custom hooks
   const { data, get, isLoading } = useGet();
-  const { data: editData, remove } = useDelete();
-  const { data: postData, isLoading: postIsLoading, post } = usePost();
-  //
+  const { data: removeData, remove } = useDelete();
+  const { isLoading: putIsLoading, put } = usePut();
+  const { data: postData, post, isLoading: postIsLoading } = usePost();
+
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number>();
+  const [update, setUpdate] = useState<any>();
   const [file, setFile] = useState<any>();
-  const [val, setVal] = useState({
-    name: '',
-    attachmentId: 0,
-  });
+  const [val, setVal] = useState<string>();
+  const [name, setName] = useState<string>();
   const [editModal, setEditModal] = useState(false);
 
   const toggleModal = () => setToggle(!toggle);
@@ -36,27 +37,60 @@ const DetailCategory = () => {
     }
   };
 
-  const handleEdit = async () => {
+  const addDetailCategory = async () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      post('/attachment/upload', formData);
-      console.log(postData);
+
+      await post(`/attachment/upload`, formData);
+
+      await post(`/detail-category`, {
+        name: val,
+        attachmentId: postData.body,
+      });
+      toast.success('Succsesfully added');
+    } catch (error) {
+      toast.error('Error');
+      console.log(error);
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      if (update) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        if (formData.has('file')) {
+          await put(`/attachment`, update.attachmentId, formData);
+        }
+
+        await put(`/detail-category`, update.id, {
+          name: val,
+          attachmentId: update.attachmentId,
+        });
+
+        editToggleModal();
+        get('/detail-category/list');
+        toast.success('Successfully updated');
+      }
     } catch (error) {
       toast.error('Error');
     }
   };
 
-  const handleDelete = () => {
-    remove('/detail-category', deleteId);
-    get('/detail-category/list');
-    deleteToggleModal();
-    toast.success('Succsesfuly deleted');
+  const handleDelete = async () => {
+    if (deleteId) {
+      await remove(`/detail-category`, deleteId);
+      get('/detail-category/list');
+      deleteToggleModal();
+      toast.success('Successfully deleted');
+    }
   };
 
   useEffect(() => {
     get('/detail-category/list');
-  }, [editData, deleteModal]);
+  }, [removeData, deleteModal, editModal]);
 
   return (
     <>
@@ -64,15 +98,16 @@ const DetailCategory = () => {
 
       <button
         onClick={toggleModal}
-        className="rounded-lg shadow my-5 bg-gary-600 dark:bg-boxdark px-5 py-2"
+        className="rounded-lg shadow my-5 bg-gray-600 dark:bg-boxdark px-5 py-2"
       >
         Add
       </button>
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <Table
+          setUpdate={setUpdate}
           updataModal={editToggleModal}
           deleteModal={deleteToggleModal}
-          data={data && data.object}
+          data={data?.object}
           isLoading={isLoading}
           setDeleteId={setDeleteId}
         />
@@ -83,17 +118,77 @@ const DetailCategory = () => {
         onClose={deleteToggleModal}
         onConfirm={handleDelete}
       />
+      <GlobalModal isOpen={editModal} onClose={editToggleModal}>
+        <div>
+          <Input label="Image" type="file" onChange={handleImageChange} />
+          <div>
+            <label className="block mb-2">Name</label>
+            <input
+              value={val}
+              onChange={(e) => setVal(e.target.value)}
+              className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
+            />
+          </div>
+          <div className="flex justify-between">
+            <button
+              onClick={editToggleModal}
+              className="rounded-lg px-4 py-2 bg-graydark text-white"
+            >
+              Close
+            </button>
+            <button
+              disabled={putIsLoading}
+              onClick={handleEdit}
+              className="rounded-lg px-4 py-2 bg-green-500 text-white"
+            >
+              {postIsLoading ? 'Loading...' : 'Edit'}
+            </button>
+          </div>
+        </div>
+      </GlobalModal>
       <GlobalModal
-        isOpen={editModal}
-        onClose={editToggleModal}
+        isOpen={toggle}
+        onClose={toggleModal}
         children={
           <div>
-            <Input type="file" onChange={handleImageChange} />
-            <Input
-              label="Name"
-              value={val.name}
-              onChange={(e) => setVal({ ...val, name: e.target.value })}
-            />
+            <div>
+              <div>
+                <label className="text-lg font-medium my-2" htmlFor="photo">
+                  Choice photo
+                </label>
+                <input
+                  onChange={handleImageChange}
+                  className="mt-2"
+                  id="photo"
+                  type="file"
+                />
+              </div>
+              <div className="mt-5">
+                <label className="text-lg font-medium" htmlFor="photo">
+                  Enter your Name
+                </label>
+                <input
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div className="w-full flex justify-between">
+              <button
+                onClick={toggleModal}
+                className="rounded-lg px-3 py-2 bg-graydark"
+              >
+                Close
+              </button>
+              <button
+                disabled={postIsLoading}
+                onClick={addDetailCategory}
+                className="rounded-lg px-3 py-2 bg-green-500 text-white"
+              >
+                {postIsLoading ? 'Loading...' : 'Save'}
+              </button>
+            </div>
           </div>
         }
       />

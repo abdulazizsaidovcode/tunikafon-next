@@ -19,9 +19,14 @@ interface EditModalProps {
   getting: () => void;
 }
 
-const EditModal: React.FC<EditModalProps> = ({ isModal,  onClose, item,  getting,}) => {
+const EditModal: React.FC<EditModalProps> = ({
+  isModal,
+  onClose,
+  item,
+  getting,
+}) => {
   const [name, setName] = useState<string>(item.name);
-  const [attachmentId, setAttachmentId] = useState<string | number>( item.attachmentId,  );
+  const [attachmentId, setAttachmentId] = useState<number>(item.attachmentId);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { data, isLoading, error, put } = usePut();
 
@@ -42,15 +47,15 @@ const EditModal: React.FC<EditModalProps> = ({ isModal,  onClose, item,  getting
         const formData = new FormData();
         formData.append('file', imageFile);
         const { data } = await axios.post('/attachment/upload', formData);
-        newAttachmentId = data.body;  
+        newAttachmentId = data.body;
       }
 
       const updatedItem = {
         name,
         attachmentId: newAttachmentId,
       };
-      put('/category', item.id, updatedItem, getting());
-      toast.success('success edited')
+      put('/category', item.id, updatedItem);
+      toast.success('success edited');
       getting();
       onClose();
     } catch (error) {
@@ -64,7 +69,7 @@ const EditModal: React.FC<EditModalProps> = ({ isModal,  onClose, item,  getting
         isOpen={isModal}
         onClose={onClose}
         children={
-          <div className=''>
+          <div className="">
             <h2 className="text-xl mb-4">Edit Category</h2>
             {error && <p className="text-red-500 mb-4">{error}</p>}
             <label className="block mb-2">Name</label>
