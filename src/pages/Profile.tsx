@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import Table from '../components/Tables/Table';
 import AddModal from '../components/modal/add-modal';
+import useGet from '../hooks/get';
 
 const DetailCategory = () => {
   const [toggle, setToggle] = useState(false);
+  const { data, get, isLoading } = useGet();
+
+  useEffect(() => {
+    get('/detail-category/list');
+  }, []);
 
   const toggleModal = () => setToggle(!toggle);
   return (
@@ -18,7 +24,7 @@ const DetailCategory = () => {
         Add
       </button>
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <Table />
+        <Table data={data && data.object} isLoading={isLoading} />
       </div>
       <AddModal isModal={toggle} onClose={toggleModal} />
     </>

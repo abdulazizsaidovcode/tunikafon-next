@@ -2,15 +2,28 @@ import { useState } from 'react';
 import { FaRegEdit, FaRegFolderOpen } from 'react-icons/fa';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import GlobalModal from '../modal';
+import { attechment } from '../../service/urls';
 
+interface DataType {
+  id: number;
+  name: string;
+  attachmentId: number;
+}
 interface TableType {
-  data: [];
+  data: DataType[];
   name?: string;
   updataData?: () => void;
   deleteData?: () => void;
+  isLoading: boolean;
 }
 
-const Table = ({ data, name, updataData, deleteData }: TableType) => {
+const Table = ({
+  data,
+  name,
+  isLoading,
+  updataData,
+  deleteData,
+}: TableType) => {
   const [editModal, setEditModal] = useState(false);
 
   return (
@@ -37,14 +50,23 @@ const Table = ({ data, name, updataData, deleteData }: TableType) => {
             <tbody>
               {data && data.length ? (
                 data.map((item) => (
-                  <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr
+                    key={item.id}
+                    className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  >
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {item.id}
                     </th>
-                    <td className="px-6 py-4">{item.attechment}</td>
+                    <td className="px-6 py-4">
+                      <img
+                        className="w-20 h-20 rounded-full"
+                        src={attechment + item.attachmentId}
+                        alt=""
+                      />
+                    </td>
                     <td className="px-6 py-4">{item.name}</td>
                     <td className="px-6">
                       <div
