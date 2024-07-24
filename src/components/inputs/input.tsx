@@ -4,7 +4,7 @@ interface InputType {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   label?: string;
-  value?: string; 
+  value?: string;
 }
 
 const Input: React.FC<InputType> = ({
@@ -20,7 +20,7 @@ const Input: React.FC<InputType> = ({
         type={type}
         value={value}
         onChange={onChange}
-        className="mb-4 w-full p-2 border rounded"
+        className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
       />
     </div>
   );
