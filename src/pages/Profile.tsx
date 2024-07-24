@@ -61,6 +61,7 @@ const DetailCategory = () => {
   };
 
   const handleEdit = async () => {
+    setVal(update.name);
     try {
       if (update) {
         const formData = new FormData();
@@ -81,6 +82,8 @@ const DetailCategory = () => {
       }
     } catch (error) {
       toast.error('Error');
+    } finally {
+      setVal('');
     }
   };
 
