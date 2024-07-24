@@ -40,9 +40,9 @@ const AddModal = ({ isModal, onClose, onConfirm, name }: ModalType) => {
             </button>
             <button
               onClick={onConfirm}
-              className="rounded-lg px-3 py-2 bg-red-500"
+              className="rounded-lg px-3 py-2 bg-green-500 text-white"
             >
-              Delete
+              Save
             </button>
           </div>
         </div>

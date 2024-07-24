@@ -6,8 +6,9 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import axios from '../service/api';
 import { attechment } from '../service/urls';
 import EditModal from '../components/modal/CatygoryEditmodal';
-import deleteModal from '../components/modal/deleteModal';
+import DeleteModal from '../components/modal/deleteModal'; // Ensure you import the delete modal
 import useGet from '../hooks/get';
+import { toast } from 'sonner';
 
 interface Item {
   id: number;
@@ -18,7 +19,7 @@ interface Item {
 const Category = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
-  // const [category, setCategory] = useState<Item[]>([]);
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const { data, get, isLoading, error } = useGet();
 
@@ -32,6 +33,29 @@ const Category = () => {
   const handleCloseEditModal = () => {
     setEditModal(false);
     setSelectedItem(null);
+  };
+
+  const handleDeleteClick = (item: Item) => {
+    setSelectedItem(item);
+    setDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModal(false);
+    setSelectedItem(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedItem) {
+      try {
+        await axios.delete(`/category/${selectedItem.id}`);
+        get('/category/list');
+        toast.success('Category deleted')
+      } catch (e) {
+        toast.error('Failed to delete item:');
+      }
+      handleCloseDeleteModal();
+    }
   };
 
   useEffect(() => {
@@ -70,9 +94,9 @@ const Category = () => {
             </tr>
           </thead>
           <tbody>
-            
+            {isLoading && <div>Loading...</div>}
             {data && data.object.length ? (
-              data.object.map((item:Item, i: number) => (
+              data.object.map((item: Item, i: number) => (
                 <tr
                   key={item.id}
                   className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -91,7 +115,7 @@ const Category = () => {
                     />
                   </td>
                   <td className="px-6 py-4">{item.name}</td>
-                  <td className="px-6  align-middle">
+                  <td className="px-6 align-middle">
                     <button
                       onClick={() => handleEditClick(item)}
                       className="cursor-pointer"
@@ -99,7 +123,7 @@ const Category = () => {
                       <FaRegEdit size={25} className="text-green-500 mr-2" />
                     </button>
                     <button
-                      onClick={() => deleteModal()}
+                      onClick={() => handleDeleteClick(item)}
                       className="cursor-pointer"
                     >
                       <RiDeleteBinLine size={25} className="text-red-500" />
@@ -109,21 +133,29 @@ const Category = () => {
                 </tr>
               ))
             ) : (
-              <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="px-6 text-center" colSpan={5}>
-                  <FaRegFolderOpen size={50} />
-                </td>
-              </tr>
+              ''
             )}
           </tbody>
         </table>
       </div>
-      <AddModal isModal={toggle} onClose={toggleModal} />
+
+      <AddModal 
+        isModal={toggle} 
+        onClose={toggleModal}
+      />
       {editModal && selectedItem && (
         <EditModal
           getting={() => get('/category/list')}
           isModal={editModal}
           onClose={handleCloseEditModal}
+          item={selectedItem}
+        />
+      )}
+      {deleteModal && selectedItem && (
+        <DeleteModal
+          isModal={deleteModal}
+          onClose={handleCloseDeleteModal}
+          onConfirm={handleConfirmDelete}
           item={selectedItem}
         />
       )}

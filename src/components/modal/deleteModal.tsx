@@ -6,6 +6,7 @@ interface ModalType {
   onConfirm?: () => void;
 }
 
+
 const deleteModal = ({ isModal, onClose, onConfirm }: ModalType) => {
   return (
     <GlobalModal
