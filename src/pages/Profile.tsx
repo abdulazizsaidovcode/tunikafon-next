@@ -44,14 +44,19 @@ const DetailCategory = () => {
 
       await post(`/attachment/upload`, formData);
 
-      await post(`/detail-category`, {
-        name: name,
-        attachmentId: postData.body,
-      });
+      if (postData) {
+        console.log('Hello');
+
+        await post(`/detail-category`, {
+          name: name,
+          attachmentId: postData,
+        });
+      }
+      get('/detail-category/list');
+      toggleModal();
       toast.success('Succsesfully added');
     } catch (error) {
       toast.error('Error');
-      console.log(error);
     }
   };
 
@@ -90,7 +95,7 @@ const DetailCategory = () => {
 
   useEffect(() => {
     get('/detail-category/list');
-  }, [removeData, deleteModal, editModal]);
+  }, [removeData, deleteModal, editModal, toggle]);
 
   return (
     <>
