@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { base_url } from './urls';
 
-const base_url = 'http://64.226.108.80:8090';
 
 axios.defaults.baseURL = base_url;
 

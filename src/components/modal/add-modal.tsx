@@ -12,7 +12,7 @@ const AddModal = ({ isModal, onClose, onConfirm, name }: ModalType) => {
     <GlobalModal
       isOpen={isModal}
       onClose={onClose}
-      children={
+      children  ={
         <div>
           <div>
             <div>
