@@ -1,11 +1,8 @@
 import axios from '../../service/api';
 import React, { useState } from 'react';
-// import axios from '../service/api';
-// // import { attechment } from '../service/urls';
-// import { FaRegEdit, FaRegFolderOpen } from 'react-icons/fa';
-// import { RiDeleteBinLine } from 'react-icons/ri';
 import { attechment } from '../../service/urls';
 import Input from '../inputs/input';
+import usePut from '../../hooks/put';
 
 interface Item {
   id: number;
@@ -17,18 +14,21 @@ interface EditModalProps {
   isModal: boolean;
   onClose: () => void;
   item: Item;
-  value: string;
   getting: () => void;
-  onChange: (val: string) => void;
 }
 
-const EditModal: React.FC<EditModalProps> = ({ isModal, onClose, item, getting }) => {
+const EditModal: React.FC<EditModalProps> = ({
+  isModal,
+  onClose,
+  item,
+  getting,
+}) => {
   const [name, setName] = useState<string>(item.name);
   const [attachmentId, setAttachmentId] = useState<string | number>(
     item.attachmentId,
   );
-  
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const { data, isLoading, error, put } = usePut();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -37,6 +37,10 @@ const EditModal: React.FC<EditModalProps> = ({ isModal, onClose, item, getting }
   };
 
   const handleSave = async () => {
+    if (!name || !attachmentId) {
+      return;
+    }
+
     try {
       let newAttachmentId = attachmentId;
       if (imageFile) {
@@ -45,14 +49,16 @@ const EditModal: React.FC<EditModalProps> = ({ isModal, onClose, item, getting }
         const { data } = await axios.post('/attachment/upload', formData);
         newAttachmentId = data.body;
       }
+
       const updatedItem = {
         name,
         attachmentId: newAttachmentId,
       };
 
-      await axios.put(`/category/${item.id}`, updatedItem);
-      onClose();
+      // await axios.put(`/category/${item.id}`, updatedItem);
+      put('/category', item.id, updatedItem, getting());
       getting();
+      onClose();
     } catch (error) {
       console.error('Error updating category:', error);
     }
@@ -63,6 +69,7 @@ const EditModal: React.FC<EditModalProps> = ({ isModal, onClose, item, getting }
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div className="bg-white p-5 rounded-lg shadow-lg w-1/2">
           <h2 className="text-xl mb-4">Edit Category</h2>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
           <label className="block mb-2">Name</label>
           <input
             type="text"
@@ -86,10 +93,11 @@ const EditModal: React.FC<EditModalProps> = ({ isModal, onClose, item, getting }
               Cancel
             </button>
             <button
+              disabled={isLoading}
               onClick={handleSave}
               className="px-4 py-2 bg-blue-500 text-white rounded"
             >
-              Save
+              {isLoading ? 'Loading...' : 'Save'}
             </button>
           </div>
         </div>
