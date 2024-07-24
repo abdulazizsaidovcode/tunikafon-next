@@ -6,8 +6,7 @@ interface ModalType {
   onConfirm?: () => void;
 }
 
-
-const deleteModal = ({ isModal, onClose, onConfirm }: ModalType) => {
+const DeleteModal = ({ isModal, onClose, onConfirm }: ModalType) => {
   return (
     <GlobalModal
       isOpen={isModal}
@@ -37,4 +36,4 @@ const deleteModal = ({ isModal, onClose, onConfirm }: ModalType) => {
   );
 };
 
-export default deleteModal;
+export default DeleteModal;

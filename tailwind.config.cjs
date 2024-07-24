@@ -248,14 +248,14 @@ module.exports = {
         'spin-2': 'spin 2s linear infinite',
         'spin-3': 'spin 3s linear infinite',
       },
-    },
-    animation: {
-      animate: 'animate 0.4s linear',
-    },
-    keyframes: {
-      animate: {
-        '0%': { transform: 'translateY(20%)' },
-        '100%': { transform: 'translateY(0%)' },
+      animation: {
+        animate: 'animate 0.4s linear',
+      },
+      keyframes: {
+        animate: {
+          '0%': { transform: 'translateY(20%)' },
+          '100%': { transform: 'translateY(0%)' },
+        },
       },
     },
   },
