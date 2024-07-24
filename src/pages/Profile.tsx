@@ -45,7 +45,7 @@ const DetailCategory = () => {
       await post(`/attachment/upload`, formData);
 
       await post(`/detail-category`, {
-        name: val,
+        name: name,
         attachmentId: postData.body,
       });
       toast.success('Succsesfully added');
