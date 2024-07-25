@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
 import useLogin from '../../hooks/useLogin';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const SignIn: React.FC = () => {
   const [val, setVal] = useState({ phoneNumber: '', password: '' });
-  const { error, login, isLoading } = useLogin();
+  const { error, login, isLoading, data } = useLogin();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    login(val.phoneNumber, val.password);
+    try {
+      if (!val.phoneNumber || !val.password) throw new Error();
 
-    toast.promise(error, {
-      loading: 'Loading...',
-      success: () => {
-        return `Succses`;
-      },
-      error: error.response.data.error,
-    });
+      login(val.phoneNumber, val.password);
+
+      toast.promise(data, {
+        loading: 'Loading...',
+        success: () => {
+          return `Succses`;
+        },
+        error: error.response.data.error,
+      });
+    } catch (error) {
+      toast.error('Error');
+    }
   };
 
   return (

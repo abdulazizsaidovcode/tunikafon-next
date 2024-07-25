@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import Table from '../components/Tables/Table';
-import AddModal from '../components/modal/add-modal';
 import useGet from '../hooks/get';
 import DeleteModal from '../components/modal/deleteModal';
 import useDelete from '../hooks/delete';
@@ -10,20 +9,21 @@ import GlobalModal from '../components/modal';
 import Input from '../components/inputs/input';
 import usePut from '../hooks/put';
 import usePost from '../hooks/post';
+import axios from '../service/api';
 
 const DetailCategory = () => {
   // custom hooks
   const { data, get, isLoading } = useGet();
   const { data: removeData, remove } = useDelete();
   const { isLoading: putIsLoading, put } = usePut();
-  const { data: postData, post, isLoading: postIsLoading } = usePost();
+  const { post, isLoading: postIsLoading } = usePost();
 
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number>();
   const [update, setUpdate] = useState<any>();
   const [file, setFile] = useState<any>();
-  const [val, setVal] = useState<string>();
+  const [val, setVal] = useState<string>('');
   const [name, setName] = useState<string>();
   const [editModal, setEditModal] = useState(false);
 
@@ -42,14 +42,16 @@ const DetailCategory = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      await post(`/attachment/upload`, formData);
+      if (!name?.length || !formData.has('file')) {
+        throw new Error('All feads reqired');
+      }
 
-      if (postData.body) {
-        console.log('Hello');
+      const { data } = await axios.post(`/attachment/upload`, formData);
 
+      if (data.body) {
         await post(`/detail-category`, {
           name: name,
-          attachmentId: postData.body,
+          attachmentId: data.body,
         });
       }
       get('/detail-category/list');
@@ -57,17 +59,20 @@ const DetailCategory = () => {
       toast.success('Succsesfully added');
     } catch (error) {
       toast.error('Error');
+    } finally {
+      setName('');
+      setFile(null);
     }
   };
 
   const handleEdit = async () => {
-    setVal(update.name);
     try {
-      if (update) {
-        const formData = new FormData();
-        formData.append('file', file);
+      const formData = new FormData();
+      formData.append('file', file);
 
-        if (formData.has('file')) {
+      if (val?.length === 0 || !formData.has('file')) throw new Error();
+      else if (update) {
+        if (!formData.has('file')) {
           await put(`/attachment`, update.attachmentId, formData);
         }
 
@@ -77,11 +82,12 @@ const DetailCategory = () => {
         });
 
         editToggleModal();
-        get('/detail-category/list');
+        await get('/detail-category/list');
         toast.success('Successfully updated');
       }
     } catch (error) {
       toast.error('Error');
+      console.log(error);
     } finally {
       setVal('');
     }

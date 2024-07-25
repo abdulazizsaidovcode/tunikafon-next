@@ -10,11 +10,11 @@ interface DataType {
 interface TableType {
   data: DataType[];
   name?: string;
-  updataModal?: () => void;
+  updataModal: () => void;
   deleteModal?: () => void;
   isLoading: boolean;
   setDeleteId: (val: number) => void;
-  setUpdate: (val: number) => void;
+  setUpdate?: (val: number) => void;
 }
 
 const Table = ({

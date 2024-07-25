@@ -14,8 +14,10 @@ const useLogin = () => {
         password,
       });
       setData(data);
-      localStorage.setItem('token', data.body);
-      window.location.pathname = '/';
+      if (data.success) {
+        localStorage.setItem('token', data.body);
+        window.location.pathname = '/';
+      } else throw new Error();
     } catch (error) {
       setError(error);
     } finally {
