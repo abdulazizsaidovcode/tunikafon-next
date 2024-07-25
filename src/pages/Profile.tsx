@@ -42,7 +42,7 @@ const DetailCategory = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      if (!name?.length || !formData.has('file')) {
+      if (!name?.trim().length || !formData.has('file')) {
         throw new Error('All fields required');
       }
 
@@ -70,7 +70,7 @@ const DetailCategory = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      if (val?.length === 0 || !formData.has('file')) throw new Error();
+      if (val?.trim().length === 0 || !formData.has('file')) throw new Error();
 
       if (update) {
         await put(`/attachment`, update.attachmentId, formData);
@@ -109,7 +109,7 @@ const DetailCategory = () => {
     if (update) {
       setVal(update.name);
     }
-  }, [update]);
+  }, [update, editModal]);
 
   return (
     <>

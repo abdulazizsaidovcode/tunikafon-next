@@ -12,7 +12,7 @@ const SignIn: React.FC = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     try {
-      if (!val.phoneNumber || !val.password) throw new Error();
+      if (!val.phoneNumber.trim() || !val.password.trim()) throw new Error();
 
       login(val.phoneNumber, val.password);
 

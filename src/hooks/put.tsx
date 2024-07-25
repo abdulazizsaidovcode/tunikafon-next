@@ -13,7 +13,7 @@ const usePut = () => {
       if (data.success) {
         setData(data);
       } else {
-        setError('Feild to Fetch');
+        setError(new Error());
       }
     } catch (error) {
       setError(error);

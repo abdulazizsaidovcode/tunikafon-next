@@ -9,21 +9,27 @@ import usePost from '../hooks/post';
 import { toast } from 'sonner';
 import DeleteModal from '../components/modal/deleteModal';
 import useDelete from '../hooks/delete';
+import usePut from '../hooks/put';
 
 const Employees = () => {
   const { post, isLoading: postIsloading, error } = usePost();
   const { data, isLoading, get } = useGet();
   const { remove, isLoading: deleteIsLoading } = useDelete();
+  const { put, isLoading: putIsLoading, error: putError } = usePut();
+
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState();
-  const [add, setAdd] = useState({
+  const [editModal, setEditModal] = useState(false);
+  const [edit, setEdit] = useState<any>();
+  const [all, setAll] = useState({
     fullName: '',
     phoneNumber: '',
     password: '',
   });
 
   const toggleModal = () => setToggle(!toggle);
+  const editToggleModal = () => setEditModal(!editModal);
   const deleteToggleModal = () => setDeleteModal(!deleteModal);
 
   const handleDelete = async () => {
@@ -40,29 +46,74 @@ const Employees = () => {
   const handleClick = async () => {
     try {
       if (
-        !add.fullName.length ||
-        !add.phoneNumber.length ||
-        !add.password.length
+        !all.fullName.trim().length ||
+        !all.phoneNumber.trim().length ||
+        !all.password.trim().length
       )
         throw new Error();
       else {
-        await post('/auth/register', add);
+        await post('/auth/register', all);
 
         if (error) throw new Error();
         else {
-          toast.success('Succesfuly added');
+          toast.success('Succesfuly aded');
           toggleModal();
           get('/user/employees');
         }
       }
     } catch (error) {
       toast.error('Error');
+    } finally {
+      setAll({
+        fullName: '',
+        phoneNumber: '',
+        password: '',
+      });
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      if (
+        !all.fullName.trim().length ||
+        !all.phoneNumber.trim().length ||
+        !all.password.trim().length
+      )
+        throw new Error();
+      else {
+        await put('/auth/edit/by/admin', edit.id, all);
+
+        if (putError) throw new Error();
+        else {
+          toast.success('Succesfuly updated');
+          editToggleModal();
+          get('/user/employees');
+        }
+      }
+    } catch (error) {
+      toast.error('Error');
+    } finally {
+      setAll({
+        fullName: '',
+        phoneNumber: '',
+        password: '',
+      });
     }
   };
 
   useEffect(() => {
     get('/user/employees');
   }, []);
+
+  useEffect(() => {
+    if (edit) {
+      setAll({
+        fullName: edit.fullName,
+        phoneNumber: edit.phoneNumber,
+        password: '',
+      });
+    }
+  }, [edit, editModal]);
 
   return (
     <>
@@ -97,7 +148,7 @@ const Employees = () => {
               <tbody>
                 {isLoading && (
                   <tr className="px-6 py-4">
-                    <div className="w-10 h-10 animate-spin rounded-full border-4 border-white border-dotted" />
+                    <div className="w-10 h-10 animate-spin rounded-full border-4 border-black dark:border-white border-dotted" />
                   </tr>
                 )}
                 {data && data.object.length
@@ -116,7 +167,10 @@ const Employees = () => {
                         <td className="px-6 py-4">{item.phoneNumber}</td>
                         <td className="px-6">
                           <button
-                          //  onClick={() => handleEdit(item)}
+                            onClick={() => {
+                              editToggleModal();
+                              setEdit(item);
+                            }}
                           >
                             <FaRegEdit size={25} className="text-green-500" />
                           </button>
@@ -155,18 +209,18 @@ const Employees = () => {
             <div>
               <Input
                 label="Full name"
-                onChange={(e) => setAdd({ ...add, fullName: e.target.value })}
+                onChange={(e) => setAll({ ...all, fullName: e.target.value })}
               />
               <Input
                 label="PhoneNumber"
                 onChange={(e) =>
-                  setAdd({ ...add, phoneNumber: e.target.value })
+                  setAll({ ...all, phoneNumber: e.target.value })
                 }
               />
               <Input
                 label="Password"
                 type="password"
-                onChange={(e) => setAdd({ ...add, password: e.target.value })}
+                onChange={(e) => setAll({ ...all, password: e.target.value })}
               />
             </div>
             <div className="w-full flex justify-between">
@@ -182,6 +236,48 @@ const Employees = () => {
                 className="rounded-lg px-3 py-2 bg-green-500 text-white"
               >
                 {postIsloading ? 'Loading...' : 'Save'}
+              </button>
+            </div>
+          </div>
+        }
+      />
+      <GlobalModal
+        isOpen={editModal}
+        onClose={editToggleModal}
+        children={
+          <div className="w-96">
+            <div>
+              <Input
+                label="Full name"
+                onChange={(e) => setAll({ ...all, fullName: e.target.value })}
+                value={all.fullName}
+              />
+              <Input
+                label="PhoneNumber"
+                onChange={(e) =>
+                  setAll({ ...all, phoneNumber: e.target.value })
+                }
+                value={all.phoneNumber}
+              />
+              <Input
+                label="Password"
+                type="password"
+                onChange={(e) => setAll({ ...all, password: e.target.value })}
+              />
+            </div>
+            <div className="w-full flex justify-between">
+              <button
+                onClick={editToggleModal}
+                className="rounded-lg px-3 py-2 bg-graydark"
+              >
+                Close
+              </button>
+              <button
+                disabled={putIsLoading}
+                onClick={handleEdit}
+                className="rounded-lg px-3 py-2 bg-green-500 text-white"
+              >
+                {postIsloading ? 'Loading...' : 'Edit'}
               </button>
             </div>
           </div>

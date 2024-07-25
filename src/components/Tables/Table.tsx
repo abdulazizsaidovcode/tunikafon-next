@@ -26,7 +26,6 @@ const Table = ({
   setDeleteId,
   setUpdate,
 }: TableType) => {
-  // const [editModal, setEditModal] = useState(false);
 
   const handleDelete = (id: number) => {
     deleteModal();
@@ -62,7 +61,7 @@ const Table = ({
             <tbody>
               {isLoading && (
                 <tr className="px-6 py-4">
-                  <div className="w-10 h-10 animate-spin rounded-full border-4 border-white border-dotted" />
+                  <div className="w-10 h-10 animate-spin rounded-full border-4 border-black dark:border-white border-dotted" />
                 </tr>
               )}
               {data && data.length
@@ -109,40 +108,6 @@ const Table = ({
           </table>
         </div>
       </div>
-      {/* <GlobalModal
-        isOpen={editModal}
-        onClose={() => setEditModal(false)}
-        children={
-          <div>
-            <div>
-              <label className="text-lg font-medium my-2" htmlFor="photo">
-                Choice photo
-              </label>
-              <input className="mt-2" id="photo" type="file" />
-            </div>
-            <div className="mt-5">
-              <label className="text-lg font-medium" htmlFor="photo">
-                Enter your name
-              </label>
-              <input
-                className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
-                type="text"
-              />
-            </div>
-            <div className="w-full flex justify-between">
-              <button
-                onClick={() => setEditModal(false)}
-                className="rounded-lg px-3 py-2 bg-graydark"
-              >
-                Close
-              </button>
-              <button className="rounded-lg px-3 py-2 bg-green-500 text-white">
-                Edit
-              </button>
-            </div>
-          </div>
-        }
-      /> */}
     </>
   );
 };
