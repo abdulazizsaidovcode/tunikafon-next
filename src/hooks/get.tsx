@@ -9,7 +9,7 @@ const useGet = () => {
   const get = async (url: string, page?: number) => {
     setIsLoading(true);
     try {
-      const api = page ? `${url}?page=${page}&size=10` : url;
+      const api = page ? `${url}?page=${page ? page : 0}&size=10` : url;
       const { data } = await axios.get(api);
       if (data.success) {
         setData(data.body);

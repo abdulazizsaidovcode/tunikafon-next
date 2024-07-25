@@ -89,7 +89,7 @@ const EditModal: React.FC<EditModalProps> = ({
             <Input label="Image" onChange={handleImageChange} type="file" />
             {attachmentId && (
               <img
-                key={attachmentId} // Add key to force re-render
+                key={attachmentId}
                 src={`${attechment}${attachmentId}`}
                 alt="Current"
                 className="w-20 h-20 mb-4"
