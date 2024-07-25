@@ -233,7 +233,7 @@ const Category = () => {
           isModal={deleteModal}
           onClose={handleCloseDeleteModal}
           onConfirm={handleConfirmDelete}
-          // item={selectedItem}
+          item={selectedItem}
         />
       )}
     </>
