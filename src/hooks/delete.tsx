@@ -8,6 +8,8 @@ const useDelete = () => {
 
   const remove = async (url: string, id: any) => {
     setIsLoading(true);
+    setError(null);
+    setData(null);
     try {
       const { data } = await axios.delete(`${url}/${id}`);
       if (data.success) {

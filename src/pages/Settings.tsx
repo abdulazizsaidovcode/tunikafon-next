@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import DeleteModal from '../components/modal/deleteModal';
 import useDelete from '../hooks/delete';
 import usePut from '../hooks/put';
+import axios from '../service/api';
 
 const Employees = () => {
   const { post, isLoading: postIsloading, error } = usePost();
@@ -22,6 +23,7 @@ const Employees = () => {
   const [deleteId, setDeleteId] = useState();
   const [editModal, setEditModal] = useState(false);
   const [edit, setEdit] = useState<any>();
+  const [file, setFile] = useState<any>();
   const [all, setAll] = useState({
     fullName: '',
     phoneNumber: '',
@@ -31,6 +33,12 @@ const Employees = () => {
   const toggleModal = () => setToggle(!toggle);
   const editToggleModal = () => setEditModal(!editModal);
   const deleteToggleModal = () => setDeleteModal(!deleteModal);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -74,21 +82,29 @@ const Employees = () => {
 
   const handleEdit = async () => {
     try {
+      const formData = new FormData();
+      formData.append('file', file);
       if (
         !all.fullName.trim().length ||
         !all.phoneNumber.trim().length ||
-        !all.password.trim().length
+        !all.password.trim().length ||
+        !formData.has('file')
       )
         throw new Error();
-      else {
-        await put('/auth/edit/by/admin', edit.id, all);
 
-        if (putError) throw new Error();
-        else {
-          toast.success('Succesfuly updated');
-          editToggleModal();
-          get('/user/employees');
-        }
+      const { data } = await axios.post(`/attachment/upload`, formData);
+
+      await put('/auth/edit/by/admin', edit.id, {
+        ...all,
+        attachmentId: data.body,
+      });
+
+      if (putError) throw new Error();
+      else {
+        toast.success('Succesfuly updated');
+        editToggleModal();
+        get('/user/employees');
+        
       }
     } catch (error) {
       toast.error('Error');
@@ -210,12 +226,14 @@ const Employees = () => {
               <Input
                 label="Full name"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
+                value={all.fullName}
               />
               <Input
                 label="PhoneNumber"
                 onChange={(e) =>
                   setAll({ ...all, phoneNumber: e.target.value })
                 }
+                value={all.phoneNumber}
               />
               <Input
                 label="Password"
@@ -247,6 +265,7 @@ const Employees = () => {
         children={
           <div className="w-96">
             <div>
+              <Input onChange={handleImageChange} label="Image" type="file" />
               <Input
                 label="Full name"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}

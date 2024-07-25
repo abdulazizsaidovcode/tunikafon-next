@@ -8,6 +8,8 @@ const usePut = () => {
 
   const put = async (url: string, id: string, updateData: {}) => {
     setIsLoading(true);
+    setError(null);
+    setData(null);
     try {
       const { data } = await axios.put(`${url}/${id}`, updateData);
       if (data.success) {
