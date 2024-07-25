@@ -48,7 +48,7 @@ function App() {
               index
               element={
                 <>
-                  <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="eCommerce Dashboard |" />
                   <ECommerce />
                 </>
               }
@@ -57,7 +57,7 @@ function App() {
               path="/category"
               element={
                 <>
-                  <PageTitle title="Category | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Category | " />
                   <Category />
                 </>
               }
@@ -66,7 +66,7 @@ function App() {
               path="/categor-detail"
               element={
                 <>
-                  <PageTitle title="DetailCategory | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="DetailCategory |" />
                   <DetailCategory />
                 </>
               }
@@ -75,7 +75,7 @@ function App() {
               path="/detail"
               element={
                 <>
-                  <PageTitle title="Detail | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Detail |" />
                   <Detail />
                 </>
               }
@@ -84,7 +84,7 @@ function App() {
               path="/product"
               element={
                 <>
-                  <PageTitle title="Product | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Product |" />
                   <Product />
                 </>
               }
@@ -93,7 +93,7 @@ function App() {
               path="/calculation"
               element={
                 <>
-                  <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Tables |" />
                   <Calculation />
                 </>
               }
@@ -102,7 +102,7 @@ function App() {
               path="/employees"
               element={
                 <>
-                  <PageTitle title="Employees | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Employees |" />
                   <Employees />
                 </>
               }
@@ -111,7 +111,7 @@ function App() {
               path="/chart"
               element={
                 <>
-                  <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Basic Chart |" />
                   <Chart />
                 </>
               }
@@ -120,7 +120,7 @@ function App() {
               path="/ui/alerts"
               element={
                 <>
-                  <PageTitle title="Alerts | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Alerts |" />
                   <Alerts />
                 </>
               }
@@ -129,7 +129,7 @@ function App() {
               path="/ui/buttons"
               element={
                 <>
-                  <PageTitle title="Buttons | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                  <PageTitle title="Buttons |" />
                   <Buttons />
                 </>
               }
@@ -142,7 +142,7 @@ function App() {
             path="/login"
             element={
               <>
-                <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <PageTitle title="Signin |" />
                 <SignIn />
               </>
             }
