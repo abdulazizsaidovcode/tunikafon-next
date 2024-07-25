@@ -7,8 +7,9 @@ const usePost = () => {
   const [error, setError] = useState<any>(null);
 
   const post = async (url: string, postData: any) => {
-    setError(null);
     setIsLoading(true);
+    setError(null);
+    setData(null);
     try {
       const { data } = await axios.post(url, postData);
       if (data.success) {
