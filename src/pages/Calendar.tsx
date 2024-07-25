@@ -9,6 +9,8 @@ import EditModal from '../components/modal/CatygoryEditmodal';
 import DeleteModal from '../components/modal/deleteModal'; // Ensure you import the delete modal
 import useGet from '../hooks/get';
 import { toast } from 'sonner';
+import GlobalModal from '../components/modal';
+import usePost from '../hooks/post';
 
 interface Item {
   id: number;
@@ -22,7 +24,9 @@ const Category = () => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const { data, get, isLoading, error } = useGet();
-
+  const { post, isLoading: postIsLoading } = usePost();
+  const [file, setFile] = useState<any>();
+  const [name, setName] = useState<string>();
   const toggleModal = () => setToggle(!toggle);
 
   const handleEditClick = (item: Item) => {
@@ -57,10 +61,42 @@ const Category = () => {
       handleCloseDeleteModal();
     }
   };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+  const addDetailCategory = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      if (!name?.length || !formData.has('file')) {
+        throw new Error('All feads reqired');
+      }
+
+      const { data } = await axios.post(`/attachment/upload`, formData);
+
+      if (data.body) {
+        await post(`/category`, {
+          name: name,
+          attachmentId: data.body,
+        });
+      }
+      get('/category/list');
+      toggleModal();
+      toast.success('Succsesfully done');
+    } catch (error) {
+      toast.error('Error');
+    } finally {
+      setName('');
+      setFile(null);
+    }
+  };
 
   useEffect(() => {
     get('/category/list');
-  }, []);
+  }, [editModal]);
 
   return (
     <>
@@ -138,11 +174,6 @@ const Category = () => {
           </tbody>
         </table>
       </div>
-
-      <AddModal 
-        isModal={toggle} 
-        onClose={toggleModal}
-      />
       {editModal && selectedItem && (
         <EditModal
           getting={() => get('/category/list')}
@@ -151,6 +182,52 @@ const Category = () => {
           item={selectedItem}
         />
       )}
+      <GlobalModal
+        isOpen={toggle}
+        onClose={toggleModal}
+        children={
+          <div>
+            <div>
+              <div>
+                <label className="text-lg font-medium my-2" htmlFor="photo">
+                  Choice photo
+                </label>
+                <input
+                  onChange={handleImageChange}
+                  className="mt-2"
+                  id="photo"
+                  type="file"
+                />
+              </div>
+              <div className="mt-5">
+                <label className="text-lg font-medium" htmlFor="photo">
+                  Enter your Name
+                </label>
+                <input
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div className="w-full flex justify-between">
+              <button
+                onClick={toggleModal}
+                className="rounded-lg px-3 py-2 bg-graydark"
+              >
+                Close
+              </button>
+              <button
+                disabled={postIsLoading}
+                onClick={addDetailCategory}
+                className="rounded-lg px-3 py-2 bg-green-500 text-white"
+              >
+                {postIsLoading ? 'Loading...' : 'Save'}
+              </button>
+            </div>
+          </div>
+        }
+      />
       {deleteModal && selectedItem && (
         <DeleteModal
           isModal={deleteModal}

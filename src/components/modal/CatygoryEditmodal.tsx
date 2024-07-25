@@ -26,7 +26,9 @@ const EditModal: React.FC<EditModalProps> = ({
   getting,
 }) => {
   const [name, setName] = useState<string>(item.name);
-  const [attachmentId, setAttachmentId] = useState<number>(item.attachmentId);
+  const [attachmentId, setAttachmentId] = useState<string | number>(
+    item.attachmentId,
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { data, isLoading, error, put } = usePut();
 
@@ -38,6 +40,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const handleSave = async () => {
     if (!name || !attachmentId) {
+      toast.error('Name and Attachment ID are required');
       return;
     }
 
@@ -46,19 +49,23 @@ const EditModal: React.FC<EditModalProps> = ({
       if (imageFile) {
         const formData = new FormData();
         formData.append('file', imageFile);
-        const { data } = await axios.post('/attachment/upload', formData);
-        newAttachmentId = data.body;
+        const response = await axios.put(
+          `/attachment/${attachmentId}`,
+          formData,
+        );
+        newAttachmentId = response.data.body;
       }
 
       const updatedItem = {
         name,
         attachmentId: newAttachmentId,
       };
-      put('/category', item.id, updatedItem);
-      toast.success('success edited');
+      await put('/category', item.id, updatedItem);
+      toast.success('Category successfully edited');
       getting();
       onClose();
     } catch (error) {
+      toast.error('Error updating category');
       console.error('Error updating category:', error);
     }
   };
@@ -69,7 +76,7 @@ const EditModal: React.FC<EditModalProps> = ({
         isOpen={isModal}
         onClose={onClose}
         children={
-          <div className="">
+          <div className="p-4">
             <h2 className="text-xl mb-4">Edit Category</h2>
             {error && <p className="text-red-500 mb-4">{error}</p>}
             <label className="block mb-2">Name</label>
@@ -82,7 +89,8 @@ const EditModal: React.FC<EditModalProps> = ({
             <Input label="Image" onChange={handleImageChange} type="file" />
             {attachmentId && (
               <img
-                src={attechment + attachmentId}
+                key={attachmentId} // Add key to force re-render
+                src={`${attechment}${attachmentId}`}
                 alt="Current"
                 className="w-20 h-20 mb-4"
               />
@@ -90,7 +98,7 @@ const EditModal: React.FC<EditModalProps> = ({
             <div className="flex justify-end">
               <button
                 onClick={onClose}
-                className="mr-4 px-4 py-2 bg-gray-500 bg-black rounded"
+                className="mr-4 px-4 py-2 bg-gray-500 text-white rounded"
               >
                 Cancel
               </button>
