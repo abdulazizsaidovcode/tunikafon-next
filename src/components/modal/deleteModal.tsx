@@ -4,9 +4,10 @@ interface ModalType {
   isModal: boolean;
   onClose: () => void;
   onConfirm?: () => void;
+  isLoading: boolean;
 }
 
-const DeleteModal = ({ isModal, onClose, onConfirm }: ModalType) => {
+const DeleteModal = ({ isModal, onClose, onConfirm, isLoading }: ModalType) => {
   return (
     <GlobalModal
       isOpen={isModal}
@@ -24,10 +25,11 @@ const DeleteModal = ({ isModal, onClose, onConfirm }: ModalType) => {
               Close
             </button>
             <button
+              disabled={isLoading}
               onClick={onConfirm}
               className="rounded-lg px-3 py-2 bg-red-500"
             >
-              Delete
+              {isLoading ? 'Loading...' : 'Delete'}
             </button>
           </div>
         </div>

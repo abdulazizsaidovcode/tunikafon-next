@@ -14,7 +14,7 @@ import axios from '../service/api';
 const DetailCategory = () => {
   // custom hooks
   const { data, get, isLoading } = useGet();
-  const { data: removeData, remove } = useDelete();
+  const { data: removeData, remove, isLoading: deleteIsLoading } = useDelete();
   const { isLoading: putIsLoading, put } = usePut();
   const { post, isLoading: postIsLoading } = usePost();
 
@@ -43,7 +43,7 @@ const DetailCategory = () => {
       formData.append('file', file);
 
       if (!name?.length || !formData.has('file')) {
-        throw new Error('All feads reqired');
+        throw new Error('All fields required');
       }
 
       const { data } = await axios.post(`/attachment/upload`, formData);
@@ -56,7 +56,7 @@ const DetailCategory = () => {
       }
       get('/detail-category/list');
       toggleModal();
-      toast.success('Succsesfully added');
+      toast.success('Successfully added');
     } catch (error) {
       toast.error('Error');
     } finally {
@@ -71,10 +71,9 @@ const DetailCategory = () => {
       formData.append('file', file);
 
       if (val?.length === 0 || !formData.has('file')) throw new Error();
-      else if (update) {
-        if (!formData.has('file')) {
-          await put(`/attachment`, update.attachmentId, formData);
-        }
+
+      if (update) {
+        await put(`/attachment`, update.attachmentId, formData);
 
         await put(`/detail-category`, update.id, {
           name: val,
@@ -106,6 +105,12 @@ const DetailCategory = () => {
     get('/detail-category/list');
   }, [removeData, deleteModal, editModal, toggle]);
 
+  useEffect(() => {
+    if (update) {
+      setVal(update.name);
+    }
+  }, [update]);
+
   return (
     <>
       <Breadcrumb pageName="Detail Category" />
@@ -130,6 +135,7 @@ const DetailCategory = () => {
         isModal={deleteModal}
         onClose={deleteToggleModal}
         onConfirm={handleDelete}
+        isLoading={deleteIsLoading}
       />
       <GlobalModal isOpen={editModal} onClose={editToggleModal}>
         <div>
@@ -154,7 +160,7 @@ const DetailCategory = () => {
               onClick={handleEdit}
               className="rounded-lg px-4 py-2 bg-green-500 text-white"
             >
-              {postIsLoading ? 'Loading...' : 'Edit'}
+              {putIsLoading ? 'Loading...' : 'Edit'}
             </button>
           </div>
         </div>
@@ -167,7 +173,7 @@ const DetailCategory = () => {
             <div>
               <div>
                 <label className="text-lg font-medium my-2" htmlFor="photo">
-                  Choice photo
+                  Choose photo
                 </label>
                 <input
                   onChange={handleImageChange}
