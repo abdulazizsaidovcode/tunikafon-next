@@ -36,6 +36,8 @@ const Detail = () => {
     description: '',
   });
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   const handleCloseEditModal = () => setEditModal(false);
   const deleteToggleModal = () => setDeleteModal(!deleteModal);
   const addToggleModal = () => setAddModal(!addModal);
@@ -80,7 +82,7 @@ const Detail = () => {
         ...addData,
         detailCategoryId: +addData.detailCategoryId,
         measureValue: +addData.measureValue,
-        attachmentId: data.body,  
+        attachmentId: data.body,
       });
 
       get('/detail');
@@ -113,6 +115,10 @@ const Detail = () => {
     getDetailCategory();
   }, []);
 
+  const filteredData = data?.object?.filter((item: any) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <>
       <Breadcrumb pageName="Detail" />
@@ -128,6 +134,8 @@ const Detail = () => {
           className="bg-transparent border rounded-lg outline-none px-3 py-2"
           type="text"
           placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -162,8 +170,8 @@ const Detail = () => {
               </tr>
             </thead>
             <tbody>
-              {data && data.object.length ? (
-                data.object.map((item: any, i: number) => (
+              {filteredData && filteredData.length ? (
+                filteredData.map((item: any, i: number) => (
                   <tr
                     key={item.id}
                     className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -223,12 +231,12 @@ const Detail = () => {
         previousLabel="<"
         renderOnZeroPageCount={null}
       />
-        <EditModal
-          getting={() => get('/category/list')}
-          isModal={editModal}
-          onClose={handleCloseEditModal}
-          item={selectedItem}
-        />
+      <EditModal
+        getting={() => get('/category/list')}
+        isModal={editModal}
+        onClose={handleCloseEditModal}
+        item={selectedItem}
+      />
       <DeleteModal
         isModal={deleteModal}
         onClose={deleteToggleModal}
@@ -248,15 +256,6 @@ const Detail = () => {
             className="w-full p-2 mb-4 border rounded"
           />
           <label className="block mb-2">Detail Category ID</label>
-          {/* <input
-            type="number"
-            name="detailCategoryId"
-            onChange={(e) =>
-              setAddData({ ...addData, detailCategoryId: e.target.value })
-            }
-            value={addData.detailCategoryId}
-            className="w-full p-2 mb-4 border rounded"
-          /> */}
           <select
             className="w-full rounded px-1 py-2 outline-none"
             onChange={(e) =>
@@ -330,4 +329,3 @@ const Detail = () => {
 };
 
 export default Detail;
-

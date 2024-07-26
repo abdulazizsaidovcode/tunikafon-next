@@ -32,7 +32,15 @@ const EditModal: React.FC<EditModalProps> = ({
   const { isLoading, put } = usePut();
   const [formData, setFormData] = useState<Item>({ ...item });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [detailCategory, setDetailCategory] = useState<any[]>();
+  useEffect(() => {
+    async function getDetailCategory() {
+      const { data } = await axios.get('/detail-category/list');
+      setDetailCategory(data.body.object);
+    }
 
+    getDetailCategory();
+  }, []);
   useEffect(() => {
     setFormData(item);
   }, [item]);
@@ -70,10 +78,9 @@ const EditModal: React.FC<EditModalProps> = ({
         const response = await axios.put(
           `/attachment/${formData.attachmentId}`,
           imageData,
-        );    
+        );
         newAttachmentId = response.data;
         console.log(response);
-        
       }
 
       await put(`/detail`, item.id, {
@@ -95,9 +102,6 @@ const EditModal: React.FC<EditModalProps> = ({
       <GlobalModal isOpen={isModal} onClose={onClose}>
         <div className="p-4">
           <h2 className="text-xl mb-4">Edit Category</h2>
-          {/* {error && (
-            <p className="text-red-500 mb-4">{error.message || error}</p>
-          )} */}
           <label className="block mb-2">Name</label>
           <input
             type="text"
@@ -107,13 +111,17 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full p-2 mb-4 border rounded"
           />
           <label className="block mb-2">Detail Category ID</label>
-          <input
-            type="number"
+          <select
             name="detailCategoryId"
-            value={(formData && formData.detailCategoryId) || ''}
+            className="w-full rounded px-1 py-2 outline-none"
             onChange={handleChange}
-            className="w-full p-2 mb-4 border rounded"
-          />
+          >
+            <option selected>Select Category</option>
+            {detailCategory &&
+              detailCategory.map((item) => (
+                <option value={item.id}>{item.name}</option>
+              ))}
+          </select>
           <div className="flex w-full gap-2 justify-between">
             <div className="w-full">
               <label className="block mb-2">Measure Value</label>
