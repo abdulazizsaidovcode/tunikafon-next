@@ -10,9 +10,9 @@ import Input from '../components/inputs/input';
 import usePut from '../hooks/put';
 import usePost from '../hooks/post';
 import axios from '../service/api';
+import ReactPaginate from 'react-paginate';
 
 const DetailCategory = () => {
-  // custom hooks
   const { data, get, isLoading } = useGet();
   const { data: removeData, remove, isLoading: deleteIsLoading } = useDelete();
   const { isLoading: putIsLoading, put } = usePut();
@@ -46,10 +46,10 @@ const DetailCategory = () => {
         throw new Error('All fields required');
       }
 
-      const { data } = await axios.post(`/attachment/upload`, formData);
+      const { data } = await axios.post('/attachment/upload', formData);
 
       if (data.body) {
-        await post(`/detail-category`, {
+        await post('/detail-category', {
           name: name,
           attachmentId: data.body,
         });
@@ -94,15 +94,19 @@ const DetailCategory = () => {
 
   const handleDelete = async () => {
     if (deleteId) {
-      await remove(`/detail-category`, deleteId);
+      await remove(`/detail-category/`, deleteId);
       get('/detail-category/list');
       deleteToggleModal();
       toast.success('Successfully deleted');
     }
   };
 
+  const handlePageClick = (page: any) => {
+    get('/detail-category/list', page.selected);
+  };
+
   useEffect(() => {
-    get('/detail-category/list');
+    get('/detail-category/list', 0);
   }, [removeData, deleteModal, editModal, toggle]);
 
   useEffect(() => {
@@ -131,6 +135,16 @@ const DetailCategory = () => {
           setDeleteId={setDeleteId}
         />
       </div>
+      <ReactPaginate
+        className="flex gap-3 navigation mt-5"
+        breakLabel="..."
+        nextLabel=">"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={data && data.totalPage}
+        previousLabel="<"
+        renderOnZeroPageCount={null}
+      />
       <DeleteModal
         isModal={deleteModal}
         onClose={deleteToggleModal}

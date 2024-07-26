@@ -11,6 +11,7 @@ import DeleteModal from '../components/modal/deleteModal';
 import useDelete from '../hooks/delete';
 import usePut from '../hooks/put';
 import axios from '../service/api';
+import ReactPaginate from 'react-paginate';
 
 const Employees = () => {
   const { post, isLoading: postIsloading, error } = usePost();
@@ -104,7 +105,6 @@ const Employees = () => {
         toast.success('Succesfuly updated');
         editToggleModal();
         get('/user/employees');
-        
       }
     } catch (error) {
       toast.error('Error');
@@ -115,6 +115,10 @@ const Employees = () => {
         password: '',
       });
     }
+  };
+
+  const handlePageClick = (page: any) => {
+    get('/user/employees', page.selected);
   };
 
   useEffect(() => {
@@ -216,6 +220,16 @@ const Employees = () => {
             </table>
           </div>
         </div>
+        <ReactPaginate
+          className="flex gap-3 navigation mt-5"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={data && data.totalPage}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+        />
       </div>
       <GlobalModal
         isOpen={toggle}

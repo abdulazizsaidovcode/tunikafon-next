@@ -10,23 +10,35 @@ import useDelete from '../../hooks/delete';
 import { toast } from 'sonner';
 import Input from '../../components/inputs/input';
 import GlobalModal from '../../components/modal';
+import axios from '../../service/api';
+import usePost from '../../hooks/post';
+import '../../css/style.css';
+import ReactPaginate from 'react-paginate';
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
   const { remove, isLoading: deleteIsloading } = useDelete();
+  const { post, isLoading: postIsLoading } = usePost();
   const [editModal, setEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState();
-  const [addModal, setAddModal] = useState(false); // State for add modal
-
-  useEffect(() => {
-    get('/detail', 0);
-  }, [editModal, addModal]); // Fetch data when modals close
+  const [addModal, setAddModal] = useState(false);
+  const [detailCategory, setDetailCategory] = useState<any[]>();
+  const [file, setFile] = useState<any>();
+  const [addData, setAddData] = useState<any>({
+    name: '',
+    attachmentId: 0,
+    detailCategoryId: 0,
+    measureValue: 0,
+    measure: '',
+    price: 0,
+    description: '',
+  });
 
   const handleCloseEditModal = () => setEditModal(false);
   const deleteToggleModal = () => setDeleteModal(!deleteModal);
-  const addToggleModal = () => setAddModal(!addModal); 
+  const addToggleModal = () => setAddModal(!addModal);
 
   const handleDelete = async () => {
     try {
@@ -39,17 +51,74 @@ const Detail = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleClick = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      if (
+        !formData.has('file') ||
+        !addData.name ||
+        !addData.detailCategoryId ||
+        !addData.measureValue ||
+        !addData.measure ||
+        !addData.price ||
+        !addData.description
+      ) {
+        throw new Error('All fields required');
+      }
+
+      const { data } = await axios.post(`/attachment/upload`, formData);
+
+      await post('/detail', {
+        ...addData,
+        detailCategoryId: +addData.detailCategoryId,
+        measureValue: +addData.measureValue,
+        attachmentId: data.body,
+      });
+
+      get('/detail');
+      toast.success('Succesfuly created');
+      addToggleModal();
+    } catch (error) {
+      toast.error('Error');
+    }
+  };
+
+  const handlePageClick = (page: any) => {
+    get('/detail', page.selected);
+  };
+
   const openEditModal = (item: any) => {
     setSelectedItem(item);
     setEditModal(true);
   };
+
+  useEffect(() => {
+    get('/detail');
+  }, [editModal, addModal]);
+
+  useEffect(() => {
+    async function getDetailCategory() {
+      const { data } = await axios.get('/detail-category/list');
+      setDetailCategory(data.body.object);
+    }
+
+    getDetailCategory();
+  }, []);
 
   return (
     <>
       <Breadcrumb pageName="Detail" />
 
       <div className="w-full flex justify-between items-center">
-        <button 
+        <button
           className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-5 py-2"
           onClick={addToggleModal} // Open add modal
         >
@@ -144,6 +213,16 @@ const Detail = () => {
           </table>
         </div>
       </div>
+      <ReactPaginate
+        className="flex gap-3 navigation mt-5"
+        breakLabel="..."
+        nextLabel=">"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={data && data.totalPage}
+        previousLabel="<"
+        renderOnZeroPageCount={null}
+      />
       {selectedItem && (
         <EditModal
           getting={() => get('/category/list')}
@@ -166,39 +245,72 @@ const Detail = () => {
           <input
             type="text"
             name="name"
+            onChange={(e) => setAddData({ ...addData, name: e.target.value })}
+            value={addData.name}
             className="w-full p-2 mb-4 border rounded"
           />
           <label className="block mb-2">Detail Category ID</label>
-          <input
+          {/* <input
             type="number"
             name="detailCategoryId"
+            onChange={(e) =>
+              setAddData({ ...addData, detailCategoryId: e.target.value })
+            }
+            value={addData.detailCategoryId}
             className="w-full p-2 mb-4 border rounded"
-          />
+          /> */}
+          <select
+            className="w-full rounded px-1 py-2 outline-none"
+            onChange={(e) =>
+              setAddData({ ...addData, detailCategoryId: e.target.value })
+            }
+            value={addData.detailCategoryId}
+          >
+            <option selected>Select Category</option>
+            {detailCategory &&
+              detailCategory.map((item) => (
+                <option value={item.id}>{item.name}</option>
+              ))}
+          </select>
           <label className="block mb-2">Measure Value</label>
           <input
             type="number"
             name="measureValue"
+            onChange={(e) =>
+              setAddData({ ...addData, measureValue: e.target.value })
+            }
+            value={addData.measureValue}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Measure</label>
-          <input
-            type="text"
-            name="measure"
-            className="w-full p-2 mb-4 border rounded"
-          />
+          <select
+            className="w-full rounded px-1 py-2"
+            onChange={(e) =>
+              setAddData({ ...addData, measure: e.target.value })
+            }
+            value={addData.measure}
+          >
+            <option value="KG">Kg</option>
+            <option value="METER">Metr</option>
+            <option value="SM">Sm</option>
+            <option value="PIECE">Piece</option>
+          </select>
           <label className="block mb-2">Price</label>
           <input
             type="number"
             name="price"
+            onChange={(e) => setAddData({ ...addData, price: e.target.value })}
             className="w-full p-2 mb-4 border rounded"
           />
           <label className="block mb-2">Description</label>
           <input
             type="text"
             name="description"
+            onChange={(e) =>
+              setAddData({ ...addData, description: e.target.value })
+            }
             className="w-full p-2 mb-4 border rounded"
           />
-          <Input label="Image" type="file" />
+          <Input onChange={handleImageChange} label="Image" type="file" />
           <div className="flex justify-end">
             <button
               className="mr-4 px-4 py-2 bg-gray-500 text-white rounded"
@@ -207,6 +319,7 @@ const Detail = () => {
               Cancel
             </button>
             <button
+              onClick={handleClick}
               className="px-4 py-2 bg-blue-500 text-white rounded"
             >
               {isLoading ? 'Loading...' : 'Save'}

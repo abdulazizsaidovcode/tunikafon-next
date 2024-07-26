@@ -215,3 +215,47 @@ span.flatpickr-weekday,
 [x-cloak] {
   display: none !important;
 }
+
+.navigation li {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 7px;
+  border-radius: 10%;
+  transition: all 0.5s;
+  background-color: #243140;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+  position: relative;
+
+  &:hover {
+    background-color: #00141dc4;
+    color: white;
+  }
+
+  &:focus {
+    background-color: #00141dc4;
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.8);
+  }
+
+  a {
+    position: absolute;
+    width: 100%;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 100%;
+    left: 1%;
+    top: 8%;
+
+    &:focus {
+      font-weight: 900;
+      color: #0086d4;
+    }
+  }
+}
