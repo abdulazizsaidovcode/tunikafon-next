@@ -38,7 +38,6 @@ const EditModal: React.FC<EditModalProps> = ({
       const { data } = await axios.get('/detail-category/list');
       setDetailCategory(data.body.object);
     }
-
     getDetailCategory();
   }, []);
   useEffect(() => {
