@@ -1,10 +1,9 @@
 import axios from '../../service/api';
 import React, { useState, useEffect } from 'react';
-import { attechment } from '../../service/urls';
 import Input from '../inputs/input';
 import usePut from '../../hooks/put';
-import GlobalModal from '.';
 import { toast } from 'sonner';
+import GlobalModal from '.';
 
 interface Item {
   id: number;
@@ -30,7 +29,7 @@ const EditModal: React.FC<EditModalProps> = ({
   item,
   getting,
 }) => {
-  const { isLoading, error, put } = usePut();
+  const { isLoading, put } = usePut();
   const [formData, setFormData] = useState<Item>({ ...item });
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -38,7 +37,9 @@ const EditModal: React.FC<EditModalProps> = ({
     setFormData(item);
   }, [item]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -63,15 +64,23 @@ const EditModal: React.FC<EditModalProps> = ({
       if (imageFile) {
         const imageData = new FormData();
         imageData.append('file', imageFile);
+
+        if (!imageData.has('file')) throw new Error();
+
         const response = await axios.put(
           `/attachment/${formData.attachmentId}`,
           imageData,
-        );
-        newAttachmentId = response.data.body;
+        );    
+        newAttachmentId = response.data;
+        console.log(response);
+        
       }
 
-    //   const updatedItem = { ...formData };
-      await put('/detail', item.id, formData);
+      await put(`/detail`, item.id, {
+        ...formData,
+        attachmentId: newAttachmentId ? newAttachmentId : formData.attachmentId,
+      });
+
       toast.success('Detail successfully edited');
       getting();
       onClose();
@@ -86,12 +95,14 @@ const EditModal: React.FC<EditModalProps> = ({
       <GlobalModal isOpen={isModal} onClose={onClose}>
         <div className="p-4">
           <h2 className="text-xl mb-4">Edit Category</h2>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {/* {error && (
+            <p className="text-red-500 mb-4">{error.message || error}</p>
+          )} */}
           <label className="block mb-2">Name</label>
           <input
             type="text"
             name="name"
-            value={formData.name}
+            value={(formData && formData.name) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
@@ -99,31 +110,41 @@ const EditModal: React.FC<EditModalProps> = ({
           <input
             type="number"
             name="detailCategoryId"
-            value={formData.detailCategoryId}
+            value={(formData && formData.detailCategoryId) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Measure Value</label>
-          <input
-            type="number"
-            name="measureValue"
-            value={formData.measureValue}
-            onChange={handleChange}
-            className="w-full p-2 mb-4 border rounded"
-          />
-          <label className="block mb-2">Measure</label>
-          <input
-            type="text"
-            name="measure"
-            value={formData.measure}
-            onChange={handleChange}
-            className="w-full p-2 mb-4 border rounded"
-          />
+          <div className="flex w-full gap-2 justify-between">
+            <div className="w-full">
+              <label className="block mb-2">Measure Value</label>
+              <input
+                type="number"
+                name="measureValue"
+                value={(formData && formData.measureValue) || ''}
+                onChange={handleChange}
+                className="w-full p-2 mb-4 border rounded"
+              />
+            </div>
+            <div className="w-full">
+              <label className="block mb-2">Measure</label>
+              <select
+                name="measure"
+                value={(formData && formData.measure) || ''}
+                onChange={handleChange}
+                className="w-full p-2 mb-4 border rounded"
+              >
+                <option value="KG">KG</option>
+                <option value="METER">METER</option>
+                <option value="SM">SM</option>
+                <option value="PIECE">PIECE</option>
+              </select>
+            </div>
+          </div>
           <label className="block mb-2">Price</label>
           <input
             type="number"
             name="price"
-            value={formData.price}
+            value={(formData && formData.price) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
@@ -131,19 +152,19 @@ const EditModal: React.FC<EditModalProps> = ({
           <input
             type="text"
             name="description"
-            value={formData.description}
+            value={(formData && formData.description) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
           <Input label="Image" onChange={handleImageChange} type="file" />
-          {formData.attachmentId && (
+          {/* {formData.attachmentId && (
             <img
               key={formData.attachmentId}
               src={`${attechment}${formData.attachmentId}`}
               alt="Current"
               className="w-20 h-20 mb-4"
             />
-          )}
+          )} */}
           <div className="flex justify-end">
             <button
               onClick={onClose}

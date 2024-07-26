@@ -80,7 +80,7 @@ const Detail = () => {
         ...addData,
         detailCategoryId: +addData.detailCategoryId,
         measureValue: +addData.measureValue,
-        attachmentId: data.body,
+        attachmentId: data.body,  
       });
 
       get('/detail');
@@ -223,14 +223,12 @@ const Detail = () => {
         previousLabel="<"
         renderOnZeroPageCount={null}
       />
-      {selectedItem && (
         <EditModal
           getting={() => get('/category/list')}
           isModal={editModal}
           onClose={handleCloseEditModal}
           item={selectedItem}
         />
-      )}
       <DeleteModal
         isModal={deleteModal}
         onClose={deleteToggleModal}
@@ -332,3 +330,4 @@ const Detail = () => {
 };
 
 export default Detail;
+

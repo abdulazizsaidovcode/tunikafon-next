@@ -22,7 +22,7 @@ const DetailCategory = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number>();
   const [update, setUpdate] = useState<any>();
-  const [file, setFile] = useState<any>();
+  const [file, setFile] = useState<any>(null);
   const [val, setVal] = useState<string>('');
   const [name, setName] = useState<string>();
   const [editModal, setEditModal] = useState(false);
@@ -70,7 +70,7 @@ const DetailCategory = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      if (val?.trim().length === 0 || !formData.has('file')) throw new Error();
+      if (!formData.has('file') || !val?.trim()) throw new Error();
 
       if (update) {
         await put(`/attachment`, update.attachmentId, formData);
@@ -94,7 +94,7 @@ const DetailCategory = () => {
 
   const handleDelete = async () => {
     if (deleteId) {
-      await remove(`/detail-category/`, deleteId);
+      await remove(`/detail-category`, deleteId);
       get('/detail-category/list');
       deleteToggleModal();
       toast.success('Successfully deleted');

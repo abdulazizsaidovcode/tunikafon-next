@@ -121,6 +121,10 @@ span.flatpickr-weekday,
     -5px 0 0 #eff4fb,
     5px 0 0 #eff4fb;
 }
+input,select {
+  background: none;
+  border: 1px solid;
+}
 .flatpickr-day.inRange,
 .flatpickr-day.prevMonthDay.inRange,
 .flatpickr-day.nextMonthDay.inRange,
@@ -227,7 +231,7 @@ span.flatpickr-weekday,
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
   position: relative;
-
+  user-select: none;
   &:hover {
     background-color: #00141dc4;
     color: white;

@@ -53,7 +53,7 @@ const EditModal: React.FC<EditModalProps> = ({
           `/attachment/${attachmentId}`,
           formData,
         );
-        newAttachmentId = response.data.body;
+        newAttachmentId = response.data;
       }
 
       const updatedItem = {
