@@ -16,13 +16,7 @@ const SignIn: React.FC = () => {
 
       login(val.phoneNumber, val.password);
 
-      toast.promise(data, {
-        loading: 'Loading...',
-        success: () => {
-          return `Succses`;
-        },
-        error: error.response.data.error,
-      });
+      toast.success('Success');
     } catch (error) {
       toast.error('Error');
     }
