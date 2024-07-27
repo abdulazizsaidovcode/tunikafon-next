@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
-import SignUp from './pages/Authentication/SignUp';
 import Chart from './pages/Chart';
 import ECommerce from './pages/Dashboard/ECommerce';
 import Detail from './pages/Form/FormElements';
@@ -18,7 +16,6 @@ import DefaultLayout from './layout/DefaultLayout';
 import Category from './pages/Calendar';
 
 function App() {
-  const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -33,13 +30,7 @@ function App() {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
-
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <>
       {token ? (
         <DefaultLayout>

@@ -114,10 +114,21 @@ const Detail = () => {
 
     getDetailCategory();
   }, []);
+  const handleSearch = (event: any) => {
+    setSearchQuery(event.target.value);
+  };
+  const filteredData = data?.object
+    ?.filter((item: any) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+    .sort((a: any, b: any) => {
+      const aIndex = a.name.toLowerCase().indexOf(searchQuery.toLowerCase()),
+      bIndex = b.name.toLowerCase().indexOf(searchQuery.toLowerCase());
 
-  const filteredData = data?.object?.filter((item: any) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+      if (aIndex === 0 && bIndex !== 0) return -1;
+      else if (bIndex === 0 && aIndex !== 0) return 1;
+      else return aIndex - bIndex;
+    });
 
   return (
     <>
@@ -135,7 +146,7 @@ const Detail = () => {
           type="text"
           placeholder="Search"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={handleSearch}
         />
       </div>
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -311,7 +322,7 @@ const Detail = () => {
           <div className="flex justify-end">
             <button
               className="mr-4 px-4 py-2 bg-gray-500 text-white rounded"
-              onClick={addToggleModal} // Close modal on cancel
+              onClick={addToggleModal}
             >
               Cancel
             </button>

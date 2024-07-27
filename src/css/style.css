@@ -10,7 +10,10 @@
 
 @layer components {
 }
-
+label {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
