@@ -91,14 +91,14 @@ const Category = () => {
     } catch (error) {
       toast.error('Error');
     } finally {
-      setName('');
+      setName(''); 
       setFile(null);
     }
   };
 
   useEffect(() => {
     get('/category/list');
-  }, [editModal]);
+  }, [editModal]);  
 
   return (
     <>
