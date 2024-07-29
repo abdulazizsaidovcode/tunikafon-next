@@ -95,8 +95,8 @@ const Category = () => {
       setFile(null);
     }
   };
-
-  useEffect(() => {
+  // category
+  useEffect(() => {  
     get('/category/list');
   }, [editModal]);  
 
