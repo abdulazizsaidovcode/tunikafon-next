@@ -17,27 +17,28 @@ const DetailCategory = () => {
   const { data: removeData, remove, isLoading: deleteIsLoading } = useDelete();
   const { isLoading: putIsLoading, put } = usePut();
   const { post, isLoading: postIsLoading } = usePost();
+  const [imgUploadLoading, setImgUploadLoading] = useState(false);
 
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number>();
-  const [update, setUpdate] = useState<any>(); 
-  const [file, setFile] = useState<any>(null); 
-  const [val, setVal] = useState<string>(''); 
-  const [name, setName] = useState<string>(); 
+  const [update, setUpdate] = useState<any>();
+  const [file, setFile] = useState<any>(null);
+  const [val, setVal] = useState<string>('');
+  const [name, setName] = useState<string>();
   const [editModal, setEditModal] = useState(false);
- 
-  const toggleModal = () => setToggle(!toggle); 
-  const deleteToggleModal = () => setDeleteModal(!deleteModal); 
-  const editToggleModal = () => setEditModal(!editModal); 
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+  const toggleModal = () => setToggle(!toggle);
+  const deleteToggleModal = () => setDeleteModal(!deleteModal);
+  const editToggleModal = () => setEditModal(!editModal);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
     }
-  }; 
- 
-  const addDetailCategory = async () => { 
+  };
+
+  const addDetailCategory = async () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -46,7 +47,9 @@ const DetailCategory = () => {
         throw new Error('All fields required');
       }
 
+      setImgUploadLoading(true);
       const { data } = await axios.post('/attachment/upload', formData);
+      setImgUploadLoading(false);
 
       if (data.body) {
         await post('/detail-category', {
@@ -63,9 +66,9 @@ const DetailCategory = () => {
       setName('');
       setFile(null);
     }
-  }; 
- 
-  const handleEdit = async () => {                  
+  };
+
+  const handleEdit = async () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -215,11 +218,11 @@ const DetailCategory = () => {
                 Close
               </button>
               <button
-                disabled={postIsLoading}
+                disabled={imgUploadLoading || postIsLoading}
                 onClick={addDetailCategory}
                 className="rounded-lg px-3 py-2 bg-green-500 text-white"
               >
-                {postIsLoading ? 'Loading...' : 'Save'}
+                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Add'}
               </button>
             </div>
           </div>
