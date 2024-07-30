@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import GlobalModal from '../components/modal';
 import usePost from '../hooks/post';
 
+
 interface Item {
   id: number;
   attachmentId: string | number;
@@ -54,7 +55,6 @@ const Category = () => {
     setDeleteModal(false);
     setSelectedItem(null);
   };
-
   const handleConfirmDelete = async () => {
     if (selectedItem) {
       try {
@@ -74,9 +74,9 @@ const Category = () => {
     }
   };
 
-  const validateInput = (name: string) => {
-    const invalidChars = /[<>" "?><|\/*]/;
-    if (!name || invalidChars.test(name)) {
+  const validateInput = (value: string) => {
+    const invalidChars = /[<>"?><|\/*]/;
+    if (!value.trim() || invalidChars.test(value)) {
       setIsValid(false);
     } else {
       setIsValid(true);
@@ -84,9 +84,9 @@ const Category = () => {
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = e.target.value;
-    setName(newName);
-    validateInput(newName);
+    const newValue = e.target.value;
+    setName(newValue);
+    validateInput(newValue);
   };
 
   const addDetailCategory = async () => {
@@ -94,7 +94,6 @@ const Category = () => {
       if (!name.length || !file) {
         throw new Error('All fields required');
       }
-
       const formData = new FormData();
       formData.append('file', file);
 
@@ -251,9 +250,13 @@ const Category = () => {
               <button
                 disabled={postIsLoading || !isValid}
                 onClick={addDetailCategory}
-                className="rounded-lg px-3 py-2 bg-green-500 text-white"
+                className={
+                  postIsLoading || !isValid
+                    ? ' cursor-not-allowed px-4 py-2'
+                    : 'rounded-lg px-3 py-2 bg-green-500 text-white'
+                }
               >
-                {postIsLoading ? 'Loading...' : 'Save'}
+                {postIsLoading ? 'Uplouding...' : 'Save'}
               </button>
             </div>
           </div>

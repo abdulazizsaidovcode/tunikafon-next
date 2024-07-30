@@ -1,5 +1,5 @@
 import axios from '../../service/api';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { attechment } from '../../service/urls';
 import Input from '../inputs/input';
 import usePut from '../../hooks/put';
@@ -39,9 +39,10 @@ const EditModal: React.FC<EditModalProps> = ({
       setImageFile(e.target.files[0]);
     }
   };
-  const validateInput = () => {
-    const invalidChars = /[<>" "?><|\/*]/;
-    if (!name || invalidChars.test(name)) {
+
+  const validateInput = (value: string) => {
+    const invalidChars = /[<>"?><|\/*]/;
+    if (!value.trim() || invalidChars.test(value)) {
       setIsValid(false);
     } else {
       setIsValid(true);
@@ -49,9 +50,10 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-    validateInput();
-  };  
+    const newValue = e.target.value;
+    setName(newValue);
+    validateInput(newValue);
+  };
 
   const handleSave = async () => {
     if (!name || !attachmentId) {
@@ -98,7 +100,7 @@ const EditModal: React.FC<EditModalProps> = ({
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleNameChange}
               className="w-full p-2 mb-4 border rounded"
             />
             <Input label="Image" onChange={handleImageChange} type="file" />
@@ -118,9 +120,13 @@ const EditModal: React.FC<EditModalProps> = ({
                 Cancel
               </button>
               <button
-                disabled={isLoading}
+                disabled={isLoading || !isValid}
                 onClick={handleSave}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                className={
+                  isLoading || !isValid
+                    ? 'cursor-not-allowed px-4 py-2'
+                    : 'px-4 py-2 bg-blue-500 text-white rounded'
+                }
               >
                 {isLoading ? 'Loading...' : 'Save'}
               </button>

@@ -26,6 +26,9 @@ const Detail = () => {
   const [addModal, setAddModal] = useState(false);
   const [detailCategory, setDetailCategory] = useState<any[]>();
   const [file, setFile] = useState<any>();
+  const [isValid, setIsValid] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
+
   const [addData, setAddData] = useState<any>({
     name: '',
     attachmentId: 0,
@@ -58,7 +61,20 @@ const Detail = () => {
       setFile(e.target.files[0]);
     }
   };
+  const validateInput = (value: string) => {
+    const invalidChars = /[<>"?><|\/*]/;
+    if (!value.trim() || invalidChars.test(value)) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+  };
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setName(newValue);
+    validateInput(newValue);
+  };
   const handleClick = async () => {
     try {
       const formData = new FormData();
@@ -123,7 +139,7 @@ const Detail = () => {
     )
     .sort((a: any, b: any) => {
       const aIndex = a.name.toLowerCase().indexOf(searchQuery.toLowerCase()),
-      bIndex = b.name.toLowerCase().indexOf(searchQuery.toLowerCase());
+        bIndex = b.name.toLowerCase().indexOf(searchQuery.toLowerCase());
 
       if (aIndex === 0 && bIndex !== 0) return -1;
       else if (bIndex === 0 && aIndex !== 0) return 1;
@@ -262,7 +278,10 @@ const Detail = () => {
           <input
             type="text"
             name="name"
-            onChange={(e) => setAddData({ ...addData, name: e.target.value })}
+            onChange={(e) => {
+              setAddData({ ...addData, name: e.target.value }),
+                handleNameChange;
+            }}
             value={addData.name}
             className="w-full p-2 mb-4 border rounded"
           />
@@ -313,9 +332,10 @@ const Detail = () => {
           <input
             type="text"
             name="description"
-            onChange={(e) =>
-              setAddData({ ...addData, description: e.target.value })
-            }
+            onChange={(e) => {
+              setAddData({ ...addData, description: e.target.value }),
+                handleNameChange;
+            }}
             className="w-full p-2 mb-4 border rounded"
           />
           <Input onChange={handleImageChange} label="Image" type="file" />
@@ -327,11 +347,16 @@ const Detail = () => {
               Cancel
             </button>
             <button
+              disabled={postIsLoading || !isValid}
               onClick={handleClick}
-              className="px-4 py-2 bg-blue-500 text-white rounded"
+              className={
+                postIsLoading || !isValid
+                  ? ' cursor-not-allowed px-4 py-2'
+                  : 'rounded-lg px-3 py-2 bg-green-500 text-white'
+              }
             >
               {isLoading ? 'Loading...' : 'Save'}
-            </button>
+            </button> 
           </div>
         </div>
       </GlobalModal>
