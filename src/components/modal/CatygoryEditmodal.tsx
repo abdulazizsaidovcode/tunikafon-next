@@ -29,6 +29,8 @@ const EditModal: React.FC<EditModalProps> = ({
   const [attachmentId, setAttachmentId] = useState<string | number>(
     item.attachmentId,
   );
+  const [isValid, setIsValid] = useState<boolean>(false);
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { data, isLoading, error, put } = usePut();
 
@@ -37,6 +39,19 @@ const EditModal: React.FC<EditModalProps> = ({
       setImageFile(e.target.files[0]);
     }
   };
+  const validateInput = () => {
+    const invalidChars = /[<>" "?><|\/*]/;
+    if (!name || invalidChars.test(name)) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+    validateInput();
+  };  
 
   const handleSave = async () => {
     if (!name || !attachmentId) {

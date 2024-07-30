@@ -22,7 +22,7 @@ function App() {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if (token) navigate('/');
+    if (token) navigate('/dashboard');
     else navigate('/login');
   }, []);
 
@@ -36,7 +36,7 @@ function App() {
         <DefaultLayout>
           <Routes>
             <Route
-              index
+              path='/dashboard'
               element={
                 <>
                   <PageTitle title="eCommerce Dashboard |" />

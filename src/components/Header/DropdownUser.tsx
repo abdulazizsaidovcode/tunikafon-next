@@ -33,7 +33,7 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img className='rounded-full' src={data && attechment + data.attachmentId} alt="" />
+          <img className='rounded-full w-full h-full object-cover bg-cover' src={data && attechment + data.attachmentId} alt="" />
         </span>
 
         <svg

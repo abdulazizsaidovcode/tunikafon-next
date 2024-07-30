@@ -6,7 +6,7 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import axios from '../service/api';
 import { attechment } from '../service/urls';
 import EditModal from '../components/modal/CatygoryEditmodal';
-import DeleteModal from '../components/modal/deleteModal'; // Ensure you import the delete modal
+import DeleteModal from '../components/modal/deleteModal';
 import useGet from '../hooks/get';
 import { toast } from 'sonner';
 import GlobalModal from '../components/modal';
@@ -22,11 +22,17 @@ const Category = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Item | null | any>(null);
   const { data, get, isLoading, error } = useGet();
   const { post, isLoading: postIsLoading } = usePost();
-  const [file, setFile] = useState<any>();
-  const [name, setName] = useState<string>();
+  const [file, setFile] = useState<File | null>(null);
+  const [name, setName] = useState<string>('');
+  const [isValid, setIsValid] = useState<boolean>(false);
+
+  useEffect(() => {
+    get('/category/list');
+  }, [editModal]);
+
   const toggleModal = () => setToggle(!toggle);
 
   const handleEditClick = (item: Item) => {
@@ -54,9 +60,9 @@ const Category = () => {
       try {
         await axios.delete(`/category/${selectedItem.id}`);
         get('/category/list');
-        toast.success('Category deleted')
+        toast.success('Category deleted');
       } catch (e) {
-        toast.error('Failed to delete item:');
+        toast.error('Failed to delete item');
       }
       handleCloseDeleteModal();
     }
@@ -67,38 +73,49 @@ const Category = () => {
       setFile(e.target.files[0]);
     }
   };
-  
+
+  const validateInput = (name: string) => {
+    const invalidChars = /[<>" "?><|\/*]/;
+    if (!name || invalidChars.test(name)) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value;
+    setName(newName);
+    validateInput(newName);
+  };
+
   const addDetailCategory = async () => {
     try {
+      if (!name.length || !file) {
+        throw new Error('All fields required');
+      }
+
       const formData = new FormData();
       formData.append('file', file);
-
-      if (!name?.length || !formData.has('file')) {
-        throw new Error('All feads reqired');
-      }
 
       const { data } = await axios.post(`/attachment/upload`, formData);
 
       if (data.body) {
         await post(`/category`, {
-          name: name,
+          name,
           attachmentId: data.body,
         });
+        get('/category/list');
+        toggleModal();
+        toast.success('Successfully added category');
       }
-      get('/category/list');
-      toggleModal();
-      toast.success('Succsesfully done');
     } catch (error) {
-      toast.error('Error');
+      toast.error('Error adding category');
     } finally {
-      setName(''); 
+      setName('');
       setFile(null);
     }
   };
-  // category
-  useEffect(() => {  
-    get('/category/list');
-  }, [editModal]);  
 
   return (
     <>
@@ -132,8 +149,13 @@ const Category = () => {
             </tr>
           </thead>
           <tbody>
-            {isLoading && <div>Loading...</div>}
-            {data && data.object.length ? (
+            {isLoading ? (
+              <tr>
+                <td colSpan={5} className="text-center py-4">
+                  Loading...
+                </td>
+              </tr>
+            ) : data && data.object.length ? (
               data.object.map((item: Item, i: number) => (
                 <tr
                   key={item.id}
@@ -171,11 +193,16 @@ const Category = () => {
                 </tr>
               ))
             ) : (
-              ''
+              <tr>
+                <td colSpan={5} className="text-center py-4">
+                  No categories found
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
       </div>
+
       {editModal && selectedItem && (
         <EditModal
           getting={() => get('/category/list')}
@@ -184,6 +211,7 @@ const Category = () => {
           item={selectedItem}
         />
       )}
+
       <GlobalModal
         isOpen={toggle}
         onClose={toggleModal}
@@ -192,7 +220,7 @@ const Category = () => {
             <div>
               <div>
                 <label className="text-lg font-medium my-2" htmlFor="photo">
-                  Choice photo
+                  Choose photo
                 </label>
                 <input
                   onChange={handleImageChange}
@@ -202,11 +230,12 @@ const Category = () => {
                 />
               </div>
               <div className="mt-5">
-                <label className="text-lg font-medium" htmlFor="photo">
+                <label className="text-lg font-medium" htmlFor="name">
                   Enter your Name
                 </label>
                 <input
-                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  onChange={handleNameChange}
                   className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
                   type="text"
                 />
@@ -220,7 +249,7 @@ const Category = () => {
                 Close
               </button>
               <button
-                disabled={postIsLoading}
+                disabled={postIsLoading || !isValid}
                 onClick={addDetailCategory}
                 className="rounded-lg px-3 py-2 bg-green-500 text-white"
               >
@@ -230,6 +259,7 @@ const Category = () => {
           </div>
         }
       />
+
       {deleteModal && selectedItem && (
         <DeleteModal
           isModal={deleteModal}

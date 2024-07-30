@@ -1,5 +1,6 @@
 import GlobalModal from '.';
 
+
 interface ModalType {
   isModal: boolean;
   onClose: () => void;
