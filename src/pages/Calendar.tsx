@@ -256,7 +256,7 @@ const Category = () => {
                     : 'rounded-lg px-3 py-2 bg-green-500 text-white'
                 }
               >
-                {postIsLoading ? 'Uplouding...' : 'Save'}
+                {postIsLoading ? 'Loading...' : 'Save'}
               </button>
             </div>
           </div>

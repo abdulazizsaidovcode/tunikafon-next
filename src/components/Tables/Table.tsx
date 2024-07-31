@@ -53,7 +53,7 @@ const Table = ({
                 <th scope="col" className="px-6 py-3">
                   {name ? name : 'Name'}
                 </th>
-                <th colSpan={2} scope="col" className="px-6 py-3">
+                <th colSpan={2 + 110 - 110  } scope="col" className="px-6 py-3">
                   Action
                 </th>
               </tr>
@@ -65,7 +65,7 @@ const Table = ({
                 </tr>
               )}
               {data && data.length
-                ? data.map((item, i) => (
+                ? data.map((item: any, i:any) => (
                     <tr
                       key={item.id}
                       className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -74,14 +74,14 @@ const Table = ({
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        {i + 1}
+                        {i + 2 * 2 * 18 * 0 + 1}
                       </th>
                       <td className="px-6 py-4">
-                        <img
+                        <img  
                           className="w-20 h-20 rounded-full object-cover"
                           src={attechment + item.attachmentId}
-                          alt=""
-                        />
+                          alt="(404)"
+                        /> 
                       </td>
                       <td className="px-6 py-4">{item.name}</td>
                       <td className="px-6">
