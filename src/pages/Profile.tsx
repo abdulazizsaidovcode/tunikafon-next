@@ -27,6 +27,8 @@ const DetailCategory = () => {
   const [val, setVal] = useState<string>('');
   const [name, setName] = useState<string>();
   const [editModal, setEditModal] = useState(false);
+  const [isValid, setIsValid] = useState<boolean>(false);
+
 
   const toggleModal = () => setToggle(!toggle);
   const deleteToggleModal = () => setDeleteModal(!deleteModal);
@@ -67,7 +69,20 @@ const DetailCategory = () => {
       setFile(null);
     }
   };
+  const validateInput = (value: string) => {
+    const invalidChars = /[<>"?><|\/*]/;
+    if (!value.trim() || invalidChars.test(value)) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+  };
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setName(newValue);
+    validateInput(newValue);
+  };
   const handleEdit = async () => {
     try {
       const formData = new FormData();
@@ -121,7 +136,6 @@ const DetailCategory = () => {
   return (
     <>
       <Breadcrumb pageName="Detail Category" />
-
       <button
         onClick={toggleModal}
         className="rounded-lg shadow my-5 bg-gray-600 dark:bg-boxdark px-5 py-2"
@@ -161,7 +175,11 @@ const DetailCategory = () => {
             <label className="block mb-2">Name</label>
             <input
               value={val}
-              onChange={(e) => setVal(e.target.value)}
+              type='text'
+              onChange={(e) => {
+                  setVal(e.target.value),handleNameChange
+                }
+              }
               className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
             />
           </div>
@@ -181,16 +199,16 @@ const DetailCategory = () => {
             </button>
           </div>
         </div>
-      </GlobalModal>
+      </GlobalModal> 
       <GlobalModal
         isOpen={toggle}
         onClose={toggleModal}
         children={
-          <div>
+          <div> 
             <div>
               <div>
                 <label className="text-lg font-medium my-2" htmlFor="photo">
-                  Choose photo
+                  Sellect photo
                 </label>
                 <input
                   onChange={handleImageChange}
@@ -204,7 +222,7 @@ const DetailCategory = () => {
                   Enter your Name
                 </label>
                 <input
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {setName(e.target.value), handleNameChange}}
                   className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
                   type="text"
                 />
