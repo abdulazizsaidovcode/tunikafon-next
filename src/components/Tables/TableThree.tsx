@@ -7,17 +7,17 @@ const packageData: Package[] = [
     invoiceDate: `Jan 13,2023`,
     status: 'Paid',
   },
-  {
-    name: 'Standard Package',
+  { 
+    name: 'shu saneya tugilgan bala qidirilopti ismi ***sh ',
     price: 59.0,
-    invoiceDate: `Jan 13,2023`,
-    status: 'Paid',
+    invoiceDate: `May 05,09`,
+    status: 'not found 404',
   },
   {
     name: 'Business Package',
-    price: 99.0,
+    price: 1200,
     invoiceDate: `Jan 13,2023`,
-    status: 'Unpaid',
+    status: 'yana',
   },
   {
     name: 'Standard Package',
@@ -35,16 +35,16 @@ const TableThree = () => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                Package
+                Package.lock.json
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                Invoice date
+                Invoice fa-database
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                Status
+                Status(succes)
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
-                Actions
+                Actions not fount
               </th>
             </tr>
           </thead>

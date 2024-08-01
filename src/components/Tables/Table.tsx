@@ -34,6 +34,7 @@ const Table = ({
   const handleEdit = (data: any) => {
     updataModal();
     setUpdate(data);
+
   };
 
   return (
