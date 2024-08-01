@@ -25,13 +25,22 @@ const Employees = () => {
   const [editModal, setEditModal] = useState(false);
   const [edit, setEdit] = useState<any>();
   const [file, setFile] = useState<any>();
+  const [page, setPage] = useState<number>(0);
+  const [imageUpdateLoading, setImageUpdateLoading] = useState(false);
   const [all, setAll] = useState({
     fullName: '',
     phoneNumber: '',
     password: '',
   });
 
-  const toggleModal = () => setToggle(!toggle);
+  const toggleModal = () => {
+    setToggle(!toggle);
+    setAll({
+      fullName: '',
+      phoneNumber: '',
+      password: '',
+    });
+  };
   const editToggleModal = () => setEditModal(!editModal);
   const deleteToggleModal = () => setDeleteModal(!deleteModal);
 
@@ -45,7 +54,7 @@ const Employees = () => {
     try {
       await remove('/user', deleteId);
       deleteToggleModal();
-      get('/user/employees');
+      get('/user/employees', page);
       toast.success('Succesfuly deleted');
     } catch (error) {
       toast.error('Error');
@@ -60,24 +69,19 @@ const Employees = () => {
         !all.password.trim().length
       )
         throw new Error();
-      else {
-        await post('/auth/register', all);
+      await post('/auth/register', all);
 
-        if (error) throw new Error();
-        else {
-          toast.success('Succesfuly aded');
-          toggleModal();
-          get('/user/employees');
-        }
-      }
-    } catch (error) {
-      toast.error('Error');
-    } finally {
+      toast.success('Succesfuly aded');
+      toggleModal();
+      get('/user/employees', page);
+
       setAll({
         fullName: '',
         phoneNumber: '',
         password: '',
       });
+    } catch (error) {
+      toast.error('Error');
     }
   };
 
@@ -89,41 +93,46 @@ const Employees = () => {
         !all.fullName.trim().length ||
         !all.phoneNumber.trim().length ||
         !all.password.trim().length ||
-        !formData.has('file')
+        !file
       )
         throw new Error();
 
+      setImageUpdateLoading(true);
       const { data } = await axios.post(`/attachment/upload`, formData);
 
-      await put('/auth/edit/by/admin', edit.id, {
-        ...all,
-        attachmentId: data.body,
-      });
+      if (data.body) {
+        await put('/auth/edit/by/admin', edit.id, {
+          ...all,
+          attachmentId: data.body,
+        });
+      }
 
       if (putError) throw new Error();
       else {
         toast.success('Succesfuly updated');
         editToggleModal();
-        get('/user/employees');
+
+        get('/user/employees', page);
       }
-    } catch (error) {
-      toast.error('Error');
-    } finally {
       setAll({
         fullName: '',
         phoneNumber: '',
         password: '',
       });
+    } catch (error) {
+      toast.error('Error');
+    } finally {
+      setImageUpdateLoading(false);
     }
   };
 
   const handlePageClick = (page: any) => {
-    get('/user/employees', page.selected);
+    setPage(page.selected);
   };
 
   useEffect(() => {
-    get('/user/employees');
-  }, []);
+    get('/user/employees', page);
+  }, [page]);
 
   useEffect(() => {
     if (edit) {
@@ -146,81 +155,89 @@ const Employees = () => {
         >
           Add
         </button>
-        <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-            <table className="lg:w-[1145px] md:w-[992px] w-[700px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    #
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Phone number
-                  </th>
-                  <th colSpan={2} scope="col" className="px-6 py-3">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading && (
-                  <tr className="px-6 py-4">
-                    <div className="w-10 h-10 animate-spin rounded-full border-4 border-black dark:border-white border-dotted" />
-                  </tr>
-                )}
-                {data && data.object.length
-                  ? data.object.map((item: any, i: number) => (
-                      <tr
-                        key={item.id}
-                        className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                        >
-                          {i + 1}
-                        </th>
-                        <td className="px-6 py-4">{item.fullName}</td>
-                        <td className="px-6 py-4">{item.phoneNumber}</td>
-                        <td className="px-6">
-                          <button
-                            onClick={() => {
-                              editToggleModal();
-                              setEdit(item);
-                            }}
-                          >
-                            <FaRegEdit size={25} className="text-green-500" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              deleteToggleModal();
-                              setDeleteId(item.id);
-                            }}
-                            className="ml-5"
-                          >
-                            <RiDeleteBinLine
-                              size={25}
-                              className="text-red-500"
-                            />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  : !isLoading && (
-                      <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td className="px-6">
-                          <FaRegFolderOpen size={50} />
-                        </td>
-                      </tr>
-                    )}
-              </tbody>
-            </table>
+        {isLoading ? (
+          <div className="w-full flex justify-center">
+            <div
+              className="inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              role="status"
+            >
+              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                Loading...
+              </span>
+            </div>
           </div>
-        </div>
-        <ReactPaginate
+        ) : (
+          <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+              <table className="lg:w-[1145px] md:w-[992px] w-[700px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      #
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Name
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Phone number
+                    </th>
+                    <th colSpan={2} scope="col" className="px-6 py-3">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data && data.object.length
+                    ? data.object.map((item: any, i: number) => (
+                        <tr
+                          key={item.id}
+                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        >
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                          >
+                            {i + 1}
+                          </th>
+                          <td className="px-6 py-4">{item.fullName}</td>
+                          <td className="px-6 py-4">{item.phoneNumber}</td>
+                          <td className="px-6">
+                            <button
+                              onClick={() => {
+                                editToggleModal();
+                                setEdit(item);
+                              }}
+                            >
+                              <FaRegEdit size={25} className="text-green-500" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                deleteToggleModal();
+                                setDeleteId(item.id);
+                              }}
+                              className="ml-5"
+                            >
+                              <RiDeleteBinLine
+                                size={25}
+                                className="text-red-500"
+                              />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    : !isLoading && (
+                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <td className="px-6">
+                            <FaRegFolderOpen size={50} />
+                          </td>
+                        </tr>
+                      )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        {/* <ReactPaginate
           className="flex gap-3 navigation mt-5"
           breakLabel="..."
           nextLabel=">"
@@ -229,7 +246,20 @@ const Employees = () => {
           pageCount={data && data.totalPage}
           previousLabel="<"
           renderOnZeroPageCount={null}
-        />
+        /> */}
+        {!isLoading && data && data.object ? (
+          <ReactPaginate
+            className="flex gap-3 navigation mt-5"
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={data && data.totalPage}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={page}
+          />
+        ) : null}
       </div>
       <GlobalModal
         isOpen={toggle}
@@ -306,11 +336,11 @@ const Employees = () => {
                 Close
               </button>
               <button
-                disabled={putIsLoading}
+                disabled={putIsLoading || imageUpdateLoading}
                 onClick={handleEdit}
                 className="rounded-lg px-3 py-2 bg-green-500 text-white"
               >
-                {postIsloading ? 'Loading...' : 'Edit'}
+                {putIsLoading || imageUpdateLoading ? 'Loading...' : 'Edit'}
               </button>
             </div>
           </div>

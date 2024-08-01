@@ -19,6 +19,7 @@ const useGet = () => {
       }
     } catch (err) {
       setError(err);
+      throw new Error();
     } finally {
       setIsLoading(false);
     }

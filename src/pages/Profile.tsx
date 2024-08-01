@@ -14,11 +14,11 @@ import ReactPaginate from 'react-paginate';
 
 const DetailCategory = () => {
   const { data, get, isLoading } = useGet();
-  const { data: removeData, remove, isLoading: deleteIsLoading } = useDelete();
-  const { isLoading: putIsLoading, put } = usePut();
+  const { remove, isLoading: deleteIsLoading } = useDelete();
+  const { isLoading: putIsLoading, put, error } = usePut();
   const { post, isLoading: postIsLoading } = usePost();
-  const [imgUploadLoading, setImgUploadLoading] = useState(false);
 
+  const [imgUploadLoading, setImgUploadLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number>();
@@ -28,7 +28,7 @@ const DetailCategory = () => {
   const [name, setName] = useState<string>();
   const [editModal, setEditModal] = useState(false);
   const [isValid, setIsValid] = useState<boolean>(false);
-
+  const [page, setPage] = useState<number>(0);
 
   const toggleModal = () => setToggle(!toggle);
   const deleteToggleModal = () => setDeleteModal(!deleteModal);
@@ -45,30 +45,32 @@ const DetailCategory = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      if (!name?.trim().length || !formData.has('file')) {
+      if (!name?.trim() || !file) {
         throw new Error('All fields required');
       }
 
       setImgUploadLoading(true);
-      const { data } = await axios.post('/attachment/upload', formData);
-      setImgUploadLoading(false);
 
+      const { data } = await axios.post('/attachment/upload', formData);
       if (data.body) {
         await post('/detail-category', {
           name: name,
           attachmentId: data.body,
         });
       }
-      get('/detail-category/list');
+
+      await get('/detail-category/list', page);
       toggleModal();
       toast.success('Successfully added');
     } catch (error) {
       toast.error('Error');
     } finally {
+      setImgUploadLoading(false);
       setName('');
       setFile(null);
     }
   };
+
   const validateInput = (value: string) => {
     const invalidChars = /[<>"?><|\/*]/;
     if (!value.trim() || invalidChars.test(value)) {
@@ -83,23 +85,29 @@ const DetailCategory = () => {
     setName(newValue);
     validateInput(newValue);
   };
+
   const handleEdit = async () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
 
-      if (!formData.has('file') || !val?.trim()) throw new Error();
+      if (!val?.trim().length || !file) {
+        throw new Error('All fields required');
+      }
 
       if (update) {
         await put(`/attachment`, update.attachmentId, formData);
+
+        if (error) throw new Error();
 
         await put(`/detail-category`, update.id, {
           name: val,
           attachmentId: update.attachmentId,
         });
+        if (error) throw new Error();
 
         editToggleModal();
-        await get('/detail-category/list');
+        get('/detail-category/list', page);
         toast.success('Successfully updated');
       }
     } catch (error) {
@@ -113,19 +121,19 @@ const DetailCategory = () => {
   const handleDelete = async () => {
     if (deleteId) {
       await remove(`/detail-category`, deleteId);
-      get('/detail-category/list');
+      get('/detail-category/list', page);
       deleteToggleModal();
       toast.success('Successfully deleted');
     }
   };
 
   const handlePageClick = (page: any) => {
-    get('/detail-category/list', page.selected);
+    setPage(page.selected);
   };
 
   useEffect(() => {
-    get('/detail-category/list', 0);
-  }, [removeData, deleteModal, editModal, toggle]);
+    get('/detail-category/list', page);
+  }, [page]);
 
   useEffect(() => {
     if (update) {
@@ -142,7 +150,7 @@ const DetailCategory = () => {
       >
         Add
       </button>
-      <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div>
         <Table
           setUpdate={setUpdate}
           updataModal={editToggleModal}
@@ -152,16 +160,19 @@ const DetailCategory = () => {
           setDeleteId={setDeleteId}
         />
       </div>
-      <ReactPaginate
-        className="flex gap-3 navigation mt-5"
-        breakLabel="..."
-        nextLabel=">"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
-        pageCount={data && data.totalPage}
-        previousLabel="<"
-        renderOnZeroPageCount={null}
-      />
+      {!isLoading && data && data.object ? (
+        <ReactPaginate
+          className="flex gap-3 navigation mt-5"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={data && data.totalPage}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+          forcePage={page}
+        />
+      ) : null}
       <DeleteModal
         isModal={deleteModal}
         onClose={deleteToggleModal}
@@ -175,11 +186,10 @@ const DetailCategory = () => {
             <label className="block mb-2">Name</label>
             <input
               value={val}
-              type='text'
+              type="text"
               onChange={(e) => {
-                  setVal(e.target.value),handleNameChange
-                }
-              }
+                setVal(e.target.value), handleNameChange;
+              }}
               className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
             />
           </div>
@@ -193,18 +203,18 @@ const DetailCategory = () => {
             <button
               disabled={putIsLoading}
               onClick={handleEdit}
-              className="rounded-lg px-4 py-2 bg-green-500 text-white"
+              className={` rounded-lg px-4 py-2 bg-green-500 text-white`}
             >
               {putIsLoading ? 'Loading...' : 'Edit'}
             </button>
           </div>
         </div>
-      </GlobalModal> 
+      </GlobalModal>
       <GlobalModal
         isOpen={toggle}
         onClose={toggleModal}
         children={
-          <div> 
+          <div>
             <div>
               <div>
                 <label className="text-lg font-medium my-2" htmlFor="photo">
@@ -222,7 +232,9 @@ const DetailCategory = () => {
                   Enter your Name
                 </label>
                 <input
-                  onChange={(e) => {setName(e.target.value), handleNameChange}}
+                  onChange={(e) => {
+                    setName(e.target.value), handleNameChange;
+                  }}
                   className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
                   type="text"
                 />

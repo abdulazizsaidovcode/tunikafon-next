@@ -20,6 +20,7 @@ const useLogin = () => {
       } else throw new Error();
     } catch (error) {
       setError(error);
+      throw new Error();
     } finally {
       setIsLoading(false);
     }

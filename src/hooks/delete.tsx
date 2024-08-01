@@ -19,6 +19,7 @@ const useDelete = () => {
       }
     } catch (error) {
       setError(error);
+      throw new Error();
     } finally {
       setIsLoading(false);
     }

@@ -19,6 +19,7 @@ const usePost = () => {
       }
     } catch (err) {
       setError(err);
+      throw new Error();
     } finally {
       setIsLoading(false);
     }
