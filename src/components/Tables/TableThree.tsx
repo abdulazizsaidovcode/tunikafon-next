@@ -7,17 +7,17 @@ const packageData: Package[] = [
     invoiceDate: `Jan 13,2023`,
     status: 'Paid',
   },
-  {
-    name: 'Standard Package',
+  { 
+    name: 'shu saneya tugilgan bala qidirilopti ismi ***sh ',
     price: 59.0,
-    invoiceDate: `Jan 13,2023`,
-    status: 'Paid',
+    invoiceDate: `May 05,09`,
+    status: 'not found 404',
   },
   {
     name: 'Business Package',
-    price: 99.0,
+    price: 1200,
     invoiceDate: `Jan 13,2023`,
-    status: 'Unpaid',
+    status: 'yana',
   },
   {
     name: 'Standard Package',
@@ -35,16 +35,16 @@ const TableThree = () => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                Package
+                Package.lock.json
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                Invoice date
+                Invoice fa-database
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                Status
+                Status(succes)
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
-                Actions
+                Actions not fount
               </th>
             </tr>
           </thead>
@@ -116,7 +116,7 @@ const TableThree = () => {
                         <path
                           d="M11.2502 9.67504C10.8846 9.64692 10.6033 9.90004 10.5752 10.2657L10.4064 12.7407C10.3783 13.0782 10.6314 13.3875 10.9971 13.4157C11.0252 13.4157 11.0252 13.4157 11.0533 13.4157C11.3908 13.4157 11.6721 13.1625 11.6721 12.825L11.8408 10.35C11.8408 9.98442 11.5877 9.70317 11.2502 9.67504Z"
                           fill=""
-                        />
+                        />   
                         <path
                           d="M6.72245 9.67504C6.38495 9.70317 6.1037 10.0125 6.13182 10.35L6.3287 12.825C6.35683 13.1625 6.63808 13.4157 6.94745 13.4157C6.97558 13.4157 6.97558 13.4157 7.0037 13.4157C7.3412 13.3875 7.62245 13.0782 7.59433 12.7407L7.39745 10.2657C7.39745 9.90004 7.08808 9.64692 6.72245 9.67504Z"
                           fill=""
@@ -142,6 +142,7 @@ const TableThree = () => {
                         />
                       </svg>
                     </button>
+                    <button>no name</button>
                   </div>
                 </td>
               </tr>
