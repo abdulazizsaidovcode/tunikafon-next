@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 const SignIn: React.FC = () => {
   const [val, setVal] = useState({ phoneNumber: '', password: '' });
-  const { error, login, isLoading, data } = useLogin();
+  const { login, isLoading } = useLogin();                       
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
