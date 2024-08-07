@@ -13,8 +13,14 @@ import usePut from '../hooks/put';
 import axios from '../service/api';
 import ReactPaginate from 'react-paginate';
 
+interface Type {
+  fullName: string;
+  phoneNumber: any;
+  password: string;
+}
+
 const Employees = () => {
-  const { post, isLoading: postIsloading, error } = usePost();
+  const { post, isLoading: postIsloading } = usePost();
   const { data, isLoading, get } = useGet();
   const { remove, isLoading: deleteIsLoading } = useDelete();
   const { put, isLoading: putIsLoading, error: putError } = usePut();
@@ -27,9 +33,9 @@ const Employees = () => {
   const [file, setFile] = useState<any>();
   const [page, setPage] = useState<number>(0);
   const [imageUpdateLoading, setImageUpdateLoading] = useState(false);
-  const [all, setAll] = useState({
+  const [all, setAll] = useState<Type>({
     fullName: '',
-    phoneNumber: '',
+    phoneNumber: null,
     password: '',
   });
 
@@ -37,7 +43,7 @@ const Employees = () => {
     setToggle(!toggle);
     setAll({
       fullName: '',
-      phoneNumber: '',
+      phoneNumber: null,
       password: '',
     });
   };
@@ -65,11 +71,30 @@ const Employees = () => {
     try {
       if (
         !all.fullName.trim().length ||
-        !all.phoneNumber.trim().length ||
+        !all.phoneNumber.length ||
         !all.password.trim().length
       )
-        throw new Error();
-      await post('/auth/register', all);
+        throw new Error('All fields required');
+
+      if (all.phoneNumber.length !== 12) {
+        throw new Error('The length of the number should be 13 characters.');
+      }
+
+      if (!all.phoneNumber.startsWith(+998)) {
+        throw new Error('The number must start with +998.');
+      }
+
+      const raqamQismi = all.phoneNumber.slice(1);
+      if (!/^\d+$/.test(raqamQismi)) {
+        throw new Error(
+          'The number must consist of numbers only (except for the + sign at the beginning).',
+        );
+      }
+
+      await post('/auth/register', {
+        ...all,
+        phoneNumber: `+${all.phoneNumber}`,
+      });
 
       toast.success('Succesfuly aded');
       toggleModal();
@@ -77,11 +102,12 @@ const Employees = () => {
 
       setAll({
         fullName: '',
-        phoneNumber: '',
+        phoneNumber: null,
         password: '',
       });
-    } catch (error) {
-      toast.error('Error');
+    } catch (error: any) {
+      toast.error(error.message);
+      console.log(error);
     }
   };
 
@@ -89,13 +115,12 @@ const Employees = () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      if (
-        !all.fullName.trim().length ||
-        !all.phoneNumber.trim().length ||
-        !all.password.trim().length ||
-        !file
-      )
-        throw new Error();
+      if (!all.fullName.trim().length || !all.password.trim().length || !file)
+        throw new Error('All fields required');
+
+      if (all.phoneNumber.toString().length !== 12) {
+        throw new Error('The length of the number should be 13 characters.');
+      }
 
       setImageUpdateLoading(true);
       const { data } = await axios.post(`/attachment/upload`, formData);
@@ -103,29 +128,31 @@ const Employees = () => {
       if (data.body) {
         await put('/auth/edit/by/admin', edit.id, {
           ...all,
+          phoneNumber: `+${all.phoneNumber}`, // +998 allaqachon mavjud
           attachmentId: data.body,
         });
       }
 
       if (putError) throw new Error();
       else {
-        toast.success('Succesfuly updated');
-        editToggleModal();
+        toast.success('Successfully updated');
 
         get('/user/employees', page);
       }
       setAll({
         fullName: '',
-        phoneNumber: '',
+        phoneNumber: null,
         password: '',
       });
-    } catch (error) {
-      toast.error('Error');
+      setFile(null);
+      editToggleModal();
+    } catch (error: any) {
+      toast.error(error.message);
+      console.log(error);
     } finally {
       setImageUpdateLoading(false);
     }
   };
-
   const handlePageClick = (page: any) => {
     setPage(page.selected);
   };
@@ -138,7 +165,7 @@ const Employees = () => {
     if (edit) {
       setAll({
         fullName: edit.fullName,
-        phoneNumber: edit.phoneNumber,
+        phoneNumber: +edit.phoneNumber,
         password: '',
       });
     }
@@ -195,12 +222,12 @@ const Employees = () => {
                         >
                           <th
                             scope="row"
-                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
                             {i + 1}
                           </th>
-                          <td className="px-6 py-4">{item.fullName}</td>
-                          <td className="px-6 py-4">{item.phoneNumber}</td>
+                          <td className="px-6 py-5">{item.fullName}</td>
+                          <td className="px-6 py-5">{item.phoneNumber}</td>
                           <td className="px-6">
                             <button
                               onClick={() => {
@@ -237,16 +264,7 @@ const Employees = () => {
             </div>
           </div>
         )}
-        {/* <ReactPaginate
-          className="flex gap-3 navigation mt-5"
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          pageCount={data && data.totalPage}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-        /> */}
+
         {!isLoading && data && data.object ? (
           <ReactPaginate
             className="flex gap-3 navigation mt-5"
@@ -274,15 +292,17 @@ const Employees = () => {
               />
               <Input
                 label="PhoneNumber"
-                onChange={(e) =>
-                  setAll({ ...all, phoneNumber: e.target.value })
-                }
+                type="number"
+                onChange={(e) => {
+                  setAll({ ...all, phoneNumber: e.target.value });
+                }}
                 value={all.phoneNumber}
               />
               <Input
                 label="Password"
                 type="password"
                 onChange={(e) => setAll({ ...all, password: e.target.value })}
+                value={all.password}
               />
             </div>
             <div className="w-full flex justify-between">
@@ -317,6 +337,7 @@ const Employees = () => {
               />
               <Input
                 label="PhoneNumber"
+                type="number"
                 onChange={(e) =>
                   setAll({ ...all, phoneNumber: e.target.value })
                 }
@@ -326,6 +347,7 @@ const Employees = () => {
                 label="Password"
                 type="password"
                 onChange={(e) => setAll({ ...all, password: e.target.value })}
+                value={all.password}
               />
             </div>
             <div className="w-full flex justify-between">

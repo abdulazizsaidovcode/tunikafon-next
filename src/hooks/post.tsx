@@ -14,12 +14,12 @@ const usePost = () => {
       const { data } = await axios.post(url, postData);
       if (data.success) {
         setData(data.body);
-      } else {
-        setError(new Error('Error fetching'));
       }
-    } catch (err) {
+    } catch (err: any) {
+      console.log(error);
+
       setError(err);
-      throw new Error();
+      throw new Error(err.response.data.message);
     } finally {
       setIsLoading(false);
     }

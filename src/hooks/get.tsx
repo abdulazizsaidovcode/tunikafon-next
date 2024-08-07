@@ -14,12 +14,10 @@ const useGet = () => {
       const { data } = await axios.get(api);
       if (data.success) {
         setData(data.body);
-      } else {
-        setError(new Error('Request failed'));
       }
-    } catch (err) {
+    } catch (err: any) {
       setError(err);
-      throw new Error();
+      throw new Error(err.response.data.message);
     } finally {
       setIsLoading(false);
     }

@@ -18,9 +18,9 @@ const useLogin = () => {
         localStorage.setItem('token', data.body);
         window.location.pathname = '/';
       } else throw new Error();
-    } catch (error) {
-      setError(error);
-      throw new Error();
+    } catch (err: any) {
+      setError(err);
+      throw new Error(err.response.data.message);
     } finally {
       setIsLoading(false);
     }
