@@ -144,7 +144,14 @@ const Detail = () => {
       if (aIndex === 0 && bIndex !== 0) return -1;
       else if (bIndex === 0 && aIndex !== 0) return 1;
       else return aIndex - bIndex;
-    });
+      if (newValue.startsWith(' ')) {
+        setValue(newValue.trimStart());
+      } else {
+        setValue(newValue);
+      }
+    }
+    
+    );
 
   return (
     <>
@@ -153,7 +160,7 @@ const Detail = () => {
       <div className="w-full flex justify-between items-center">
         <button
           className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-5 py-2"
-          onClick={addToggleModal} // Open add modal
+          onClick={addToggleModal}
         >
           Add
         </button>

@@ -12,7 +12,6 @@ import { toast } from 'sonner';
 import GlobalModal from '../components/modal';
 import usePost from '../hooks/post';
 
-
 interface Item {
   id: number;
   attachmentId: string | number;
@@ -33,6 +32,13 @@ const Category = () => {
   useEffect(() => {
     get('/category/list');
   }, [editModal]);
+
+  useEffect(() => {
+    // Sortirovka qilish uchun data mavjud bo'lsa
+    if (data && data.object) {
+      data.object.sort((a: Item, b: Item) => a.id - b.id);
+    }
+  }, [data]);
 
   const toggleModal = () => setToggle(!toggle);
 
@@ -55,6 +61,7 @@ const Category = () => {
     setDeleteModal(false);
     setSelectedItem(null);
   };
+
   const handleConfirmDelete = async () => {
     if (selectedItem) {
       try {
@@ -189,7 +196,7 @@ const Category = () => {
                     >
                       <RiDeleteBinLine size={25} className="text-red-500" />
                     </button>
-                    </td>
+                  </td>
                 </tr> 
               ))
             ) : (

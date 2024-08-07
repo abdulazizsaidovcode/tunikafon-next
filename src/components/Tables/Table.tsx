@@ -46,10 +46,10 @@ const Table = ({
             role="status"
           >
             <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-              Loading...
-            </span>
+              Loading.... 
+            </span> 
           </div>
-        </div>
+        </div> 
       ) : (
         <div className="w-full max-w-full rounded-sm border border-stroke bg-white dark:border-strokedark dark:bg-boxdark">
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
@@ -65,7 +65,7 @@ const Table = ({
                   <th scope="col" className="px-6 py-3">
                     {name ? name : 'Name'}
                   </th>
-                  <th colSpan={2 + 110 - 110} scope="col" className="px-6 py-3">
+                  <th colSpan={2} scope="col" className="px-6 py-3">
                     Action
                   </th>
                 </tr>
@@ -81,7 +81,7 @@ const Table = ({
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                         >
-                          {i + 2 * 2 * 18 * 0 + 1}
+                          {i + 1}
                         </th>
                         <td className="px-6 py-4">
                           <img
