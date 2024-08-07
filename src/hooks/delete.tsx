@@ -14,12 +14,10 @@ const useDelete = () => {
       const { data } = await axios.delete(`${url}/${id}`);
       if (data.success) {
         setData(data);
-      } else {
-        setError('Feild to fetch');
       }
-    } catch (error) {
-      setError(error);
-      throw new Error();
+    } catch (err: any) {
+      setError(err);
+      throw new Error(err.response.data.message);
     } finally {
       setIsLoading(false);
     }

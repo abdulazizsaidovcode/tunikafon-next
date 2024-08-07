@@ -61,13 +61,12 @@ const DetailCategory = () => {
 
       await get('/detail-category/list', page);
       toggleModal();
-      toast.success('Successfully added');
-    } catch (error) {
-      toast.error('Error');
-    } finally {
       setImgUploadLoading(false);
       setName('');
       setFile(null);
+      toast.success('Successfully added');
+    } catch (error) {
+      toast.error('Error');
     }
   };
 
@@ -98,23 +97,20 @@ const DetailCategory = () => {
       if (update) {
         await put(`/attachment`, update.attachmentId, formData);
 
-        if (error) throw new Error();
-
         await put(`/detail-category`, update.id, {
-          name: val,
+          name: val.trim(),
           attachmentId: update.attachmentId,
         });
         if (error) throw new Error();
 
         editToggleModal();
         get('/detail-category/list', page);
+        setVal('');
+        setFile(null);
         toast.success('Successfully updated');
       }
-    } catch (error) {
-      toast.error('Error');
-      console.log(error);
-    } finally {
-      setVal('');
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
