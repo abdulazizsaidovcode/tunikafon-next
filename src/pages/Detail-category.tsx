@@ -17,7 +17,6 @@ const DetailCategory = () => {
   const { remove, isLoading: deleteIsLoading } = useDelete();
   const { isLoading: putIsLoading, put, error } = usePut();
   const { post, isLoading: postIsLoading } = usePost();
-
   const [imgUploadLoading, setImgUploadLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -177,7 +176,7 @@ const DetailCategory = () => {
       />
       <GlobalModal isOpen={editModal} onClose={editToggleModal}>
         <div>
-          <Input label="Image" type="file" onChange={handleImageChange} />
+          <Input label="Image" type="file"  onChange={handleImageChange} />
           <div>
             <label className="block mb-2">Name</label>
             <input
@@ -219,6 +218,7 @@ const DetailCategory = () => {
                 <input
                   onChange={handleImageChange}
                   className="mt-2"
+                  accept='.png .jpg .svg'
                   id="photo"
                   type="file"
                 />

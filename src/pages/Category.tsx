@@ -236,6 +236,7 @@ const Category = () => {
                   className="mt-2"
                   id="photo"
                   type="file"
+                  accept='.png .jpg .svg'
                 />
               </div>
               <div className="mt-5">

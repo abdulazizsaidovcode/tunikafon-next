@@ -5,15 +5,15 @@ import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import Chart from './pages/Chart';
 import ECommerce from './pages/Dashboard/ECommerce';
-import Detail from './pages/Form/FormElements';
-import Product from './pages/Form/FormLayout';
-import DetailCategory from './pages/Profile';
-import Employees from './pages/Settings';
+import Detail from './pages/Detail/FormElements';
+import Product from './pages/Detail/FormLayout';
+import DetailCategory from './pages/Detail-category';
+import Employees from './pages/Employees';
 import Calculation from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
-import Category from './pages/Calendar';
+import Category from './pages/Category';
 
 function App() {
   const { pathname } = useLocation();
