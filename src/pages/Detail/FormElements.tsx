@@ -134,21 +134,24 @@ const Detail = () => {
     setSearchQuery(event.target.value);
   };
   const filteredData = data?.object
-  ?.filter((item: any) => 
-    item.name.trimStart().toLowerCase().includes(searchQuery.trimStart().toLowerCase())
-  )
-  .sort((a: any, b: any) => {
-    const aName = a.name.trimStart().toLowerCase();
-    const bName = b.name.trimStart().toLowerCase();
-    const searchLower = searchQuery.trimStart().toLowerCase();
-    
-    const aIndex = aName.indexOf(searchLower);
-    const bIndex = bName.indexOf(searchLower);
+    ?.filter((item: any) =>
+      item.name
+        .trimStart()
+        .toLowerCase()
+        .includes(searchQuery.trimStart().toLowerCase()),
+    )
+    .sort((a: any, b: any) => {
+      const aName = a.name.trimStart().toLowerCase();
+      const bName = b.name.trimStart().toLowerCase();
+      const searchLower = searchQuery.trimStart().toLowerCase();
 
-    if (aIndex === 0 && bIndex !== 0) return -1;
-    else if (bIndex === 0 && aIndex !== 0) return 1;
-    else return aIndex - bIndex;
-  });
+      const aIndex = aName.indexOf(searchLower);
+      const bIndex = bName.indexOf(searchLower);
+
+      if (aIndex === 0 && bIndex !== 0) return -1;
+      else if (bIndex === 0 && aIndex !== 0) return 1;
+      else return aIndex - bIndex;
+    });
 
   return (
     <>
@@ -229,9 +232,8 @@ const Detail = () => {
                       <button onClick={() => openEditModal(item)}>
                         <FaRegEdit size={25} className="text-green-500" />
                       </button>
-
                     </td>
-                    <td className='px-6'>
+                    <td className="px-6">
                       <button
                         onClick={() => {
                           deleteToggleModal();
@@ -280,7 +282,6 @@ const Detail = () => {
       <GlobalModal isOpen={addModal} onClose={addToggleModal}>
         <div className="p-4">
           <h2 className="text-xl mb-4">Add Detail</h2>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
           <label className="block mb-2">Name</label>
           <input
             type="text"

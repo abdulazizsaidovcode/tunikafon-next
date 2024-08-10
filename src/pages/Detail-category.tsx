@@ -218,7 +218,7 @@ const DetailCategory = () => {
                 <input
                   onChange={handleImageChange}
                   className="mt-2"
-                  accept='.png .jpg .svg'
+                  accept='.png, .jpg, .svg'
                   id="photo"
                   type="file"
                 />
