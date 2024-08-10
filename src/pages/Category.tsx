@@ -134,7 +134,8 @@ const Category = () => {
         Add
       </button>
 
-      <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"></div>
+      <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
         <table className="lg:w-[1145px] md:w-[992px] w-[700px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -164,13 +165,13 @@ const Category = () => {
             ) : data && data.object.length ? (
               data.object.map((item: Item, i: number) => (
                 <tr
-                  key={item.id}
-                  className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                key={item.id}
+                className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
+                    >
                     {i + 1}
                   </th>
                   <td className="px-6 py-4">
@@ -178,14 +179,14 @@ const Category = () => {
                       src={attechment + item.attachmentId}
                       alt="Img not found"
                       className="w-20 h-20 rounded-full bg-cover object-cover"
-                    />
+                      />
                   </td>
                   <td className="px-6 py-4">{item.name}</td>
                   <td className="px-6 align-middle">
                     <button
                       onClick={() => handleEditClick(item)}
                       className="cursor-pointer"
-                    >
+                      >
                       <FaRegEdit size={25} className="text-green-500 mr-2" />
                     </button>
                   </td>
@@ -193,11 +194,11 @@ const Category = () => {
                     <button
                       onClick={() => handleDeleteClick(item)}
                       className="cursor-pointer"
-                    >
+                      >
                       <RiDeleteBinLine size={25} className="text-red-500" />
                     </button>
                   </td>
-                </tr> 
+                </tr>
               ))
             ) : (
               <tr>
@@ -210,6 +211,7 @@ const Category = () => {
         </table>
       </div>
 
+            </div>
       {editModal && selectedItem && (
         <EditModal
           getting={() => get('/category/list')}
@@ -223,7 +225,7 @@ const Category = () => {
         isOpen={toggle}
         onClose={toggleModal}
         children={
-          <div>
+          <div> 
             <div>
               <div>
                 <label className="text-lg font-medium my-2" htmlFor="photo">
@@ -234,6 +236,7 @@ const Category = () => {
                   className="mt-2"
                   id="photo"
                   type="file"
+                  accept='.png .jpg .svg'
                 />
               </div>
               <div className="mt-5">
@@ -254,7 +257,7 @@ const Category = () => {
                 className="rounded-lg px-3 py-2 bg-graydark"
               >
                 Close
-              </button>
+              </button>  
               <button
                 disabled={postIsLoading || !isValid}
                 onClick={addDetailCategory}

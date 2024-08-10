@@ -134,24 +134,21 @@ const Detail = () => {
     setSearchQuery(event.target.value);
   };
   const filteredData = data?.object
-    ?.filter((item: any) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
-    .sort((a: any, b: any) => {
-      const aIndex = a.name.toLowerCase().indexOf(searchQuery.toLowerCase()),
-        bIndex = b.name.toLowerCase().indexOf(searchQuery.toLowerCase());
-
-      if (aIndex === 0 && bIndex !== 0) return -1;
-      else if (bIndex === 0 && aIndex !== 0) return 1;
-      else return aIndex - bIndex;
-      if (newValue.startsWith(' ')) {
-        setValue(newValue.trimStart());
-      } else {
-        setValue(newValue);
-      }
-    }
+  ?.filter((item: any) => 
+    item.name.trimStart().toLowerCase().includes(searchQuery.trimStart().toLowerCase())
+  )
+  .sort((a: any, b: any) => {
+    const aName = a.name.trimStart().toLowerCase();
+    const bName = b.name.trimStart().toLowerCase();
+    const searchLower = searchQuery.trimStart().toLowerCase();
     
-    );
+    const aIndex = aName.indexOf(searchLower);
+    const bIndex = bName.indexOf(searchLower);
+
+    if (aIndex === 0 && bIndex !== 0) return -1;
+    else if (bIndex === 0 && aIndex !== 0) return 1;
+    else return aIndex - bIndex;
+  });
 
   return (
     <>
@@ -232,10 +229,10 @@ const Detail = () => {
                       <button onClick={() => openEditModal(item)}>
                         <FaRegEdit size={25} className="text-green-500" />
                       </button>
-                      
+
                     </td>
                     <td className='px-6'>
-                    <button
+                      <button
                         onClick={() => {
                           deleteToggleModal();
                           setDeleteId(item.id);
@@ -362,10 +359,10 @@ const Detail = () => {
               className={'rounded-lg px-3 py-2 bg-green-500 text-white'}
             >
               {isLoading ? 'Loading...' : 'Save'}
-            </button> 
+            </button>
           </div>
         </div>
-      </GlobalModal>  
+      </GlobalModal>
     </>
   );
 };
