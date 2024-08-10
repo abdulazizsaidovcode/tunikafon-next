@@ -128,7 +128,7 @@ const Employees = () => {
       if (data.body) {
         await put('/auth/edit/by/admin', edit.id, {
           ...all,
-          phoneNumber: `+${all.phoneNumber}`, // +998 allaqachon mavjud
+          phoneNumber: `+${all.phoneNumber}`, 
           attachmentId: data.body,
         });
       }

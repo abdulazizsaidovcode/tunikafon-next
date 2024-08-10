@@ -13,7 +13,6 @@ import Calculation from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
-import Category from './pages/Calendar';
 
 function App() {
   const { pathname } = useLocation();
@@ -36,7 +35,7 @@ function App() {
         <DefaultLayout>
           <Routes>
             <Route
-              path='/dashboard'
+              path="/dashboard"
               element={
                 <>
                   <PageTitle title="eCommerce Dashboard |" />
@@ -44,15 +43,7 @@ function App() {
                 </>
               }
             />
-            <Route
-              path="/category"
-              element={
-                <>
-                  <PageTitle title="Category | " />
-                  <Category />
-                </>
-              }
-            />
+
             <Route
               path="/categor-detail"
               element={
