@@ -7,16 +7,13 @@ import { toast } from 'sonner';
 
 const SignIn: React.FC = () => {
   const [val, setVal] = useState({ phoneNumber: '', password: '' });
-  const { login, isLoading } = useLogin();                       
+  const { login, isLoading } = useLogin();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     try {
       if (!val.phoneNumber.trim() || !val.password.trim()) throw new Error();
-
       login(val.phoneNumber, val.password);
-
-      toast.success('Success');
     } catch (error) {
       toast.error('Error');
     }
@@ -24,8 +21,8 @@ const SignIn: React.FC = () => {
 
   return (
     <>
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="flex flex-wrap items-center">
+      <div className="rounded-sm bg-white dark:bg-boxdark">
+        <div className="flex h-screen flex-wrap justify-center items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
               <Link className="mb-5.5 inline-block" to="/">
