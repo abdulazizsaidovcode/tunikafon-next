@@ -111,7 +111,7 @@ const Product = () => {
       setName('');
       setDetailIds([]);
       setFile(null);
-      toggleModal();
+      toggleEditModal();
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -132,6 +132,12 @@ const Product = () => {
     get('/product', page);
     getDetail('/detail');
   }, []);
+
+  useEffect(() => {
+    if (update) {
+      setName(update.name);
+    }
+  }, [update, editModal]);
 
   return (
     <>

@@ -6,7 +6,7 @@ import SignIn from './pages/Authentication/SignIn';
 import Chart from './pages/Chart';
 import ECommerce from './pages/Dashboard/ECommerce';
 
-import Calculation from './pages/Tables';
+import Calculation from './pages/Calculation';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
