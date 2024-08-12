@@ -1,6 +1,7 @@
 import { ApexOptions } from 'apexcharts';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
+import useGet from '../../hooks/get';
 
 const options: ApexOptions = {
   legend: {
@@ -21,7 +22,6 @@ const options: ApexOptions = {
       left: 0,
       opacity: 0.1,
     },
-
     toolbar: {
       show: false,
     },
@@ -46,12 +46,8 @@ const options: ApexOptions = {
   ],
   stroke: {
     width: [2, 2],
-    curve: 'straight',
+    curve: 'smooth',
   },
-  // labels: {
-  //   show: false,
-  //   position: "top",
-  // },
   grid: {
     xaxis: {
       lines: {
@@ -73,9 +69,7 @@ const options: ApexOptions = {
     strokeColors: ['#3056D3', '#80CAEE'],
     strokeWidth: 3,
     strokeOpacity: 0.9,
-    strokeDashArray: 0,
     fillOpacity: 1,
-    discrete: [],
     hover: {
       size: undefined,
       sizeOffset: 5,
@@ -84,18 +78,7 @@ const options: ApexOptions = {
   xaxis: {
     type: 'category',
     categories: [
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
+      'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
     ],
     axisBorder: {
       show: false,
@@ -123,46 +106,64 @@ interface ChartOneState {
 }
 
 const ChartOne: React.FC = () => {
+  const { get, data } = useGet();
+  const [year, setYear] = useState<number>(2024);
+
+  useEffect(() => {
+    get(`/order/dashboard/month-income?year=${year}`);
+  }, [year]);
+
+  useEffect(() => {
+    if (data) {
+      setState({
+        series: [
+          {
+            name: 'income',
+            data: data.map(item => item.income ? item.income : 0),
+          },
+        ],
+      });
+    }
+  }, [data]);
+
   const [state, setState] = useState<ChartOneState>({
     series: [
       {
-        name: 'Product One',
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
-      },
-
-      {
-        name: 'Product Two',
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+        name: 'income',
+        data: [],
       },
     ],
   });
 
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-    }));
-  };
-  handleReset;
-
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
-      <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+    <div className="col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+      {/* <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          <div className="flex min-w-47.5">
-            <h1>Chart</h1>
-          </div>
+          <div className="flex min-w-47.5"> */}
+            <h1 className='text-2xl p-3'>Year</h1>
+          {/* </div>
         </div>
-      </div>
-
-      <div>
-        <div id="chartOne" className="-ml-5">
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type="area"
-            height={350}
-          />
-        </div>
+      </div> */}
+      <input
+        id="year"
+        type="number"
+        placeholder="2024"
+        className='rounded ml-3 select-none py-3 p-2 w-full'
+        value={year}
+        onChange={(e) => {
+          const newValue = parseInt(e.target.value, 10);
+          if (!isNaN(newValue)) {
+            setYear(newValue);
+          }
+        }}
+      />
+      <div className='w-full mt-4'>
+        <ReactApexChart
+          options={options}
+          series={state.series}
+          type="area"
+          height={350}
+        />
       </div>
     </div>
   );
