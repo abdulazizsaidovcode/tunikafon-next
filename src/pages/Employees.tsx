@@ -12,6 +12,7 @@ import useDelete from '../hooks/delete';
 import usePut from '../hooks/put';
 import axios from '../service/api';
 import ReactPaginate from 'react-paginate';
+import { Button } from '@material-tailwind/react';
 
 interface Type {
   fullName: string;
@@ -128,7 +129,7 @@ const Employees = () => {
       if (data.body) {
         await put('/auth/edit/by/admin', edit.id, {
           ...all,
-          phoneNumber: `+${all.phoneNumber}`, 
+          phoneNumber: `+${all.phoneNumber}`,
           attachmentId: data.body,
         });
       }
@@ -305,20 +306,17 @@ const Employees = () => {
                 value={all.password}
               />
             </div>
-            <div className="w-full flex justify-between">
-              <button
-                onClick={toggleModal}
-                className="rounded-lg px-3 py-2 bg-graydark"
-              >
+            <div className="w-full flex justify-end gap-5">
+              <Button onClick={toggleModal} color="red">
                 Close
-              </button>
-              <button
+              </Button>
+              <Button
                 disabled={postIsloading}
                 onClick={handleClick}
-                className="rounded-lg px-3 py-2 bg-green-500 text-white"
+                color="green"
               >
                 {postIsloading ? 'Loading...' : 'Save'}
-              </button>
+              </Button>
             </div>
           </div>
         }
@@ -350,20 +348,17 @@ const Employees = () => {
                 value={all.password}
               />
             </div>
-            <div className="w-full flex justify-between">
-              <button
-                onClick={editToggleModal}
-                className="rounded-lg px-3 py-2 bg-graydark"
-              >
+            <div className="w-full flex justify-end gap-5">
+              <Button onClick={editToggleModal} color="red">
                 Close
-              </button>
-              <button
+              </Button>
+              <Button
                 disabled={putIsLoading || imageUpdateLoading}
                 onClick={handleEdit}
-                className="rounded-lg px-3 py-2 bg-green-500 text-white"
+                color="green"
               >
                 {putIsLoading || imageUpdateLoading ? 'Loading...' : 'Edit'}
-              </button>
+              </Button>
             </div>
           </div>
         }

@@ -181,28 +181,14 @@ const DetailCategory = () => {
         children={
           <div>
             <div>
-              <div>
-                <label className="text-lg font-medium my-2" htmlFor="photo">
-                  Sellect photo
-                </label>
-                <input
-                  onChange={handleImageChange}
-                  className="mt-2"
-                  accept=".png, .jpg, .svg"
-                  id="photo"
-                  type="file"
-                />
-              </div>
+              <Input label="Image" onChange={handleImageChange} type="file" />
               <div className="mt-5">
-                <label className="text-lg font-medium" htmlFor="photo">
-                  Enter your Name
-                </label>
-                <input
+                <Input
+                  label="Enter your Name"
+                  value={name}
                   onChange={(e) => {
                     setName(e.target.value), handleNameChange;
                   }}
-                  className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
-                  type="text"
                 />
               </div>
             </div>

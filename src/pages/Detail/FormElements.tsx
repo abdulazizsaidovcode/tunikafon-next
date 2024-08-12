@@ -14,6 +14,7 @@ import axios from '../../service/api';
 import usePost from '../../hooks/post';
 import '../../css/style.css';
 import ReactPaginate from 'react-paginate';
+import { Button } from '@material-tailwind/react';
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
@@ -158,12 +159,12 @@ const Detail = () => {
       <Breadcrumb pageName="Detail" />
 
       <div className="w-full flex justify-between items-center">
-        <button
-          className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-5 py-2"
+        <Button
+          className="my-5 bg-gray-600 dark:bg-boxdark"
           onClick={addToggleModal}
         >
           Add
-        </button>
+        </Button>
         <input
           className="bg-transparent border rounded-lg outline-none px-3 py-2"
           type="text"
@@ -347,20 +348,17 @@ const Detail = () => {
             className="w-full p-2 mb-4 border rounded"
           />
           <Input onChange={handleImageChange} label="Image" type="file" />
-          <div className="flex justify-end">
-            <button
-              className="mr-4 px-4 py-2 bg-gray-500 text-white rounded"
-              onClick={addToggleModal}
-            >
+          <div className="flex justify-end gap-5">
+            <Button color="red" onClick={addToggleModal}>
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               disabled={postIsLoading}
               onClick={handleClick}
-              className={'rounded-lg px-3 py-2 bg-green-500 text-white'}
+              color="green"
             >
               {isLoading ? 'Loading...' : 'Save'}
-            </button>
+            </Button>
           </div>
         </div>
       </GlobalModal>

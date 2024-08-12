@@ -1,5 +1,5 @@
+import { Button } from '@material-tailwind/react';
 import GlobalModal from '.';
-
 
 interface ModalType {
   isModal: boolean;
@@ -18,20 +18,13 @@ const DeleteModal = ({ isModal, onClose, onConfirm, isLoading }: ModalType) => {
           <h1 className="text-lg my-3">
             Are you sure you want to delete the data?
           </h1>
-          <div className="w-full flex justify-between">
-            <button
-              onClick={onClose}
-              className="rounded-lg px-3 py-2 bg-graydark"
-            >
+          <div className="w-full flex justify-end gap-5">
+            <Button onClick={onClose} className="bg-graydark">
               Close
-            </button>
-            <button
-              disabled={isLoading}
-              onClick={onConfirm}
-              className="rounded-lg px-3 py-2 bg-red-500"
-            >
+            </Button>
+            <Button disabled={isLoading} onClick={onConfirm} color="red">
               {isLoading ? 'Loading...' : 'Delete'}
-            </button>
+            </Button>
           </div>
         </div>
       }
