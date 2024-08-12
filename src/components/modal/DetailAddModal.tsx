@@ -93,7 +93,6 @@ export default function DetailAddModal() {
 
             toast.success('Successfully created');
             setIsLoading(false);
-            // Reset the form
             setAddData({
                 name: '',
                 attachmentId: 0,
@@ -106,7 +105,7 @@ export default function DetailAddModal() {
                 height: 0,
                 largeDiagonal: 0,
                 smallDiagonal: 0,
-                side: null, // Reset side to null
+                side: null,
             });
         } catch (error) {
             toast.error('Error creating detail');
