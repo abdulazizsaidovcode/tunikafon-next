@@ -18,7 +18,7 @@ import DetailAddModal from '../../components/modal/DetailAddModal';
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
   const { remove, isLoading: deleteIsloading } = useDelete();
-  const { post, isLoading: postIsLoading } = usePost();
+  // const { post, isLoading: postIsLoading } = usePost();
   const [editModal, setEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -115,19 +115,28 @@ const Detail = () => {
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
           <table className="lg:w-[1145px] w-[992px]  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead className="text-xs    text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6  py-3">
                   #
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 min-w-[120px]  py-3">
                   Photo
-                </th>
-                <th scope="col" className="px-6 py-3">
+                </th> 
+                <th scope="col" className="px-6   py-3">
                   Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Detail Category
+                  Width
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Height
+                </th>
+                <th scope="col" className="px-6 min-w-[170px] py-3">
+                  Large Diagonal
+                </th>
+                <th scope="col" className="px-6 min-w-[170px]  py-3">
+                  Small Diagonal
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Description
@@ -164,7 +173,10 @@ const Detail = () => {
                       />
                     </td>
                     <td className="px-6 py-4">{item.name}</td>
-                    <td className="px-6 py-4">{item.detailCategoryId}</td>
+                    <td className="px-6 py-4">{item.width}</td>
+                    <td className="px-6 py-4">{item.height}</td>
+                    <td className="px-6 py-4">{item.largeDiagonal}</td>
+                    <td className="px-6 py-4">{item.smallDiagonal}</td>
                     <td className="px-6 py-4">{item.description}</td>
                     <td className="px-6 py-4">{item.price}</td>
                     <td className="px-6 py-4">{item.measure}</td>

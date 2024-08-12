@@ -82,7 +82,6 @@ export default function DetailAddModal() {
         !addData.height ||
         !addData.largeDiagonal ||
         !addData.smallDiagonal //||
-        // !addData.detailTypeStatus
       ) {
         throw new Error('All fields are required');
       }
