@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface InputType {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   label?: string;
   value?: string;
