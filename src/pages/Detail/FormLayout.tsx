@@ -119,7 +119,7 @@ const Product = () => {
 
   const deleteProduct = async () => {
     try {
-      await remove('/detail', deleteId);
+      await remove('/product', deleteId);
       get('/product', page);
       toggleDeleteModal();
       toast.success('Product deleted succsefuly');
@@ -195,16 +195,17 @@ const Product = () => {
                         className="p-0 !bg-[#30303d] !text-white active:bg-black/50 hover:bg-black/50 hover:text-white flex items-center w-full"
                       >
                         <label
-                          htmlFor="item-1"
+                          htmlFor={item.id}
                           className="flex cursor-pointer items-center gap-2 p-2"
                         >
                           <Checkbox
                             ripple={false}
                             checked={detailsIds.includes(item.id)}
-                            id="item-1"
+                            id={item.id}
                             containerProps={{ className: 'p-0' }}
                             className="hover:before:content-none"
                           />
+
                           {item.name}
                         </label>
                       </MenuItem>
@@ -272,16 +273,17 @@ const Product = () => {
                         className="p-0 !bg-[#30303d] !text-white active:bg-black/50 hover:bg-black/50 hover:text-white flex items-center w-full"
                       >
                         <label
-                          htmlFor="item-1"
+                          htmlFor={item.id}
                           className="flex cursor-pointer items-center gap-2 p-2"
                         >
                           <Checkbox
                             ripple={false}
                             checked={detailsIds.includes(item.id)}
-                            id="item-1"
+                            id={item.id}
                             containerProps={{ className: 'p-0' }}
                             className="hover:before:content-none"
                           />
+
                           {item.name}
                         </label>
                       </MenuItem>

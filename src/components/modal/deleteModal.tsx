@@ -18,7 +18,7 @@ const DeleteModal = ({ isModal, onClose, onConfirm, isLoading }: ModalType) => {
           <h1 className="text-lg my-3">
             Are you sure you want to delete the data?
           </h1>
-          <div className="w-full flex justify-end gap-5">
+          <div className="w-full flex justify-between gap-5">
             <Button onClick={onClose} className="bg-graydark">
               Close
             </Button>
