@@ -7,14 +7,19 @@ import GlobalModal from '.';
 import { Button } from '@material-tailwind/react';
 
 interface Item {
-  id: number;
-  attachmentId: string | number;
   name: string;
+  attachmentId: number;
   detailCategoryId: number;
-  measureValue?: number;
+  measureValue: number;
   measure: string;
   price: number;
   description: string;
+  width: number;
+  height: number;
+  largeDiagonal: number;
+  smallDiagonal: number;
+  side: number | null | string;
+  detailTypeStatus: string;
 }
 
 interface EditModalProps {
@@ -23,7 +28,18 @@ interface EditModalProps {
   item: Item;
   getting: () => void;
 }
-
+const detailTypeStatus = [
+  { value: 'HOVUZ_ROMB', name: 'Hovuz Romb' },
+  { value: 'HOVUZ_LAMPA', name: 'Hovuz Lampa' },
+  { value: 'HOVUZ_LENTA', name: 'Hovuz Lenta' },
+  { value: 'HOVUZ_YULDUZCHA', name: 'Hovuz Yulduzcha' },
+  { value: 'LAMPA', name: 'Lampa' },
+  { value: 'HOVUZ_YONI_KAPALAK', name: 'Hovuz Yoni Kapalak' },
+  { value: 'HOVUZ_YONI', name: 'Hovuz Yoni' },
+  { value: 'HOVUZ_YONI_TUNIKA', name: 'Hovuz Yoni Tunika' },
+  { value: 'HOVUZ_YONI_TUNIKA_BEZAK', name: 'Hovuz Yoni Tunika Bezak' },
+  { value: 'HOVUZ_YONI_TUNIKA_DETAIL', name: 'Hovuz Yoni Tunika Detail' },
+];
 const EditModal: React.FC<EditModalProps> = ({
   isModal,
   onClose,
@@ -31,7 +47,21 @@ const EditModal: React.FC<EditModalProps> = ({
   getting,
 }) => {
   const { isLoading, put } = usePut();
-  const [formData, setFormData] = useState<Item>({ ...item });
+  const [formData, setFormData] = useState<Item>({
+    name: '',
+    attachmentId: 0,
+    detailCategoryId: 0,
+    measureValue: 0,
+    measure: '',
+    price: 0,
+    description: '',
+    width: 0,
+    height: 0,
+    largeDiagonal: 0,
+    smallDiagonal: 0,
+    side: 0 || null, 
+    detailTypeStatus: '',
+  });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [detailCategory, setDetailCategory] = useState<any[]>();
   useEffect(() => {
@@ -110,10 +140,24 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
+
+          <label className="block mb-2">Status</label>
+          <select
+            name="detailTypeStatus"
+            className="w-full rounded mb-3 px-1 py-2 outline-none"
+            onChange={handleChange}
+          >
+            <option selected>Select Status</option>
+            {detailTypeStatus &&
+              detailTypeStatus.map((item) => (
+                <option value={item.value}>{item.name}</option>
+              ))}
+          </select>
+
           <label className="block mb-2">Detail Category ID</label>
           <select
             name="detailCategoryId"
-            className="w-full rounded px-1 py-2 outline-none"
+            className="w-full rounded px-1 mb-3 py-2 outline-none"
             onChange={handleChange}
           >
             <option selected>Select Category</option>
@@ -141,10 +185,9 @@ const EditModal: React.FC<EditModalProps> = ({
                 onChange={handleChange}
                 className="w-full p-2 mb-4 border rounded"
               >
-                <option value="KG">KG</option>
                 <option value="METER">METER</option>
                 <option value="SM">SM</option>
-                <option value="PIECE">PIECE</option>
+                <option value="DONA">DONA</option>
               </select>
             </div>
           </div>
@@ -153,6 +196,40 @@ const EditModal: React.FC<EditModalProps> = ({
             type="number"
             name="price"
             value={(formData && formData.price) || ''}
+            onChange={handleChange}
+            className="w-full p-2 mb-4 border rounded"
+          />
+
+          <label className="block mb-2">width</label>
+          <input
+            type="number"
+            name="width"
+            value={(formData && formData.width) || ''}
+            onChange={handleChange}
+            className="w-full p-2 mb-4 border rounded"
+          />
+
+          <label className="block mb-2">height</label>
+          <input
+            type="number"
+            name="height"
+            value={(formData && formData.height) || ''}
+            onChange={handleChange}
+            className="w-full p-2 mb-4 border rounded"
+          />
+           <label className="block mb-2">Large Diagonal</label>
+          <input
+            type="number"
+            name="largeDiagonal"
+            value={(formData && formData.largeDiagonal) || ''}
+            onChange={handleChange}
+            className="w-full p-2 mb-4 border rounded"
+          />
+           <label className="block mb-2">Small Diagonal</label>
+          <input
+            type="number"
+            name="smallDiagonal"
+            value={(formData && formData.smallDiagonal) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
