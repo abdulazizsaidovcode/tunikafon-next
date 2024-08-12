@@ -11,6 +11,7 @@ import usePut from '../hooks/put';
 import usePost from '../hooks/post';
 import axios from '../service/api';
 import ReactPaginate from 'react-paginate';
+import { Button } from '@material-tailwind/react';
 
 const DetailCategory = () => {
   const { data, get, isLoading } = useGet();
@@ -139,12 +140,12 @@ const DetailCategory = () => {
   return (
     <>
       <Breadcrumb pageName="Detail Category" />
-      <button
+      <Button
         onClick={toggleModal}
-        className="rounded-lg shadow my-5 bg-gray-600 dark:bg-boxdark px-5 py-2"
+        className="bg-gray-600 dark:bg-boxdark my-5"
       >
         Add
-      </button>
+      </Button>
       <div>
         <Table
           setUpdate={setUpdate}
@@ -174,9 +175,41 @@ const DetailCategory = () => {
         onConfirm={handleDelete}
         isLoading={deleteIsLoading}
       />
+      <GlobalModal
+        isOpen={toggle}
+        onClose={toggleModal}
+        children={
+          <div>
+            <div>
+              <Input label="Image" onChange={handleImageChange} type="file" />
+              <div className="mt-5">
+                <Input
+                  label="Enter your Name"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value), handleNameChange;
+                  }}
+                />
+              </div>
+            </div>
+            <div className="w-full flex justify-end gap-5">
+              <Button onClick={toggleModal} color="red">
+                Close
+              </Button>
+              <Button
+                disabled={imgUploadLoading || postIsLoading}
+                onClick={addDetailCategory}
+                color="green"
+              >
+                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Add'}
+              </Button>
+            </div>
+          </div>
+        }
+      />
       <GlobalModal isOpen={editModal} onClose={editToggleModal}>
         <div>
-          <Input label="Image" type="file"  onChange={handleImageChange} />
+          <Input label="Image" type="file" onChange={handleImageChange} />
           <div>
             <label className="block mb-2">Name</label>
             <input
@@ -188,72 +221,16 @@ const DetailCategory = () => {
               className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
             />
           </div>
-          <div className="flex justify-between">
-            <button
-              onClick={editToggleModal}
-              className="rounded-lg px-4 py-2 bg-graydark text-white"
-            >
+          <div className="flex justify-end gap-5">
+            <Button color="red" onClick={editToggleModal}>
               Close
-            </button>
-            <button
-              disabled={putIsLoading}
-              onClick={handleEdit}
-              className={` rounded-lg px-4 py-2 bg-green-500 text-white`}
-            >
+            </Button>
+            <Button color="green" disabled={putIsLoading} onClick={handleEdit}>
               {putIsLoading ? 'Loading...' : 'Edit'}
-            </button>
+            </Button>
           </div>
         </div>
       </GlobalModal>
-      <GlobalModal
-        isOpen={toggle}
-        onClose={toggleModal}
-        children={
-          <div>
-            <div>
-              <div>
-                <label className="text-lg font-medium my-2" htmlFor="photo">
-                  Sellect photo
-                </label>
-                <input
-                  onChange={handleImageChange}
-                  className="mt-2"
-                  accept='.png, .jpg, .svg'
-                  id="photo"
-                  type="file"
-                />
-              </div>
-              <div className="mt-5">
-                <label className="text-lg font-medium" htmlFor="photo">
-                  Enter your Name
-                </label>
-                <input
-                  onChange={(e) => {
-                    setName(e.target.value), handleNameChange;
-                  }}
-                  className="w-full outline-none bg-transparent border py-2 px-3 rounded-lg my-3"
-                  type="text"
-                />
-              </div>
-            </div>
-            <div className="w-full flex justify-between">
-              <button
-                onClick={toggleModal}
-                className="rounded-lg px-3 py-2 bg-graydark"
-              >
-                Close
-              </button>
-              <button
-                disabled={imgUploadLoading || postIsLoading}
-                onClick={addDetailCategory}
-                className="rounded-lg px-3 py-2 bg-green-500 text-white"
-              >
-                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Add'}
-              </button>
-            </div>
-          </div>
-        }
-      />
     </>
   );
 };

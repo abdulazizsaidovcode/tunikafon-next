@@ -14,10 +14,15 @@ const usePut = () => {
       const { data } = await axios.put(`${url}/${id}`, updateData);
       if (data.success) {
         setData(data);
-      } 
+      }
     } catch (err: any) {
       setError(err);
-      throw new Error(err.response.data.message);
+
+      throw new Error(
+        err.response.data.message
+          ? err.response.data.message
+          : err.response.data.error,
+      );
     } finally {
       setIsLoading(false);
     }

@@ -4,6 +4,7 @@ import Input from '../inputs/input';
 import usePut from '../../hooks/put';
 import { toast } from 'sonner';
 import GlobalModal from '.';
+import { Button } from '@material-tailwind/react';
 
 interface Item {
   id: number;
@@ -172,20 +173,13 @@ const EditModal: React.FC<EditModalProps> = ({
               className="w-20 h-20 mb-4"
             />
           )} */}
-          <div className="flex justify-end">
-            <button
-              onClick={onClose}
-              className="mr-4 px-4 py-2 bg-gray-500 text-white rounded"
-            >
+          <div className="flex justify-end gap-5">
+            <Button onClick={onClose} color="red">
               Cancel
-            </button>
-            <button
-              disabled={isLoading}
-              onClick={handleSave}
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
+            </Button>
+            <Button disabled={isLoading} onClick={handleSave} color="green">
               {isLoading ? 'Loading...' : 'Save'}
-            </button>
+            </Button>
           </div>
         </div>
       </GlobalModal>

@@ -15,11 +15,14 @@ const usePost = () => {
       if (data.success) {
         setData(data.body);
       }
+      return data.body;
     } catch (err: any) {
-      console.log(error);
-
       setError(err);
-      throw new Error(err.response.data.message);
+      throw new Error(
+        err.response.data.message
+          ? err.response.data.message
+          : err.response.data.error,
+      );
     } finally {
       setIsLoading(false);
     }

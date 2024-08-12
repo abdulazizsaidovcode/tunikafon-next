@@ -8,7 +8,6 @@ import EditModal from '../../components/modal/DetailEditModal';
 import DeleteModal from '../../components/modal/deleteModal';
 import useDelete from '../../hooks/delete';
 import { toast } from 'sonner';
-import Input from '../../components/inputs/input';
 import GlobalModal from '../../components/modal';
 import axios from '../../service/api';
 import usePost from '../../hooks/post';

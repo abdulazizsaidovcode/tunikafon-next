@@ -11,10 +11,10 @@ interface TableType {
   data: DataType[];
   name?: string;
   updataModal: () => void;
-  deleteModal?: () => void;
+  deleteModal: () => void;
   isLoading: boolean;
   setDeleteId: (val: number) => void;
-  setUpdate?: (val: number) => void;
+  setUpdate : (val: number) => void;
 }
 
 const Table = ({
@@ -34,7 +34,6 @@ const Table = ({
   const handleEdit = (data: any) => {
     updataModal();
     setUpdate(data);
-
   };
 
   return (
@@ -46,76 +45,78 @@ const Table = ({
             role="status"
           >
             <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-              Loading.... 
-            </span> 
+              Loading....
+            </span>
           </div>
-        </div> 
+        </div>
       ) : (
-        <div className="w-full max-w-full rounded-sm border border-stroke bg-white dark:border-strokedark dark:bg-boxdark">
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-            <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    #
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Photo
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    {name ? name : 'Name'}
-                  </th>
-                  <th colSpan={2} scope="col" className="px-6 py-3">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data && data.length
-                  ? data.map((item: any, i: any) => (
-                      <tr
-                        key={item.id}
-                        className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+        <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+          <div className="w-full max-w-full rounded-sm border border-stroke bg-white dark:border-strokedark dark:bg-boxdark">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+              <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      #
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Photo
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      {name ? name : 'Name'}
+                    </th>
+                    <th colSpan={2} scope="col" className="px-6 py-3">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data && data.length
+                    ? data.map((item: any, i: any) => (
+                        <tr
+                          key={item.id}
+                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                         >
-                          {i + 1}
-                        </th>
-                        <td className="px-6 py-4">
-                          <img
-                            className="w-20 h-20 rounded-full object-cover"
-                            src={attechment + item.attachmentId}
-                            alt="(404)"
-                          />
-                        </td>
-                        <td className="px-6 py-4">{item.name}</td>
-                        <td className="px-6">
-                          <button onClick={() => handleEdit(item)}>
-                            <FaRegEdit size={25} className="text-green-500" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            className="ml-5"
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
-                            <RiDeleteBinLine
-                              size={25}
-                              className="text-red-500"
+                            {i + 1}
+                          </th>
+                          <td className="px-6 py-4">
+                            <img
+                              className="w-20 h-20 rounded-full object-cover"
+                              src={attechment + item.attachmentId}
+                              alt="(404)"
                             />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  : !isLoading && (
-                      <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td className="px-6">
-                          <FaRegFolderOpen size={50} />
-                        </td>
-                      </tr>
-                    )}
-              </tbody>
-            </table>
+                          </td>
+                          <td className="px-6 py-4">{item.name}</td>
+                          <td className="px-6">
+                            <button onClick={() => handleEdit(item)}>
+                              <FaRegEdit size={25} className="text-green-500" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(item.id)}
+                              className="ml-5"
+                            >
+                              <RiDeleteBinLine
+                                size={25}
+                                className="text-red-500"
+                              />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    : !isLoading && (
+                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <td className="px-6">
+                            <FaRegFolderOpen size={50} />
+                          </td>
+                        </tr>
+                      )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

@@ -17,7 +17,11 @@ const useDelete = () => {
       }
     } catch (err: any) {
       setError(err);
-      throw new Error(err.response.data.message);
+      throw new Error(
+        err.response.data.message
+          ? err.response.data.message
+          : err.response.data.error,
+      );
     } finally {
       setIsLoading(false);
     }
