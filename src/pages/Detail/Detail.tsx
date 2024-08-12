@@ -14,6 +14,7 @@ import axios from '../../service/api';
 import usePost from '../../hooks/post';
 import '../../css/style.css';
 import ReactPaginate from 'react-paginate';
+import DetailAddModal from '../../components/modal/DetailAddModal';
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
@@ -25,19 +26,11 @@ const Detail = () => {
   const [deleteId, setDeleteId] = useState();
   const [addModal, setAddModal] = useState(false);
   const [detailCategory, setDetailCategory] = useState<any[]>();
-  const [file, setFile] = useState<any>();
-  const [isValid, setIsValid] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
+  // const [file, setFile] = useState<any>();
+  // const [isValid, setIsValid] = useState<boolean>(false);
+  // const [name, setName] = useState<string>('');
 
-  const [addData, setAddData] = useState<any>({
-    name: '',
-    attachmentId: 0,
-    detailCategoryId: 0,
-    measureValue: 0,
-    measure: '',
-    price: 0,
-    description: '',
-  });
+
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -56,59 +49,7 @@ const Detail = () => {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  };
-  const validateInput = (value: string) => {
-    const invalidChars = /[<>"?><|\/*]/;
-    if (!value.trim() || invalidChars.test(value)) {
-      setIsValid(false);
-    } else {
-      setIsValid(true);
-    }
-  };
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setName(newValue);
-    validateInput(newValue);
-  };
-  const handleClick = async () => {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      if (
-        !formData.has('file') ||
-        !addData.name ||
-        !addData.detailCategoryId ||
-        !addData.measureValue ||
-        !addData.measure ||
-        !addData.price ||
-        !addData.description
-      ) {
-        throw new Error('All fields required');
-      }
-
-      const { data } = await axios.post(`/attachment/upload`, formData);
-
-      await post('/detail', {
-        ...addData,
-        detailCategoryId: +addData.detailCategoryId,
-        measureValue: +addData.measureValue,
-        attachmentId: data.body,
-      });
-
-      get('/detail');
-      toast.success('Succesfuly created');
-      addToggleModal();
-    } catch (error) {
-      toast.error('Error');
-    }
-  };
-
+ 
   const handlePageClick = (page: any) => {
     get('/detail', page.selected);
   };
@@ -280,89 +221,7 @@ const Detail = () => {
         onConfirm={handleDelete}
       />
       <GlobalModal isOpen={addModal} onClose={addToggleModal}>
-        <div className="p-4">
-          <h2 className="text-xl mb-4">Add Detail</h2>
-          <label className="block mb-2">Name</label>
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => {
-              setAddData({ ...addData, name: e.target.value }),
-                handleNameChange;
-            }}
-            value={addData.name}
-            className="w-full p-2 mb-4 border rounded"
-          />
-          <label className="block mb-2">Detail Category ID</label>
-          <select
-            className="w-full rounded px-1 py-2 outline-none"
-            onChange={(e) =>
-              setAddData({ ...addData, detailCategoryId: e.target.value })
-            }
-            value={addData.detailCategoryId}
-          >
-            <option selected>Select Category</option>
-            {detailCategory &&
-              detailCategory.map((item) => (
-                <option value={item.id}>{item.name}</option>
-              ))}
-          </select>
-          <label className="block mb-2">Measure Value</label>
-          <input
-            type="number"
-            name="measureValue"
-            onChange={(e) =>
-              setAddData({ ...addData, measureValue: e.target.value })
-            }
-            value={addData.measureValue}
-            className="w-full p-2 mb-4 border rounded"
-          />
-          <select
-            className="w-full rounded px-1 py-2"
-            onChange={(e) =>
-              setAddData({ ...addData, measure: e.target.value })
-            }
-            value={addData.measure}
-          >
-            <option value="KG">Kg</option>
-            <option value="METER">Metr</option>
-            <option value="SM">Sm</option>
-            <option value="PIECE">Piece</option>
-          </select>
-          <label className="block mb-2">Price</label>
-          <input
-            type="number"
-            name="price"
-            onChange={(e) => setAddData({ ...addData, price: e.target.value })}
-            className="w-full p-2 mb-4 border rounded"
-          />
-          <label className="block mb-2">Description</label>
-          <input
-            type="text"
-            name="description"
-            onChange={(e) => {
-              setAddData({ ...addData, description: e.target.value }),
-                handleNameChange;
-            }}
-            className="w-full p-2 mb-4 border rounded"
-          />
-          <Input onChange={handleImageChange} label="Image" type="file" />
-          <div className="flex justify-end">
-            <button
-              className="mr-4 px-4 py-2 bg-gray-500 text-white rounded"
-              onClick={addToggleModal}
-            >
-              Cancel
-            </button>
-            <button
-              disabled={postIsLoading}
-              onClick={handleClick}
-              className={'rounded-lg px-3 py-2 bg-green-500 text-white'}
-            >
-              {isLoading ? 'Loading...' : 'Save'}
-            </button>
-          </div>
-        </div>
+        <DetailAddModal />
       </GlobalModal>
     </>
   );

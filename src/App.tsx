@@ -11,7 +11,7 @@ import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import DetailCategory from './pages/Detail-category';
-import Detail from './pages/Detail/FormElements';
+import Detail from './pages/Detail/Detail';
 import Product from './pages/Detail/FormLayout';
 import Employees from './pages/Employees';
 
