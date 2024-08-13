@@ -10,7 +10,6 @@ interface Item {
   name: string;
   attachmentId: number;
   detailCategoryId: number;
-  measureValue: number;
   measure: string;
   price: number;
   description: string;
@@ -51,7 +50,6 @@ const EditModal: React.FC<EditModalProps> = ({
     name: '',
     attachmentId: 0,
     detailCategoryId: 0,
-    measureValue: 0,
     measure: '',
     price: 0,
     description: '',
@@ -59,7 +57,7 @@ const EditModal: React.FC<EditModalProps> = ({
     height: 0,
     largeDiagonal: 0,
     smallDiagonal: 0,
-    side: 0 || null, 
+    side: 0 || null,
     detailTypeStatus: '',
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -125,7 +123,7 @@ const EditModal: React.FC<EditModalProps> = ({
       toast.error('Error updating Detail');
       console.error('Error updating Detail:', error);
     }
-  };
+  }; 
 
   return (
     isModal && (
@@ -167,7 +165,7 @@ const EditModal: React.FC<EditModalProps> = ({
               ))}
           </select>
           <div className="flex w-full gap-2 justify-between">
-            <div className="w-full">
+            {/* <div className="w-full">
               <label className="block mb-2">Measure Value</label>
               <input
                 type="number"
@@ -176,7 +174,7 @@ const EditModal: React.FC<EditModalProps> = ({
                 onChange={handleChange}
                 className="w-full p-2 mb-4 border rounded"
               />
-            </div>
+            </div> */}
             <div className="w-full">
               <label className="block mb-2">Measure</label>
               <select
@@ -217,7 +215,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-           <label className="block mb-2">Large Diagonal</label>
+          <label className="block mb-2">Large Diagonal</label>
           <input
             type="number"
             name="largeDiagonal"
@@ -225,7 +223,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-           <label className="block mb-2">Small Diagonal</label>
+          <label className="block mb-2">Small Diagonal</label>
           <input
             type="number"
             name="smallDiagonal"

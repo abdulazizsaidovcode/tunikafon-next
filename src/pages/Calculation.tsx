@@ -55,6 +55,8 @@ const Calculation = () => {
           tall: +req.tall,
           orderDetailDtos,
         });
+        console.log(req);
+        
       }
     } catch (error: any) {
       toast.error(error.message);

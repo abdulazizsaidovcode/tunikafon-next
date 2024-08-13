@@ -9,12 +9,13 @@ type DetailCategory = {
   id: number;
   name: string;
 };
-
+interface DetailAddModalProps {
+  onClose: () => void;
+}
 type AddData = {
   name: string;
   attachmentId: number;
   detailCategoryId: number;
-  measureValue: number;
   measure: string;
   price: number;
   description: string;
@@ -39,7 +40,7 @@ const detailTypeStatus = [
   { value: 'HOVUZ_YONI_TUNIKA_DETAIL', name: 'Hovuz Yoni Tunika Detail' },
 ];
 
-export default function DetailAddModal() {
+export default function DetailAddModal({ onClose }: DetailAddModalProps) {
   const [addModal, setAddModal] = useState<boolean>(false);
   const addToggleModal = () => setAddModal(!addModal);
   const { get, data } = useGet();
@@ -47,7 +48,6 @@ export default function DetailAddModal() {
     name: '',
     attachmentId: 0,
     detailCategoryId: 0,
-    measureValue: 0,
     measure: '',
     price: 0,
     description: '',
@@ -61,7 +61,7 @@ export default function DetailAddModal() {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { post, isLoading: postIsLoading } = usePost();
-  useEffect(() => {});
+  useEffect(() => { });
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -74,7 +74,6 @@ export default function DetailAddModal() {
         !file ||
         !addData.name ||
         !addData.detailCategoryId ||
-        !addData.measureValue ||
         !addData.measure ||
         !addData.price ||
         !addData.description ||
@@ -97,7 +96,6 @@ export default function DetailAddModal() {
         ...addData,
         attachmentId: data.body,
         detailCategoryId: +addData.detailCategoryId,
-        measureValue: +addData.measureValue,
         width: +addData.width,
         height: +addData.height,
         largeDiagonal: +addData.largeDiagonal,
@@ -111,7 +109,6 @@ export default function DetailAddModal() {
         name: '',
         attachmentId: 0,
         detailCategoryId: 0,
-        measureValue: 0,
         measure: '',
         price: 0,
         description: '',
@@ -122,6 +119,7 @@ export default function DetailAddModal() {
         side: null,
         detailTypeStatus: '',
       });
+      onClose();
     } catch (error) {
       toast.error('Error creating detail');
       setIsLoading(false);
@@ -185,7 +183,7 @@ export default function DetailAddModal() {
           ))}
         </select>
         <div className="flex gap-2">
-          <div className="w-full">
+          {/* <div className="w-full">
             <label className="block mb-2">Measure Value</label>
             <input
               type="number"
@@ -199,7 +197,7 @@ export default function DetailAddModal() {
               value={addData.measureValue}
               className="w-full p-2 mb-4 border rounded"
             />
-          </div>
+          </div> */}
           <div className="w-full">
             <label className="block mb-2">Measure</label>
             <select
@@ -209,10 +207,9 @@ export default function DetailAddModal() {
               }
               value={addData.measure}
             >
-              <option value="KG">Kg</option>
+              <option value="DONA">Dona</option>
               <option value="METER">Meter</option>
               <option value="SM">Sm</option>
-              <option value="PIECE">Piece</option>
             </select>
           </div>
         </div>
@@ -296,7 +293,7 @@ export default function DetailAddModal() {
           className="w-full p-2 mb-4 border rounded"
         />
         <div className="flex justify-end gap-5">
-          <Button color="red" onClick={addToggleModal}>
+          <Button color="red" onClick={onClose}>
             Cancel
           </Button>
           <Button

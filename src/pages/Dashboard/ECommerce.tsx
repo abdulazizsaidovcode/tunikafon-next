@@ -3,6 +3,8 @@ import CardDataStats from '../../components/CardDataStats';
 import ChartOne from '../../components/Charts/ChartOne';
 import TableOne from '../../components/Tables/TableOne';
 import useGet from '../../hooks/get';
+import Table from '../../components/Tables/Table';
+import TableOrderAll from '../../components/Tables/TableOrderAll';
 
 const ECommerce: React.FC = () => {
   const [month, setMonth] = useState<number | string>(1);
@@ -86,6 +88,7 @@ const ECommerce: React.FC = () => {
         <div className="col-span-12">
           {/* ChartOne should take full width of its container */}
           <ChartOne />
+          <TableOrderAll/>
         </div>
       </div>
     </>

@@ -38,7 +38,6 @@ const GlobalModal: React.FC<ModalProps> = ({
   return (
     <div
       className="fixed inset-0 z-[10000] flex items-center justify-center overflow-auto bg-slate-900 py-10 bg-black/70 modal"
-      onClick={onClose}
     >
       <div
         className={`bg-white animate-[animate_0.2s_ease-in-out] dark:text-gray-400 dark:bg-[#30303d] z-999 relative rounded-lg shadow-lg ${mt}`}

@@ -232,7 +232,7 @@ const Detail = () => {
         onConfirm={handleDelete}
       />
       <GlobalModal isOpen={addModal} onClose={addToggleModal}>
-        <DetailAddModal />
+        <DetailAddModal onClose={addToggleModal}/>
       </GlobalModal>
     </>
   );
