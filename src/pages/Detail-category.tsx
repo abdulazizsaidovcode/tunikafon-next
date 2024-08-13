@@ -116,7 +116,7 @@ const DetailCategory = () => {
 
   const handleDelete = async () => {
     if (deleteId) {
-      await remove(`/detail-category`, deleteId);
+      await remove(`/detail-category/`, deleteId);
       get('/detail-category/list', page);
       deleteToggleModal();
       toast.success('Successfully deleted');

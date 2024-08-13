@@ -39,7 +39,7 @@ const Detail = () => {
 
   const handleDelete = async () => {
     try {
-      await remove('/detail', deleteId);
+      await remove('/detail/', deleteId);
       toast.success('Successfully deleted');
       deleteToggleModal();
       get('/detail');

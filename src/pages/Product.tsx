@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import Table from '../../components/Tables/Table';
-import useGet from '../../hooks/get';
+import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
+import Table from '../components/Tables/Table';
+import useGet from '../hooks/get';
 import ReactPaginate from 'react-paginate';
-import GlobalModal from '../../components/modal';
-import Input from '../../components/inputs/input';
+import GlobalModal from '../components/modal';
+import Input from '../components/inputs/input';
 import {
   Button,
   Checkbox,
@@ -13,11 +13,11 @@ import {
   MenuItem,
   MenuList,
 } from '@material-tailwind/react';
-import useDelete from '../../hooks/delete';
-import DeleteModal from '../../components/modal/deleteModal';
+import useDelete from '../hooks/delete';
+import DeleteModal from '../components/modal/deleteModal';
 import { toast } from 'sonner';
-import usePost from '../../hooks/post';
-import usePut from '../../hooks/put';
+import usePost from '../hooks/post';
+import usePut from '../hooks/put';
 
 const Product = () => {
   const { get, isLoading, data } = useGet();
@@ -119,7 +119,7 @@ const Product = () => {
 
   const deleteProduct = async () => {
     try {
-      await remove('/product', deleteId);
+      await remove('/product/', deleteId);
       get('/product', page);
       toggleDeleteModal();
       toast.success('Product deleted succsefuly');
