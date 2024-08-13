@@ -45,7 +45,7 @@ const ECommerce: React.FC = () => {
           <label htmlFor="month">Month</label>
           <input
             id="month"
-            type='number'
+            type="number"
             placeholder="01"
             className='rounded select-none py-3 p-2 w-full'
             value={month.toString()}

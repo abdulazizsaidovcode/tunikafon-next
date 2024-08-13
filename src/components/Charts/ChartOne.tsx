@@ -149,7 +149,7 @@ const ChartOne: React.FC = () => {
         type="number"
         placeholder="2024"
         className='rounded ml-3 select-none py-3 p-2 w-full'
-        value={year}
+        value={year} 
         onChange={(e) => {
           const newValue = parseInt(e.target.value, 10);
           if (!isNaN(newValue)) {
