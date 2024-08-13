@@ -12,7 +12,7 @@ import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import DetailCategory from './pages/Detail-category';
 import Detail from './pages/Detail/Detail';
-import Product from './pages/Detail/FormLayout';
+import Product from './pages/Product';
 import Employees from './pages/Employees';
 
 function App() {

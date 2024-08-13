@@ -11,7 +11,7 @@ const useDelete = () => {
     setError(null);
     setData(null);
     try {
-      const { data } = await axios.delete(`${url}/${id}`);
+      const { data } = await axios.delete(url + id);
       if (data.success) {
         setData(data);
       }

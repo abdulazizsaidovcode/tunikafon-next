@@ -59,7 +59,7 @@ const Employees = () => {
 
   const handleDelete = async () => {
     try {
-      await remove('/user', deleteId);
+      await remove('/user?userId=', deleteId);
       deleteToggleModal();
       get('/user/employees', page);
       toast.success('Succesfuly deleted');
