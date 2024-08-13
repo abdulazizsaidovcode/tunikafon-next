@@ -1,16 +1,23 @@
-import { useEffect, useState } from 'react';
-import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
-import useGet from '../hooks/get';
-import { attechment } from '../service/urls';
-import GlobalModal from '../components/modal';
-import Input from '../components/inputs/input';
-import { Button } from '@material-tailwind/react';
-import usePost from '../hooks/post';
-import { toast } from 'sonner';
+import { useEffect, useState } from "react";
+import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
+import useGet from "../hooks/get";
+import { attechment } from "../service/urls";
+import GlobalModal from "../components/modal";
+import Input from "../components/inputs/input";
+import {
+  Accordion,
+  AccordionBody,
+  AccordionHeader,
+  Button,
+  Checkbox,
+} from "@material-tailwind/react";
+import usePost from "../hooks/post";
+import { toast } from "sonner";
 
 const Calculation = () => {
   const { get, isLoading, data } = useGet();
   const { get: getDetail, data: details } = useGet();
+  const { get: getProductDetail, data: productdetail } = useGet();
   const { post, isLoading: countLoading, data: total } = usePost();
   const { post: save, isLoading: saveLoading } = usePost();
 
@@ -24,39 +31,80 @@ const Calculation = () => {
   });
   const [select, setSelect] = useState(true);
   const [toggle, setToggle] = useState(false);
-  const [productId, setProductId] = useState<number>();
-  const [orderDetailDtos, setOrderDetailDtos] = useState<any>();
+  const [open, setOpen] = useState(0);
+  const [details1, setDetails1] = useState<any[]>([]);
+  const [details2, setDetails2] = useState<any[]>([]);
+  const [details3, setDetails3] = useState<any[]>([]);
 
-  const toggleModal = () => setToggle(!toggle);
+  const handleOpen = (value: any) => {
+    getDetails(value);
+    setOpen(open === value ? 0 : value);
+  };
 
-  const sort = (e: React.ChangeEvent<HTMLInputElement>, item: any) => {
-    const sortDetail = orderDetailDtos.filter(
-      (state: any) => state.id !== item.id,
+  const toggleModal = () => {
+    setToggle(!toggle);
+    setDetails3([]);
+  };
+
+  const handleCheckboxChange = (item: any) => {
+    const isSelected = details1.some((detail) => detail.id === item.id);
+
+    if (isSelected) {
+      setDetails1(details1.filter((detail) => detail.id !== item.id));
+      setDetails2(details2.filter((detail) => detail.detailId !== item.id));
+    } else {
+      setDetails1([
+        ...details1,
+        { id: item.id, name: item.name, attachmentId: item.attachmentId },
+      ]);
+      setDetails2([
+        ...details2,
+        { detailId: item.id, count: 0 }, // Initialize count as 0
+      ]);
+    }
+  };
+
+  const handleInputChange = (id: number, value: string) => {
+    setDetails2(
+      details2.map((detail) =>
+        detail.detailId === id
+          ? { ...detail, count: value ? +value : 0 }
+          : detail
+      )
     );
-    const data = sortDetail.map((state: any) => {
-      if (state.count > 0) {
-        return { detailId: state.id, count: state.count };
-      } else {
-        return { detailId: state.id, count: 0 };
-      }
-    });
-    const updatedItem = { detailId: item.id, count: +e.target.value };
+  };
+  useEffect(() => {
+    if (productdetail) {
+      setDetails3(
+        productdetail.map((item: any) => ({
+          detailId: item.id,
+          count: 0,
+        }))
+      );
+    }
+  }, [productdetail]);
 
-    setOrderDetailDtos([...data, updatedItem]);
+  const handleProductDetailChange = (id: number, value: string) => {
+    setDetails3(
+      details3.map((detail) =>
+        detail.detailId === id
+          ? { ...detail, count: value ? +value : 0 }
+          : detail
+      )
+    );
   };
 
   const handleClick = async () => {
     try {
       if (!req.width || !req.tall) {
-        throw new Error('Width or tall is required');
+        throw new Error("Width or tall is required");
       } else {
-        await post('/order/calculation', {
+        await post("/order/calculation", {
           width: +req.width,
           tall: +req.tall,
-          orderDetailDtos,
+          orderDetailDtos: select ? details3 : details2,
         });
-        console.log(req);
-        
+        // console.log(details2); // For debugging: see the structure of details2
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -66,35 +114,47 @@ const Calculation = () => {
   const handleSave = async () => {
     try {
       if (!req.width || !req.tall || !orderData.address || !orderData.date)
-        throw new Error('All fields required');
+        throw new Error("All fields required");
 
-      await save('/order/save', {
+      await save("/order/save", {
         width: +req.width,
         tall: +req.tall,
         address: orderData.address,
         date: orderData.date,
-        orderDetailDtos,
+        // productAttachmentId: 0,
+        orderDetails: details2,
       });
+
+      // Reset the state after a successful save
+      setReq({ width: null, tall: null });
+      setOrderData({ date: null, address: null });
+      setDetails1([]);
+      setDetails2([]);
+      setDetails3([]);
+      setToggle(false);
+      await post("/order/calculation", {
+        width: 0,
+        tall: 0,
+        orderDetailDtos: [],
+      });
+
+      toast.success("Data saved successfully!");
     } catch (error: any) {
       toast.error(error.message);
     }
   };
 
   useEffect(() => {
-    get('/product');
+    get("/product");
   }, []);
 
-  useEffect(() => {
-    const getDet = async () => {
-      await getDetail('detail/for/detail/product/1');
-      const data = details.map((item: any) => ({
-        detailId: item.id,
-        count: 0,
-      }));
-      setOrderDetailDtos([...data]);
-    };
-    getDet();
-  }, [productId]);
+  const getDetails = async (id: number) => {
+    await getDetail(`detail/for/detail/product/${id}`);
+  };
+
+  const getProductDetails = async (id: number) => {
+    await getProductDetail(`product/details/${id}`);
+  };
 
   return (
     <>
@@ -133,8 +193,8 @@ const Calculation = () => {
                     key={item.id}
                     className="cursor-pointer"
                     onClick={() => {
+                      getProductDetails(item.id);
                       toggleModal();
-                      setProductId(item.id);
                     }}
                   >
                     <img
@@ -142,7 +202,7 @@ const Calculation = () => {
                       src={attechment + item.attachmentId}
                       alt={item.name}
                     />
-                    <div className="w-full rounded-lg  border mt-5 text-center py-2">
+                    <div className="w-full rounded-lg border mt-5 text-center py-2">
                       <h1>{item.name}</h1>
                     </div>
                   </div>
@@ -152,63 +212,149 @@ const Calculation = () => {
           <div className="w-full p-4 bg-black border border-white rounded-lg text-white">
             <div className="flex justify-between items-center border-b border-white pb-2 mb-4">
               <h2 className="text-lg">Detail category</h2>
-              <img
-                src="path/to/your/icon.png"
-                alt="Detail Icon"
-                className="w-8 h-8"
-              />
             </div>
-            <div className="flex mb-4">
-              <ul className="w-1/2 graydark">
-                <li className="flex items-center rounded-lg py-2 border border-white">
-                  <img
-                    src="path/to/your/icon.png"
-                    alt="Detail 1"
-                    className="w-6 h-6 mr-2"
-                  />
-                  <span>Detail 1</span>
-                </li>
-              </ul>
-              <div className="w-1/2 flex items-center justify-center">
-                <img
-                  src="path/to/your/icon.png"
-                  alt="Detail 1"
-                  className="w-16 h-16"
-                />
+            <div className="flex gap-10 mb-4">
+              <div className="w-1/2">
+                {data &&
+                  data.object.map((item: any) => (
+                    <Accordion key={item.id} open={open === item.id}>
+                      <AccordionHeader onClick={() => handleOpen(item.id)}>
+                        <img
+                          className="w-15 h-15 bg-cover object-cover rounded-xl"
+                          src={
+                            item.attachmentId
+                              ? attechment + item.attachmentId
+                              : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                          }
+                          alt={item.name}
+                        />
+                        <div className="w-full text-white rounded-lg mt-5 text-center py-2">
+                          <h1>{item.name}</h1>
+                        </div>
+                      </AccordionHeader>
+                      <AccordionBody>
+                        {details &&
+                          details.map((detail: any) => (
+                            <div
+                              key={detail.id}
+                              className="flex items-center justify-between border rounded-lg px-5 py-2 mb-4"
+                            >
+                              <Checkbox
+                                checked={details1.some(
+                                  (d) => d.id === detail.id
+                                )}
+                                onChange={() => handleCheckboxChange(detail)}
+                              />
+                              <span>{detail.name}</span>
+                              <span></span>
+                            </div>
+                          ))}
+                      </AccordionBody>
+                    </Accordion>
+                  ))}
+              </div>
+              <div className="w-1/2 flex flex-col items-center justify-center gap-2">
+                {details1.map((detail) => (
+                  <div
+                    key={detail.id}
+                    className="flex items-center justify-between border rounded-lg px-5 py-2 w-full"
+                  >
+                    {/* <img
+                      className="w-15 h-15 bg-cover object-cover rounded-xl"
+                      src={attechment + detail.attachmentId}
+                      alt={detail.name}
+                    /> */}
+                    <span></span>
+                    <div className="flex-1 px-4">
+                      <h1 className="text-center">{detail.name}</h1>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="Soni"
+                      onChange={(e) =>
+                        handleInputChange(detail.id, e.target.value)
+                      }
+                      className="rounded outline-none px-1 py-0.5 w-20"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Enter address"
-                className="w-full p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
-              />
-            </div>
-            <div className="flex justify-between mb-4">
+
+            <div className="flex justify-between py-5 items-end">
               <div className="flex gap-5">
+                <div className="w-full flex flex-col">
+                  <label htmlFor="buyi">Bo'yi</label>
+                  <input
+                    type="number"
+                    value={req.tall ? req.tall : ""}
+                    id="buyi"
+                    placeholder="bo'yi"
+                    className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
+                    onChange={(e) => setReq({ ...req, tall: e.target.value })}
+                  />
+                </div>
+                <div className="w-full flex flex-col">
+                  <label htmlFor="eni">Eni</label>
+                  <input
+                    type="number"
+                    value={req.width ? req.width : ""}
+                    id="eni"
+                    placeholder="eni"
+                    className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
+                    onChange={(e) => setReq({ ...req, width: e.target.value })}
+                  />
+                </div>
+                <div className="flex items-end flex-row">
+
+                <h1 className="text-lg ">{total ? total : "0"}</h1>
+                <h1 className="text-lg ms-2">{`so'm`}</h1>
+                </div>
+              </div>
+              <div>
+                <Button onClick={handleClick} className="bg-primary">
+                  Calculate
+                </Button>
+              </div>
+            </div>
+            <div className="mb-4 flex gap-10 py-5">
+              <div className="w-full">
+                <label htmlFor="address">Address</label>
                 <input
+                  id="address"
                   type="text"
-                  placeholder="bo'yi"
-                  className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
-                />
-                <input
-                  type="text"
-                  placeholder="eni"
-                  className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none mx-2"
+                  value={orderData.address ? orderData.address : ""}
+                  placeholder="Enter address"
+                  className="w-full p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
+                  onChange={(e) =>
+                    setOrderData((prevState: any) => ({
+                      ...prevState,
+                      address: e.target.value,
+                    }))
+                  }
                 />
               </div>
-              <Button
-                // disabled={countLoading}
-                className="my-5 bg-gary-600 dark:bg-boxdark"
-              >
-                Hisoblash
-              </Button>
+              <div className="w-full">
+                <label htmlFor="date">Date</label>
+                <input
+                  id="date"
+                  type="date"
+                  value={orderData.date ? orderData.date : 0}
+                  placeholder="Enter date"
+                  className="w-full p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
+                  onChange={(e) =>
+                    setOrderData((prevState: any) => ({
+                      ...prevState,
+                      date: e.target.value,
+                    }))
+                  }
+                />
+              </div>
             </div>
-            <div className="flex justify-between">
-              <Button className="my-5 bg-gary-600 dark:bg-boxdark">
-                CANCEL
+            <div className="w-full flex justify-center">
+              <Button onClick={handleSave} className="bg-primary px-20">
+                Saqlash
               </Button>
-              <Button className="my-5 bg-gary-600 dark:bg-boxdark">SAVE</Button>
             </div>
           </div>
         )}
@@ -239,17 +385,19 @@ const Calculation = () => {
                   </div>
                 </div>
               ) : (
-                details && (
+                productdetail && (
                   <div>
                     <h2>Detail</h2>
                     <div className="flex flex-col gap-5 border p-3 rounded max-h-44 overflow-y-auto">
-                      {details.map((item: any) => (
+                      {productdetail.map((item: any) => (
                         <div className="w-full flex items-center justify-between border rounded-lg px-5 py-2">
                           <h4>{item.name}</h4>
                           <input
                             type="number"
                             className="rounded outline-none px-1 py-0.5"
-                            onChange={(e: any) => sort(e, item)}
+                            onChange={(e) =>
+                              handleProductDetailChange(item.id, e.target.value)
+                            }
                           />
                         </div>
                       ))}
@@ -280,10 +428,10 @@ const Calculation = () => {
                 onClick={handleClick}
                 className="my-5 bg-gary-600 dark:bg-boxdark"
               >
-                {countLoading ? 'Loading...' : 'Hisoblash'}
+                {countLoading ? "Loading..." : "Hisoblash"}
               </Button>
             </div>
-            <h1 className="text-lg">{total}</h1>
+            <h1 className="text-lg text-center">{total} so'm</h1>
             <Input
               onChange={(e) =>
                 setOrderData({ ...orderData, address: e.target.value })
@@ -296,7 +444,7 @@ const Calculation = () => {
                 Close
               </Button>
               <Button disabled={saveLoading} onClick={handleSave} color="green">
-                {saveLoading ? 'Loading...' : 'Save'}
+                {saveLoading ? "Loading..." : "Save"}
               </Button>
             </div>
           </div>
