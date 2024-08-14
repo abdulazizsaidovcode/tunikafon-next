@@ -116,7 +116,7 @@ const Detail = () => {
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
           <table className="lg:w-[1145px] w-[992px]  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs    text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6  py-3">
                   #
@@ -124,7 +124,7 @@ const Detail = () => {
                 <th scope="col" className="px-6 min-w-[120px]  py-3">
                   Photo
                 </th> 
-                <th scope="col" className="px-6   py-3">
+                <th scope="col" className="px-6 w-[120px]  py-3">
                   Name
                 </th>
                 <th scope="col" className="px-6 py-3">

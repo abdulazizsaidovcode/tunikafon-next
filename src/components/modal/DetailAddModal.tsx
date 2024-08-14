@@ -65,12 +65,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
       !!addData.name &&
       !!addData.detailCategoryId &&
       !!addData.measure &&
-      !!addData.price &&
-      !!addData.description &&
-      !!addData.width &&
-      !!addData.height &&
-      !!addData.largeDiagonal &&
-      !!addData.smallDiagonal;
+      !!addData.price;
 
     setIsFormValid(isValid);
   }, [addData, file]);
@@ -94,10 +89,11 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         ...addData,
         attachmentId: data.body,
         detailCategoryId: +addData.detailCategoryId,
-        width: +addData.width,
-        height: +addData.height,
-        largeDiagonal: +addData.largeDiagonal,
-        smallDiagonal: +addData.smallDiagonal,
+        width: addData.width ? +addData.width : null,
+        height: addData.height ? +addData.height : null,
+        largeDiagonal: addData.largeDiagonal ? +addData.largeDiagonal : null,
+        smallDiagonal: addData.smallDiagonal ? +addData.smallDiagonal : null,
+        side: addData.side ? addData.side : null,
         detailTypeStatus: addData.detailTypeStatus,
       });
 
@@ -106,7 +102,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
       setAddData({
         name: '',
         attachmentId: 0,
-        detailCategoryId: 0,
+        detailCategoryId: '',
         measure: '',
         price: 0,
         description: '',
