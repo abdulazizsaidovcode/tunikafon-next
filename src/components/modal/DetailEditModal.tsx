@@ -145,7 +145,7 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full rounded mb-3 px-1 py-2 outline-none"
             onChange={handleChange}
           >
-            <option selected>Select Status</option>
+            <option  disabled>Select Status</option>
             {detailTypeStatus &&
               detailTypeStatus.map((item) => (
                 <option value={item.value}>{item.name}</option>
@@ -158,7 +158,7 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full rounded px-1 mb-3 py-2 outline-none"
             onChange={handleChange}
           >
-            <option selected>Select Category</option>
+            <option selected disabled>Select Category</option>
             {detailCategory &&
               detailCategory.map((item) => (
                 <option value={item.id}>{item.name}</option>
@@ -185,7 +185,7 @@ const EditModal: React.FC<EditModalProps> = ({
               >
                 <option value="METER">METER</option>
                 <option value="SM">SM</option>
-                <option value="DONA">DONA</option>
+                <option value="DONA" selected>DONA</option>
               </select>
             </div>
           </div>
