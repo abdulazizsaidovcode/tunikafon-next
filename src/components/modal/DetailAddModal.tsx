@@ -153,7 +153,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailCategoryId}
         >
-          <option value={0}>Select Category</option>
+          <option value={0}>Select <details></details> Category</option>
           {data ? (
             data.object.map((item: any) => (
               <option key={item.id} value={item.id}>
