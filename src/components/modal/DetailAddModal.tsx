@@ -97,7 +97,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         detailTypeStatus: addData.detailTypeStatus,
       });
 
-      toast.success('Successfully created');
+      toast.success('Detail successfully created');
       setIsLoading(false);
       setAddData({
         name: '',

@@ -90,8 +90,20 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   const handleSave = async () => {
-    if (!formData.name || !formData.attachmentId) {
-      toast.error('Name and Attachment ID are required');
+    if (!formData.name) {
+      toast.error('Name is required');
+      return;
+    }
+    else if (!formData.attachmentId) {
+      toast.error(' Attachment ID is required');
+      return;
+    }
+     else if (!formData.price) {
+      toast.error('Price is required');
+      return;
+    }
+    else if (!formData.price) {
+      toast.error('Price is required');
       return;
     }
 
@@ -121,7 +133,7 @@ const EditModal: React.FC<EditModalProps> = ({
       onClose();
     } catch (error) {
       toast.error('Error updating Detail');
-      console.error('Error updating Detail:', error);
+      // console.error('Error updating Detail:', error);
     }
   }; 
 
