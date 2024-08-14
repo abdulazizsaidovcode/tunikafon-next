@@ -261,7 +261,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         />
         <label className="block mb-2">Side</label>
         <input
-          type="text"
+          type="number"
           name="side"
           onChange={(e) => setAddData({ ...addData, side: e.target.value })}
           value={addData.side ?? ''}
@@ -291,6 +291,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="file"
           onChange={handleImageChange}
           className="w-full p-2 mb-4 border rounded"
+          accept='.png, .jpg'
         />
         <div className="flex justify-end gap-5">
           <Button color="red" onClick={onClose}>

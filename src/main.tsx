@@ -10,6 +10,7 @@ import { Toaster } from 'sonner';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
+      <title>Tunikafon</title>
       <Toaster position="bottom-right" />
       <App />
     </Router>

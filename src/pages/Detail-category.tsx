@@ -65,8 +65,8 @@ const DetailCategory = () => {
       setName('');
       setFile(null);
       toast.success('Successfully added');
-    } catch (error) {
-      toast.error('Error');
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 

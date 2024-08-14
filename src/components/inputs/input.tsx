@@ -20,7 +20,7 @@ const Input: React.FC<InputType> = ({
         type={type}
         value={value}
         onChange={onChange}
-        accept=".png, .jpg, .svg"
+        accept=".png, .jpg"
         className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
       />
     </div>

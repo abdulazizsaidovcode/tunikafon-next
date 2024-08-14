@@ -17,6 +17,7 @@ const useGet = () => {
       }
     } catch (err: any) {
       setError(err);
+      if (err.response && err.response.status === 404) setData(null)
       throw new Error(
         err.response.data.message
           ? err.response.data.message

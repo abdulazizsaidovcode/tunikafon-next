@@ -77,24 +77,13 @@ const Employees = () => {
       )
         throw new Error('All fields required');
 
-      if (all.phoneNumber.length !== 12) {
-        throw new Error('The length of the number should be 13 characters.');
-      }
-
-      if (!all.phoneNumber.startsWith(+998)) {
-        throw new Error('The number must start with +998.');
-      }
-
-      const raqamQismi = all.phoneNumber.slice(1);
-      if (!/^\d+$/.test(raqamQismi)) {
-        throw new Error(
-          'The number must consist of numbers only (except for the + sign at the beginning).',
-        );
+      if (all.phoneNumber.length !== 9) {
+        throw new Error("The number does't match");
       }
 
       await post('/auth/register', {
         ...all,
-        phoneNumber: `+${all.phoneNumber}`,
+        phoneNumber: `+998${all.phoneNumber}`,
       });
 
       toast.success('Succesfuly aded');
@@ -119,8 +108,8 @@ const Employees = () => {
       if (!all.fullName.trim().length || !all.password.trim().length || !file)
         throw new Error('All fields required');
 
-      if (all.phoneNumber.toString().length !== 12) {
-        throw new Error('The length of the number should be 13 characters.');
+      if (all.phoneNumber.toString().length !== 9) {
+        throw new Error("The number does't match");
       }
 
       setImageUpdateLoading(true);
@@ -129,7 +118,7 @@ const Employees = () => {
       if (data.body) {
         await put('/auth/edit/by/admin', edit.id, {
           ...all,
-          phoneNumber: `+${all.phoneNumber}`,
+          phoneNumber: `+998${all.phoneNumber}`,
           attachmentId: data.body,
         });
       }
@@ -166,7 +155,7 @@ const Employees = () => {
     if (edit) {
       setAll({
         fullName: edit.fullName,
-        phoneNumber: +edit.phoneNumber,
+        phoneNumber: edit.phoneNumber.slice(4, 13),
         password: '',
       });
     }
@@ -217,49 +206,49 @@ const Employees = () => {
                 <tbody>
                   {data && data.object.length
                     ? data.object.map((item: any, i: number) => (
-                        <tr
-                          key={item.id}
-                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      <tr
+                        key={item.id}
+                        className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      >
+                        <th
+                          scope="row"
+                          className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                          {i + 1}
+                        </th>
+                        <td className="px-6 py-5">{item.fullName}</td>
+                        <td className="px-6 py-5">{item.phoneNumber}</td>
+                        <td className="px-6">
+                          <button
+                            onClick={() => {
+                              editToggleModal();
+                              setEdit(item);
+                            }}
                           >
-                            {i + 1}
-                          </th>
-                          <td className="px-6 py-5">{item.fullName}</td>
-                          <td className="px-6 py-5">{item.phoneNumber}</td>
-                          <td className="px-6">
-                            <button
-                              onClick={() => {
-                                editToggleModal();
-                                setEdit(item);
-                              }}
-                            >
-                              <FaRegEdit size={25} className="text-green-500" />
-                            </button>
-                            <button
-                              onClick={() => {
-                                deleteToggleModal();
-                                setDeleteId(item.id);
-                              }}
-                              className="ml-5"
-                            >
-                              <RiDeleteBinLine
-                                size={25}
-                                className="text-red-500"
-                              />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
+                            <FaRegEdit size={25} className="text-green-500" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              deleteToggleModal();
+                              setDeleteId(item.id);
+                            }}
+                            className="ml-5"
+                          >
+                            <RiDeleteBinLine
+                              size={25}
+                              className="text-red-500"
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                     : !isLoading && (
-                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                          <td className="px-6">
-                            <FaRegFolderOpen size={50} />
-                          </td>
-                        </tr>
-                      )}
+                      <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td className="px-6">
+                          <FaRegFolderOpen size={50} />
+                        </td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>

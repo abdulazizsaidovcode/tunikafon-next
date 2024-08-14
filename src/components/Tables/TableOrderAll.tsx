@@ -4,6 +4,7 @@ import { attechment } from '../../service/urls';
 import { FaArrowDownLong } from "react-icons/fa6";
 import useGet from '../../hooks/get';
 import GlobalModal from '../modal';
+import ReactPaginate from 'react-paginate';
 
 interface OrderDetail {
     detailId: number;
@@ -28,19 +29,24 @@ interface Order {
 }
 
 export default function TableOrderAll() {
-    const { get, data, isLoading } = useGet(); 
-    const { get: getOne, data: dateOne } = useGet(); 
+    const { get, data, isLoading } = useGet();
+    const { get: getOne, data: dateOne } = useGet();
     const [toggle, setToggle] = useState(false);
+    const [page, setPage] = useState<number>(0);
+
     // const [selectedItem, setSelectedItem] = useState<Order | null>(null);
 
     useEffect(() => {
-        get('/order/all');
-    }, []);
+        get('/order/all', page);
+    }, [page]);
 
     const toggleModal = () => {
         setToggle(!toggle);
     };
-
+    const handlePageClick = (page: any) => {
+        setPage(page.selected);
+    };
+    
     const handleViewClick = async (id: string) => {
         await getOne(`/order/one/${id}`);
         toggleModal()
@@ -134,6 +140,19 @@ export default function TableOrderAll() {
                     </div>
                 </div>
             </div>
+                {!isLoading && data && data.object ? (
+                    <ReactPaginate
+                        className="flex gap-3 navigation mt-5"
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        pageCount={data && data.totalPage}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null}
+                        forcePage={page}
+                    />
+                ) : null}
 
             <GlobalModal
                 isOpen={toggle}
@@ -151,26 +170,27 @@ export default function TableOrderAll() {
                         <p className='flex justify-between'>Date: <span>{dateOne.date || "not included"}</span></p>
                         <div className=''>
                             <div className="flex items-center gap-2">
-                            <h3 className="text-md font-medium">Order Details Res:</h3><FaArrowDownLong  />
-                                </div>                            
+                                <h3 className="text-md font-medium">Order Details Res:</h3><FaArrowDownLong />
+                            </div>
                             <div className='flex flex-col text-lg gap-3 mt-3'>
-                            {dateOne.orderDetailsRes.map((detail: any) => (
-                                <div className='p-4 ml-3 flex items-center gap-3 border rounded' >
-                                    <div>
-                                        <img src={attechment + detail.detailAttachmentId} alt={detail.detailName} className="w-20 h-20 rounded-full object-cover" />
+                                {dateOne.orderDetailsRes.map((detail: any) => (
+                                    <div className='p-4 ml-3 flex items-center gap-3 border rounded' >
+                                        <div>
+                                            <img src={attechment + detail.detailAttachmentId} alt={detail.detailName} className="w-20 h-20 rounded-full object-cover" />
+                                        </div>
+                                        <div className="w-[85%] flex flex-col justify-start">
+                                            <p>Detail Name: {detail.detailName}</p>
+                                            <p>Amount: {detail.amount}</p>
+                                            <p>Residual: {detail.residual}</p>
+                                        </div>
+
                                     </div>
-                                    <div className="w-[85%] flex flex-col justify-start">
-                                    <p>Detail Name: {detail.detailName}</p>
-                                    <p>Amount: {detail.amount}</p>
-                                    <p>Residual: {detail.residual}</p>
-                                    </div>
-                                    
-                                </div>
-                            ))}
+                                ))}
                             </div>
                         </div>
                     </div>
                 )}
+
             </GlobalModal>
         </div>
     );
