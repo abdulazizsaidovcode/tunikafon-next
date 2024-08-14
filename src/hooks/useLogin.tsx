@@ -18,6 +18,7 @@ const useLogin = () => {
 
       if (data.success) {
         localStorage.setItem('token', data.body);
+        localStorage.setItem('role', data.message);
         window.location.pathname = '/';
         toast.success('Success');
       } else throw new Error();
