@@ -21,10 +21,9 @@ const DropdownUser = () => {
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
-      <Link
+      <div
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-4"
-        to="/"
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
@@ -60,7 +59,7 @@ const DropdownUser = () => {
             fill=""
           />
         </svg>
-      </Link>
+      </div>
       {dropdownOpen && (
         <div
           className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}
