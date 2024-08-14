@@ -4,7 +4,7 @@ import ClickOutside from '../ClickOutside';
 import UserOne from '../../images/user/user-01.png';
 import useGet from '../../hooks/get';
 import { attechment } from '../../service/urls';
-
+import { FaUser } from "react-icons/fa";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { get, data } = useGet();
@@ -14,6 +14,7 @@ const DropdownUser = () => {
     localStorage.clear();
     navigate('/login');
   };
+
   useEffect(() => {
     get('/user/me');
   }, []);
@@ -23,17 +24,25 @@ const DropdownUser = () => {
       <Link
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-4"
-        to="#"
+        to="/"
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {data && data.fullName}
+            {data?.fullName}
           </span>
-          <span className="block text-xs">{data && data.phoneNumber}</span>
+          <span className="block text-xs">{data?.phoneNumber}</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <img className='rounded-full w-full h-full object-cover bg-cover' src={data && attechment + data.attachmentId} alt="" />
+        <span className="h-12 w-12 rounded-full overflow-hidden">
+          {data?.attachmentId ? (
+            <img
+              className='rounded-full w-full h-full object-cover'
+              src={attechment + data.attachmentId}
+              alt="User Avatar"
+            />
+          ) : (
+            <FaUser className="text-gray-500 w-full h-full" />
+          )}
         </span>
 
         <svg
@@ -52,8 +61,6 @@ const DropdownUser = () => {
           />
         </svg>
       </Link>
-
-      {/* <!-- Dropdown Start --> */}
       {dropdownOpen && (
         <div
           className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}
@@ -83,7 +90,6 @@ const DropdownUser = () => {
           </button>
         </div>
       )}
-      {/* <!-- Dropdown End --> */}
     </ClickOutside>
   );
 };

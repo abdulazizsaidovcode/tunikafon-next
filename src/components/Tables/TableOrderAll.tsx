@@ -64,9 +64,6 @@ export default function TableOrderAll() {
                                         #
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        Photo
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
                                         Employee Name
                                     </th>
                                     <th scope="col" className="px-6 py-3">
