@@ -211,6 +211,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
               }
               value={addData.measure}
             >
+              {/* <option selected>Select measure</option> */}
               <option value="DONA">Dona</option>
               <option value="METER">Meter</option>
               <option value="SM">Sm</option>
