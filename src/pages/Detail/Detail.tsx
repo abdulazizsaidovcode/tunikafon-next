@@ -129,6 +129,9 @@ const Detail = () => {
                 <th scope="col" className="px-6 py-3">
                   Height
                 </th>
+                <th scope="col" className="px-6 py-3">
+                  Detail Type Status
+                </th>
                 <th scope="col" className="px-6 min-w-[170px] py-3">
                   Large Diagonal
                 </th>
@@ -172,6 +175,7 @@ const Detail = () => {
                     <td className="px-6 py-4">{item.name}</td>
                     <td className="px-6 py-4">{item.width}</td>
                     <td className="px-6 py-4">{item.height}</td>
+                    <td className="px-6 py-4">{item.detailTypeStatus}</td>
                     <td className="px-6 py-4">{item.largeDiagonal}</td>
                     <td className="px-6 py-4">{item.smallDiagonal}</td>
                     <td className="px-6 py-4">{item.description}</td>
