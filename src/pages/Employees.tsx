@@ -36,7 +36,7 @@ const Employees = () => {
   const [imageUpdateLoading, setImageUpdateLoading] = useState(false);
   const [all, setAll] = useState<Type>({
     fullName: '',
-    phoneNumber: null,
+    phoneNumber: '+998',
     password: '',
   });
 
@@ -77,7 +77,7 @@ const Employees = () => {
       )
         throw new Error('All fields required');
 
-      if (all.phoneNumber.length !== 9) {
+      if (all.phoneNumber.length !== 13) {
         throw new Error("The number does't match");
       }
 
@@ -105,23 +105,21 @@ const Employees = () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      if (!all.fullName.trim().length || !all.password.trim().length || !file)
+      if (!all.fullName.trim().length || !all.password.trim().length)
         throw new Error('All fields required');
 
-      if (all.phoneNumber.toString().length !== 9) {
+      if (all.phoneNumber.toString().length !== 13) {
         throw new Error("The number does't match");
       }
 
       setImageUpdateLoading(true);
-      const { data } = await axios.post(`/attachment/upload`, formData);
+      const data = file && (await axios.post(`/attachment/upload`, formData));
 
-      if (data.body) {
-        await put('/auth/edit/by/admin', edit.id, {
-          ...all,
-          phoneNumber: all.phoneNumber,
-          attachmentId: data.body,
-        });
-      }
+      await put('/auth/edit/by/admin', edit.id, {
+        ...all,
+        phoneNumber: all.phoneNumber,
+        attachmentId: data ? data.data.body : 0,
+      });
 
       if (putError) throw new Error();
       else {
