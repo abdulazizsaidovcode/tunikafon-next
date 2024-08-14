@@ -184,7 +184,7 @@ const DetailCategory = () => {
               <Input label="Image" onChange={handleImageChange} type="file" />
               <div className="mt-5">
                 <Input
-                  label="Enter your Name"
+                  label="Enter detail category name"
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value), handleNameChange;
@@ -211,7 +211,7 @@ const DetailCategory = () => {
         <div>
           <Input label="Image" type="file" onChange={handleImageChange} />
           <div>
-            <label className="block mb-2">Name</label>
+            <label className="block mb-2">Enter detail category name</label>
             <input
               value={val}
               type="text"

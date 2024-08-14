@@ -105,7 +105,7 @@ const Employees = () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      if (!all.fullName.trim().length || !all.password.trim().length || !file)
+      if (!all.fullName.trim().length || !all.password.trim().length)
         throw new Error('All fields required');
 
       if (all.phoneNumber.toString().length !== 9) {
@@ -113,15 +113,15 @@ const Employees = () => {
       }
 
       setImageUpdateLoading(true);
-      const { data } = await axios.post(`/attachment/upload`, formData);
+      // if (file)
+      const data = file && await axios.post(`/attachment/upload`, formData);
 
-      if (data.body) {
-        await put('/auth/edit/by/admin', edit.id, {
-          ...all,
-          phoneNumber: `+998${all.phoneNumber}`,
-          attachmentId: data.body,
-        });
-      }
+
+      await put('/auth/edit/by/admin', edit.id, {
+        ...all,
+        phoneNumber: `+998${all.phoneNumber}`,
+        attachmentId: data ? data.data.body : 0,
+      });
 
       if (putError) throw new Error();
       else {
@@ -206,49 +206,49 @@ const Employees = () => {
                 <tbody>
                   {data && data.object.length
                     ? data.object.map((item: any, i: number) => (
-                        <tr
-                          key={item.id}
-                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      <tr
+                        key={item.id}
+                        className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      >
+                        <th
+                          scope="row"
+                          className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                          {i + 1}
+                        </th>
+                        <td className="px-6 py-5">{item.fullName}</td>
+                        <td className="px-6 py-5">{item.phoneNumber}</td>
+                        <td className="px-6">
+                          <button
+                            onClick={() => {
+                              editToggleModal();
+                              setEdit(item);
+                            }}
                           >
-                            {i + 1}
-                          </th>
-                          <td className="px-6 py-5">{item.fullName}</td>
-                          <td className="px-6 py-5">{item.phoneNumber}</td>
-                          <td className="px-6">
-                            <button
-                              onClick={() => {
-                                editToggleModal();
-                                setEdit(item);
-                              }}
-                            >
-                              <FaRegEdit size={25} className="text-green-500" />
-                            </button>
-                            <button
-                              onClick={() => {
-                                deleteToggleModal();
-                                setDeleteId(item.id);
-                              }}
-                              className="ml-5"
-                            >
-                              <RiDeleteBinLine
-                                size={25}
-                                className="text-red-500"
-                              />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
+                            <FaRegEdit size={25} className="text-green-500" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              deleteToggleModal();
+                              setDeleteId(item.id);
+                            }}
+                            className="ml-5"
+                          >
+                            <RiDeleteBinLine
+                              size={25}
+                              className="text-red-500"
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                     : !isLoading && (
-                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                          <td className="px-6">
-                            <FaRegFolderOpen size={50} />
-                          </td>
-                        </tr>
-                      )}
+                      <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td className="px-6">
+                          <FaRegFolderOpen size={50} />
+                        </td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
