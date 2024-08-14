@@ -14,6 +14,8 @@ const useGet = () => {
       const { data } = await axios.get(api);
       if (data.success) {
         setData(data.body);
+      } else {
+        setData(null)
       }
     } catch (err: any) {
       setError(err);

@@ -93,7 +93,7 @@ const Product = () => {
 
   const editProduct = async () => {
     try {
-      if (!name.trim() || !detailsIds.length || !file)
+      if (!name.trim() || !detailsIds.length)
         throw new Error('All fields required');
 
       const formData = new FormData();
@@ -175,7 +175,7 @@ const Product = () => {
         isOpen={toggle}
         onClose={toggleModal}
         children={
-          <div className="sm:w-96 w-60 relative">
+          <div className="sm:w-96 w-full relative">
             <Input onChange={handleImageChange} label="Image" type="file" />
             <Input
               onChange={(e: any) => setName(e.target.value)}
@@ -233,7 +233,7 @@ const Product = () => {
                 )}
               </MenuList>
             </Menu>
-            <div className="w-96 mt-5 flex gap-5 justify-end">
+            <div className="sm:w-96 w-full mt-5 flex gap-5 justify-end">
               <Button onClick={toggleModal} color="red">
                 Close
               </Button>
@@ -252,7 +252,7 @@ const Product = () => {
         isOpen={editModal}
         onClose={toggleEditModal}
         children={
-          <div className="sm:w-96 w-60 relative">
+          <div className="sm:w-96 w-full relative">
             <Input onChange={handleImageChange} label="Image" type="file" />
             <Input
               onChange={(e: any) => setName(e.target.value)}
@@ -311,7 +311,7 @@ const Product = () => {
                 )}
               </MenuList>
             </Menu>
-            <div className="w-96 mt-5 flex gap-5 justify-end">
+            <div className="sm:w-96 w-full mt-5 flex gap-5 justify-end">
               <Button onClick={toggleEditModal} color="red">
                 Close
               </Button>

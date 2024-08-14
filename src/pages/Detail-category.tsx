@@ -90,24 +90,25 @@ const DetailCategory = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      if (!val?.trim().length || !file) {
+      if (!val?.trim().length) {
         throw new Error('All fields required');
       }
 
       if (update) {
-        await put(`/attachment`, update.attachmentId, formData);
+        if (file) await put(`/attachment`, update.attachmentId, formData);
+        else {
+          await put(`/detail-category`, update.id, {
+            name: val.trim(),
+            attachmentId: update.attachmentId,
+          });
+          if (error) throw new Error();
 
-        await put(`/detail-category`, update.id, {
-          name: val.trim(),
-          attachmentId: update.attachmentId,
-        });
-        if (error) throw new Error();
-
-        editToggleModal();
-        get('/detail-category/list', page);
-        setVal('');
-        setFile(null);
-        toast.success('Successfully updated');
+          editToggleModal();
+          get('/detail-category/list', page);
+          setVal('');
+          setFile(null);
+          toast.success('Successfully updated');
+        }
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -117,7 +118,7 @@ const DetailCategory = () => {
   const handleDelete = async () => {
     if (deleteId) {
       await remove(`/detail-category/`, deleteId);
-      get('/detail-category/list', page);
+      await get('/detail-category/list', page);
       deleteToggleModal();
       toast.success('Successfully deleted');
     }
