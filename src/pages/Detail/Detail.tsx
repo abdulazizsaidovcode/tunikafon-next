@@ -96,7 +96,7 @@ const Detail = () => {
 
       <div className="w-full flex justify-between items-center">
         <Button
-          className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-5 py-2"
+          className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-6 py-3"
           onClick={addToggleModal}
         >
           Add

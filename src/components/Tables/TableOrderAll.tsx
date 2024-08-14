@@ -64,10 +64,7 @@ export default function TableOrderAll() {
                                         #
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        Employee Name
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Product Name
+                                         Name
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Price
@@ -107,7 +104,6 @@ export default function TableOrderAll() {
                                                 />
                                             </td> */}
                                             <td className="px-6 py-4">{item.employeeName}</td>
-                                            <td className="px-6 py-4">{item.productName}</td>
                                             <td className="px-6 py-4">{item.price}</td>
                                             <td className="px-6 py-4">{item.orderStatus}</td>
                                             <td className="px-6 py-4">{item.address}</td>
@@ -158,7 +154,7 @@ export default function TableOrderAll() {
                 {dateOne && (
                     <div className='lg:w-[600px] w-[300px]  flex flex-col gap-2 text-xl md:w-[500px]'>
                         <h2 className="text-lg font-semibold">Order Details</h2>
-                        <p className='flex justify-between'>Employee Name: <span>{dateOne.employeeName || "not included"}</span></p>
+                        {/* <p className='flex justify-between'>Employee Name: <span>{dateOne.employeeName || "not included"}</span></p> */}
                         <p className='flex justify-between'>Width: <span>{dateOne.width || "not included"}</span></p>
                         <p className='flex justify-between'>Tall: <span>{dateOne.tall || "not included"}</span></p>
                         <p className='flex justify-between'>Price: <span>{dateOne.price || "not included"}</span></p>

@@ -144,7 +144,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         />
         <label className="block mb-2">Detail Category ID</label>
         <select
-          className="w-full rounded px-1 py-2 outline-none"
+          className="w-full rounded dark:bg-black/70 px-1 py-2 outline-none"
           onChange={(e) =>
             setAddData({
               ...addData,
@@ -170,7 +170,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         </select>
         <label className="block my-2">Detail type status</label>
         <select
-          className="w-full rounded px-1 py-2 outline-none"
+          className="w-full rounded dark:bg-black/70 px-1 py-2 outline-none"
           onChange={(e) =>
             setAddData({
               ...addData,
@@ -205,7 +205,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           <div className="w-full">
             <label className="block mb-2">Measure</label>
             <select
-              className="w-full rounded px-1 py-2"
+              className="w-full dark:bg-black/70  rounded px-1 py-2"
               onChange={(e) =>
                 setAddData({ ...addData, measure: e.target.value })
               }
