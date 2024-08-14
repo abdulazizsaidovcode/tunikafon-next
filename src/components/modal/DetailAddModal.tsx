@@ -61,7 +61,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { post, isLoading: postIsLoading } = usePost();
-  useEffect(() => { });
+  useEffect(() => {});
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -160,6 +160,10 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
                 {item.name}
               </option>
             ))
+          ) : !data ? (
+            <option disabled className="text-lg">
+              Malumot yuq
+            </option>
           ) : (
             <option>Loading...</option>
           )}
@@ -291,7 +295,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="file"
           onChange={handleImageChange}
           className="w-full p-2 mb-4 border rounded"
-          accept='.png, .jpg'
+          accept=".png, .jpg"
         />
         <div className="flex justify-end gap-5">
           <Button color="red" onClick={onClose}>

@@ -143,12 +143,12 @@ const Product = () => {
     <>
       <Breadcrumb pageName="Product" />
 
-      <button
+      <Button
         onClick={toggleModal}
         className="rounded-lg shadow my-5 bg-gary-600 dark:bg-boxdark px-5 py-2"
       >
         Add
-      </button>
+      </Button>
       <Table
         updataModal={toggleEditModal}
         setUpdate={setUpdate}

@@ -10,10 +10,10 @@ import useDelete from '../../hooks/delete';
 import { toast } from 'sonner';
 import GlobalModal from '../../components/modal';
 import axios from '../../service/api';
-import usePost from '../../hooks/post';
 import '../../css/style.css';
 import ReactPaginate from 'react-paginate';
 import DetailAddModal from '../../components/modal/DetailAddModal';
+import { Button } from '@material-tailwind/react';
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
@@ -28,8 +28,6 @@ const Detail = () => {
   // const [file, setFile] = useState<any>();
   // const [isValid, setIsValid] = useState<boolean>(false);
   // const [name, setName] = useState<string>('');
-
-
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -48,7 +46,6 @@ const Detail = () => {
     }
   };
 
- 
   const handlePageClick = (page: any) => {
     get('/detail', page.selected);
   };
@@ -98,12 +95,12 @@ const Detail = () => {
       <Breadcrumb pageName="Detail" />
 
       <div className="w-full flex justify-between items-center">
-        <button
+        <Button
           className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-5 py-2"
           onClick={addToggleModal}
         >
           Add
-        </button>
+        </Button>
         <input
           className="bg-transparent border rounded-lg outline-none px-3 py-2"
           type="text"
@@ -122,7 +119,7 @@ const Detail = () => {
                 </th>
                 <th scope="col" className="px-6 min-w-[120px]  py-3">
                   Photo
-                </th> 
+                </th>
                 <th scope="col" className="px-6   py-3">
                   Name
                 </th>
@@ -232,7 +229,7 @@ const Detail = () => {
         onConfirm={handleDelete}
       />
       <GlobalModal isOpen={addModal} onClose={addToggleModal}>
-        <DetailAddModal onClose={addToggleModal}/>
+        <DetailAddModal onClose={addToggleModal} />
       </GlobalModal>
     </>
   );
