@@ -36,7 +36,7 @@ const Employees = () => {
   const [imageUpdateLoading, setImageUpdateLoading] = useState(false);
   const [all, setAll] = useState<Type>({
     fullName: '',
-    phoneNumber: null,
+    phoneNumber: '+998',
     password: '',
   });
 
@@ -44,7 +44,7 @@ const Employees = () => {
     setToggle(!toggle);
     setAll({
       fullName: '',
-      phoneNumber: null,
+      phoneNumber: '+998',
       password: '',
     });
   };
@@ -77,13 +77,13 @@ const Employees = () => {
       )
         throw new Error('All fields required');
 
-      if (all.phoneNumber.length !== 9) {
+      if (all.phoneNumber.length !== 13) {
         throw new Error("The number does't match");
       }
 
       await post('/auth/register', {
         ...all,
-        phoneNumber: `+998${all.phoneNumber}`,
+        phoneNumber: all.phoneNumber,
       });
 
       toast.success('Succesfuly aded');
@@ -108,18 +108,16 @@ const Employees = () => {
       if (!all.fullName.trim().length || !all.password.trim().length)
         throw new Error('All fields required');
 
-      if (all.phoneNumber.toString().length !== 9) {
+      if (all.phoneNumber.toString().length !== 13) {
         throw new Error("The number does't match");
       }
 
       setImageUpdateLoading(true);
-      // if (file)
-      const data = file && await axios.post(`/attachment/upload`, formData);
-
+      const data = file && (await axios.post(`/attachment/upload`, formData));
 
       await put('/auth/edit/by/admin', edit.id, {
         ...all,
-        phoneNumber: `+998${all.phoneNumber}`,
+        phoneNumber: all.phoneNumber,
         attachmentId: data ? data.data.body : 0,
       });
 
@@ -155,7 +153,7 @@ const Employees = () => {
     if (edit) {
       setAll({
         fullName: edit.fullName,
-        phoneNumber: edit.phoneNumber.slice(4, 13),
+        phoneNumber: edit.phoneNumber,
         password: '',
       });
     }
@@ -206,49 +204,49 @@ const Employees = () => {
                 <tbody>
                   {data && data.object.length
                     ? data.object.map((item: any, i: number) => (
-                      <tr
-                        key={item.id}
-                        className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        <tr
+                          key={item.id}
+                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                         >
-                          {i + 1}
-                        </th>
-                        <td className="px-6 py-5">{item.fullName}</td>
-                        <td className="px-6 py-5">{item.phoneNumber}</td>
-                        <td className="px-6">
-                          <button
-                            onClick={() => {
-                              editToggleModal();
-                              setEdit(item);
-                            }}
+                          <th
+                            scope="row"
+                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
-                            <FaRegEdit size={25} className="text-green-500" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              deleteToggleModal();
-                              setDeleteId(item.id);
-                            }}
-                            className="ml-5"
-                          >
-                            <RiDeleteBinLine
-                              size={25}
-                              className="text-red-500"
-                            />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                            {i + 1}
+                          </th>
+                          <td className="px-6 py-5">{item.fullName}</td>
+                          <td className="px-6 py-5">{item.phoneNumber}</td>
+                          <td className="px-6">
+                            <button
+                              onClick={() => {
+                                editToggleModal();
+                                setEdit(item);
+                              }}
+                            >
+                              <FaRegEdit size={25} className="text-green-500" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                deleteToggleModal();
+                                setDeleteId(item.id);
+                              }}
+                              className="ml-5"
+                            >
+                              <RiDeleteBinLine
+                                size={25}
+                                className="text-red-500"
+                              />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
                     : !isLoading && (
-                      <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td className="px-6">
-                          <FaRegFolderOpen size={50} />
-                        </td>
-                      </tr>
-                    )}
+                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <td className="px-6">
+                            <FaRegFolderOpen size={50} />
+                          </td>
+                        </tr>
+                      )}
                 </tbody>
               </table>
             </div>
@@ -274,7 +272,7 @@ const Employees = () => {
         onClose={toggleModal}
         children={
           <div className="sm:w-96 w-full">
-            <div className='w-80 sm:w-full'>
+            <div className="w-80 sm:w-full">
               <Input
                 label="Full name"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
@@ -282,7 +280,7 @@ const Employees = () => {
               />
               <Input
                 label="PhoneNumber"
-                type="number"
+                type="text"
                 onChange={(e) => {
                   setAll({ ...all, phoneNumber: e.target.value });
                 }}
@@ -324,7 +322,7 @@ const Employees = () => {
               />
               <Input
                 label="PhoneNumber"
-                type="number"
+                type="text"
                 onChange={(e) =>
                   setAll({ ...all, phoneNumber: e.target.value })
                 }
