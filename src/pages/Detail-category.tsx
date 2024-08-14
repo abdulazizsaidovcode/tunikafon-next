@@ -96,19 +96,18 @@ const DetailCategory = () => {
 
       if (update) {
         if (file) await put(`/attachment`, update.attachmentId, formData);
-        else {
-          await put(`/detail-category`, update.id, {
-            name: val.trim(),
-            attachmentId: update.attachmentId,
-          });
-          if (error) throw new Error();
 
-          editToggleModal();
-          get('/detail-category/list', page);
-          setVal('');
-          setFile(null);
-          toast.success('Successfully updated');
-        }
+        await put(`/detail-category`, update.id, {
+          name: val.trim(),
+          attachmentId: update.attachmentId,
+        });
+        if (error) throw new Error();
+
+        editToggleModal();
+        get('/detail-category/list', page);
+        setVal('');
+        setFile(null);
+        toast.success('Successfully updated');
       }
     } catch (error: any) {
       toast.error(error.message);

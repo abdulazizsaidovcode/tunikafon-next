@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
-import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
-import useGet from "../hooks/get";
-import { attechment } from "../service/urls";
-import GlobalModal from "../components/modal";
-import Input from "../components/inputs/input";
+import { useEffect, useState } from 'react';
+import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
+import useGet from '../hooks/get';
+import { attechment } from '../service/urls';
+import GlobalModal from '../components/modal';
+import Input from '../components/inputs/input';
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
   Button,
   Checkbox,
-} from "@material-tailwind/react";
-import usePost from "../hooks/post";
-import { toast } from "sonner";
+} from '@material-tailwind/react';
+import usePost from '../hooks/post';
+import { toast } from 'sonner';
+import { FaRegFolderOpen } from 'react-icons/fa6';
 
 const Calculation = () => {
   const { get, isLoading, data } = useGet();
@@ -69,8 +70,8 @@ const Calculation = () => {
       details2.map((detail) =>
         detail.detailId === id
           ? { ...detail, count: value ? +value : 0 }
-          : detail
-      )
+          : detail,
+      ),
     );
   };
   useEffect(() => {
@@ -79,7 +80,7 @@ const Calculation = () => {
         productdetail.map((item: any) => ({
           detailId: item.id,
           count: 0,
-        }))
+        })),
       );
     }
   }, [productdetail]);
@@ -89,17 +90,17 @@ const Calculation = () => {
       details3.map((detail) =>
         detail.detailId === id
           ? { ...detail, count: value ? +value : 0 }
-          : detail
-      )
+          : detail,
+      ),
     );
   };
 
   const handleClick = async () => {
     try {
       if (!req.width || !req.tall) {
-        throw new Error("Width or tall is required");
+        throw new Error('Width or tall is required');
       } else {
-        await post("/order/calculation", {
+        await post('/order/calculation', {
           width: +req.width,
           tall: +req.tall,
           orderDetailDtos: select ? details3 : details2,
@@ -114,9 +115,9 @@ const Calculation = () => {
   const handleSave = async () => {
     try {
       if (!req.width || !req.tall || !orderData.address || !orderData.date)
-        throw new Error("All fields required");
+        throw new Error('All fields required');
 
-      await save("/order/save", {
+      await save('/order/save', {
         width: +req.width,
         tall: +req.tall,
         address: orderData.address,
@@ -132,20 +133,20 @@ const Calculation = () => {
       setDetails2([]);
       setDetails3([]);
       setToggle(false);
-      await post("/order/calculation", {
+      await post('/order/calculation', {
         width: 0,
         tall: 0,
         orderDetailDtos: [],
       });
 
-      toast.success("Data saved successfully!");
+      toast.success('Data saved successfully!');
     } catch (error: any) {
       toast.error(error.message);
     }
   };
 
   useEffect(() => {
-    get("/product");
+    get('/product');
   }, []);
 
   const getDetails = async (id: number) => {
@@ -178,35 +179,40 @@ const Calculation = () => {
       <div>
         {select ? (
           <div className="grid gap-5 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 place-items-center">
-            {isLoading
-              ? Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i}>
-                    <div className="w-60 h-60 rounded-xl animate-pulse bg-[#e3e3e3]" />
-                    <div className="w-full rounded-lg animate-pulse border mt-5 py-2">
-                      <span className="w-24 h-5 mx-auto block rounded-lg animate-pulse bg-[#e3e3e3]"></span>
-                    </div>
+            {isLoading ? (
+              Array.from({ length: 8 }).map((_, i) => (
+                <div key={i}>
+                  <div className="w-60 h-60 rounded-xl animate-pulse bg-[#e3e3e3]" />
+                  <div className="w-full rounded-lg animate-pulse border mt-5 py-2">
+                    <span className="w-24 h-5 mx-auto block rounded-lg animate-pulse bg-[#e3e3e3]"></span>
                   </div>
-                ))
-              : data &&
-                data.object.map((item: any) => (
-                  <div
-                    key={item.id}
-                    className="cursor-pointer"
-                    onClick={() => {
-                      getProductDetails(item.id);
-                      toggleModal();
-                    }}
-                  >
-                    <img
-                      className="w-60 h-60 bg-cover object-cover rounded-xl"
-                      src={attechment + item.attachmentId}
-                      alt={item.name}
-                    />
-                    <div className="w-full rounded-lg border mt-5 text-center py-2">
-                      <h1>{item.name}</h1>
-                    </div>
+                </div>
+              ))
+            ) : data && data.object.length ? (
+              data.object.map((item: any) => (
+                <div
+                  key={item.id}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    getProductDetails(item.id);
+                    toggleModal();
+                  }}
+                >
+                  <img
+                    className="w-60 h-60 bg-cover object-cover rounded-xl"
+                    src={attechment + item.attachmentId}
+                    alt={item.name}
+                  />
+                  <div className="w-full rounded-lg border mt-5 text-center py-2">
+                    <h1>{item.name}</h1>
                   </div>
-                ))}
+                </div>
+              ))
+            ) : (
+              <div className="w-full">
+                <FaRegFolderOpen size={80} />
+              </div>
+            )}
           </div>
         ) : (
           <div className="w-full p-4 bg-black border border-white rounded-lg text-white">
@@ -224,7 +230,7 @@ const Calculation = () => {
                           src={
                             item.attachmentId
                               ? attechment + item.attachmentId
-                              : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                              : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
                           }
                           alt={item.name}
                         />
@@ -241,7 +247,7 @@ const Calculation = () => {
                             >
                               <Checkbox
                                 checked={details1.some(
-                                  (d) => d.id === detail.id
+                                  (d) => d.id === detail.id,
                                 )}
                                 onChange={() => handleCheckboxChange(detail)}
                               />
@@ -287,7 +293,7 @@ const Calculation = () => {
                   <label htmlFor="buyi">Bo'yi</label>
                   <input
                     type="number"
-                    value={req.tall ? req.tall : ""}
+                    value={req.tall ? req.tall : ''}
                     id="buyi"
                     placeholder="bo'yi"
                     className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
@@ -298,7 +304,7 @@ const Calculation = () => {
                   <label htmlFor="eni">Eni</label>
                   <input
                     type="number"
-                    value={req.width ? req.width : ""}
+                    value={req.width ? req.width : ''}
                     id="eni"
                     placeholder="eni"
                     className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
@@ -306,9 +312,8 @@ const Calculation = () => {
                   />
                 </div>
                 <div className="flex items-end flex-row">
-
-                <h1 className="text-lg ">{total ? total : "0"}</h1>
-                <h1 className="text-lg ms-2">{`so'm`}</h1>
+                  <h1 className="text-lg ">{total ? total : '0'}</h1>
+                  <h1 className="text-lg ms-2">{`so'm`}</h1>
                 </div>
               </div>
               <div>
@@ -323,7 +328,7 @@ const Calculation = () => {
                 <input
                   id="address"
                   type="text"
-                  value={orderData.address ? orderData.address : ""}
+                  value={orderData.address ? orderData.address : ''}
                   placeholder="Enter address"
                   className="w-full p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
                   onChange={(e) =>
@@ -428,7 +433,7 @@ const Calculation = () => {
                 onClick={handleClick}
                 className="my-5 bg-gary-600 dark:bg-boxdark"
               >
-                {countLoading ? "Loading..." : "Hisoblash"}
+                {countLoading ? 'Loading...' : 'Hisoblash'}
               </Button>
             </div>
             <h1 className="text-lg text-center">{total} so'm</h1>
@@ -444,7 +449,7 @@ const Calculation = () => {
                 Close
               </Button>
               <Button disabled={saveLoading} onClick={handleSave} color="green">
-                {saveLoading ? "Loading..." : "Save"}
+                {saveLoading ? 'Loading...' : 'Save'}
               </Button>
             </div>
           </div>
