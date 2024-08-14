@@ -14,6 +14,7 @@ import usePost from '../../hooks/post';
 import '../../css/style.css';
 import ReactPaginate from 'react-paginate';
 import DetailAddModal from '../../components/modal/DetailAddModal';
+import { Button } from '@material-tailwind/react';
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
@@ -98,12 +99,12 @@ const Detail = () => {
       <Breadcrumb pageName="Detail" />
 
       <div className="w-full flex justify-between items-center">
-        <button
-          className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-5 py-2"
+        <Button
+          className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-6 py-3"
           onClick={addToggleModal}
         >
           Add
-        </button>
+        </Button>
         <input
           className="bg-transparent border rounded-lg outline-none px-3 py-2"
           type="text"
@@ -181,12 +182,12 @@ const Detail = () => {
                     <td className="px-6 py-4">{item.price}</td>
                     <td className="px-6 py-4">{item.measure}</td>
                     <td className="px-6">
-                      <button onClick={() => openEditModal(item)}>
+                      <Button onClick={() => openEditModal(item)}>
                         <FaRegEdit size={25} className="text-green-500" />
-                      </button>
+                      </Button>
                     </td>
                     <td className="px-6">
-                      <button
+                      <Button
                         onClick={() => {
                           deleteToggleModal();
                           setDeleteId(item.id);
@@ -194,7 +195,7 @@ const Detail = () => {
                         className="ml-3"
                       >
                         <RiDeleteBinLine size={25} className="text-red-500" />
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 ))

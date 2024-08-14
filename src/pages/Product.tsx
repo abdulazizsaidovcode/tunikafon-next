@@ -143,12 +143,12 @@ const Product = () => {
     <>
       <Breadcrumb pageName="Product" />
 
-      <button
+      <Button
         onClick={toggleModal}
-        className="rounded-lg shadow my-5 bg-gary-600 dark:bg-boxdark px-5 py-2"
+        className="rounded-lg shadow my-5 bg-gary-600 dark:bg-boxdark px-6 py-3"
       >
         Add
-      </button>
+      </Button>
       <Table
         updataModal={toggleEditModal}
         setUpdate={setUpdate}
@@ -187,7 +187,7 @@ const Product = () => {
               }}
             >
               <MenuHandler>
-                <Button className="w-full border text-start font-normal">
+                <Button className="w-full border px-6 py-3 text-start font-normal">
                   Select detail
                 </Button>
               </MenuHandler>

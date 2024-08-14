@@ -5,7 +5,6 @@ import UserOne from '../../images/user/user-01.png';
 import useGet from '../../hooks/get';
 import { attechment } from '../../service/urls';
 import { FaUser } from "react-icons/fa";
-
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { get, data } = useGet();
@@ -18,14 +17,14 @@ const DropdownUser = () => {
 
   useEffect(() => {
     get('/user/me');
-  }, []); // `get` ni dependentsiyada qo'shish
+  }, []);
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-4"
-        to="#"
+        to="/"
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
@@ -62,8 +61,6 @@ const DropdownUser = () => {
           />
         </svg>
       </Link>
-
-      {/* <!-- Dropdown Start --> */}
       {dropdownOpen && (
         <div
           className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}
@@ -93,7 +90,6 @@ const DropdownUser = () => {
           </button>
         </div>
       )}
-      {/* <!-- Dropdown End --> */}
     </ClickOutside>
   );
 };

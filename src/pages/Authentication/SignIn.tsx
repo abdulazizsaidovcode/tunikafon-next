@@ -25,7 +25,7 @@ const SignIn: React.FC = () => {
         <div className="flex h-screen flex-wrap justify-center items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-1 px-26 text-center">
-              <Link className=" inline-block text-5xl text-white" to="/">
+              <Link className=" inline-block text-5xl dark:text-white" to="/">
               Tunikafon
                 
               </Link>
