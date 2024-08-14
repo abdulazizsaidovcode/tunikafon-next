@@ -80,7 +80,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         !addData.width ||
         !addData.height ||
         !addData.largeDiagonal ||
-        !addData.smallDiagonal //||
+        !addData.smallDiagonal
       ) {
         throw new Error('All fields are required');
       }
@@ -153,7 +153,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailCategoryId}
         >
-          <option value={0}>Select Category</option>
+          <option value={0}>Select <details></details> category</option>
           {data ? (
             data.object.map((item: any) => (
               <option key={item.id} value={item.id}>
@@ -179,7 +179,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailTypeStatus}
         >
-          <option value={0}>Select Category</option>
+          <option value={0}>Select detail type</option>
           {detailTypeStatus.map((item: any) => (
             <option key={item.id} value={item.value}>
               {item.name}
@@ -211,6 +211,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
               }
               value={addData.measure}
             >
+              {/* <option selected>Select measure</option> */}
               <option value="DONA">Dona</option>
               <option value="METER">Meter</option>
               <option value="SM">Sm</option>
