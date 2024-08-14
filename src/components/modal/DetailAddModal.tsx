@@ -80,7 +80,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         !addData.width ||
         !addData.height ||
         !addData.largeDiagonal ||
-        !addData.smallDiagonal //||
+        !addData.smallDiagonal
       ) {
         throw new Error('All fields are required');
       }
