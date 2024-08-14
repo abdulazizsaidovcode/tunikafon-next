@@ -14,7 +14,6 @@ import DetailCategory from './pages/Detail-category';
 import Detail from './pages/Detail/Detail';
 import Product from './pages/Product';
 import Employees from './pages/Employees';
-import Employee from './layout/Employee';
 import EmployeeRoute from './layout/Employee';
 
 function App() {

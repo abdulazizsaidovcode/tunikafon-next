@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { FaEye, FaRegFolderOpen } from 'react-icons/fa';
-import { RiDeleteBinLine } from 'react-icons/ri';
 import { attechment } from '../../service/urls';
+import { FaArrowDownLong } from "react-icons/fa6";
 import useGet from '../../hooks/get';
 import GlobalModal from '../modal';
 
+interface OrderDetail {
+    detailId: number;
+    detailName: string;
+    detailAttachmentId: number;
+    amount: number;
+    residual: string | null;
+}
+
 interface Order {
     id: string;
-    productAttachmentId: string;
     employeeName: string;
-    productName: string;
-    price: number;
-    orderStatus: string;
-    address: string;
-    date: string;
+    productName: string | number;
+    orderDetails: string | null;
+    orderDetailsRes: OrderDetail[];
+    width: number;
+    tall: number;
+    price: number | null;
+    date: string | null;
+    orderStatus: string | null;
+    address: string | null;
 }
 
 export default function TableOrderAll() {
-    const { get, data, isLoading } = useGet<Order[]>(); 
+    const { get, data, isLoading } = useGet(); 
+    const { get: getOne, data: dateOne } = useGet(); 
     const [toggle, setToggle] = useState(false);
-    const [selectedItem, setSelectedItem] = useState<Order | null>(null);
+    // const [selectedItem, setSelectedItem] = useState<Order | null>(null);
 
     useEffect(() => {
         get('/order/all');
@@ -29,9 +41,9 @@ export default function TableOrderAll() {
         setToggle(!toggle);
     };
 
-    const handleViewClick = (item: Order) => {
-        setSelectedItem(item);
-        toggleModal();
+    const handleViewClick = async (id: string) => {
+        await getOne(`/order/one/${id}`);
+        toggleModal()
     };
 
     return (
@@ -72,8 +84,8 @@ export default function TableOrderAll() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data && data.length
-                                    ? data.map((item: Order, i: number) => (
+                                {data && data.object && data.object.length > 0
+                                    ? data.object.map((item: Order, i: number) => (
                                         <tr
                                             key={item.id}
                                             className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -84,13 +96,13 @@ export default function TableOrderAll() {
                                             >
                                                 {i + 1}
                                             </th>
-                                            <td className="px-6 py-4">
+                                            {/* <td className="px-6 py-4">
                                                 <img
                                                     className="w-20 h-20 rounded-full object-cover"
                                                     src={attechment + item.productAttachmentId}
                                                     alt="(404)"
                                                 />
-                                            </td>
+                                            </td> */}
                                             <td className="px-6 py-4">{item.employeeName}</td>
                                             <td className="px-6 py-4">{item.productName}</td>
                                             <td className="px-6 py-4">{item.price}</td>
@@ -99,7 +111,7 @@ export default function TableOrderAll() {
                                             <td className="px-6 py-4">{item.date}</td>
                                             <td className="px-6">
                                                 <button
-                                                    onClick={() => handleViewClick(item)}
+                                                    onClick={() => handleViewClick(item.id)}
                                                     className="ml-5"
                                                 >
                                                     <FaEye
@@ -127,16 +139,36 @@ export default function TableOrderAll() {
                 isOpen={toggle}
                 onClose={toggleModal}
             >
-                {selectedItem && (
-                    <div>
+                {dateOne && (
+                    <div className='lg:w-[600px] w-[300px]  flex flex-col gap-2 text-xl md:w-[500px]'>
                         <h2 className="text-lg font-semibold">Order Details</h2>
-                        <p>Employee Name: {selectedItem.employeeName}</p>
-                        <p>Product Name: {selectedItem.productName}</p>
-                        <p>Price: {selectedItem.price}</p>
-                        <p>Order Status: {selectedItem.orderStatus}</p>
-                        <p>Address: {selectedItem.address}</p>
-                        <p>Date: {selectedItem.date}</p>
-                        <p>Photo: <img src={attechment + selectedItem.productAttachmentId} alt={selectedItem.productName} /></p>
+                        <p className='flex justify-between'>Employee Name: <span>{dateOne.employeeName || "not included"}</span></p>
+                        <p className='flex justify-between'>Width: <span>{dateOne.width || "not included"}</span></p>
+                        <p className='flex justify-between'>Tall: <span>{dateOne.tall || "not included"}</span></p>
+                        <p className='flex justify-between'>Price: <span>{dateOne.price || "not included"}</span></p>
+                        <p className='flex justify-between'>Order Status: <span>{dateOne.orderStatus || "not included"}</span></p>
+                        <p className='flex justify-between'>Address: <span>{dateOne.address || "not included"}</span></p>
+                        <p className='flex justify-between'>Date: <span>{dateOne.date || "not included"}</span></p>
+                        <div className=''>
+                            <div className="flex items-center gap-2">
+                            <h3 className="text-md font-medium">Order Details Res:</h3><FaArrowDownLong  />
+                                </div>                            
+                            <div className='flex flex-col text-lg gap-3 mt-3'>
+                            {dateOne.orderDetailsRes.map((detail: any) => (
+                                <div className='p-4 ml-3 flex items-center gap-3 border rounded' >
+                                    <div>
+                                        <img src={attechment + detail.detailAttachmentId} alt={detail.detailName} className="w-20 h-20 rounded-full object-cover" />
+                                    </div>
+                                    <div className="w-[85%] flex flex-col justify-start">
+                                    <p>Detail Name: {detail.detailName}</p>
+                                    <p>Amount: {detail.amount}</p>
+                                    <p>Residual: {detail.residual}</p>
+                                    </div>
+                                    
+                                </div>
+                            ))}
+                            </div>
+                        </div>
                     </div>
                 )}
             </GlobalModal>
