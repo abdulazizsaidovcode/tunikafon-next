@@ -157,7 +157,7 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full rounded mb-3 px-1 py-2 outline-none"
             onChange={handleChange}
           >
-            <option  disabled>Select Status</option>
+            <option  selected>Select Status</option>
             {detailTypeStatus &&
               detailTypeStatus.map((item) => (
                 <option value={item.value}>{item.name}</option>
