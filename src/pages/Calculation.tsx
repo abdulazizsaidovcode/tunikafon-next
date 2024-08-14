@@ -187,7 +187,7 @@ const Calculation = () => {
                     </div>
                   </div>
                 ))
-              : data &&
+              : data && data.object.length ?
                 data.object.map((item: any) => (
                   <div
                     key={item.id}
@@ -206,7 +206,7 @@ const Calculation = () => {
                       <h1>{item.name}</h1>
                     </div>
                   </div>
-                ))}
+                )) : <></>}
           </div>
         ) : (
           <div className="w-full p-4 bg-black border border-white rounded-lg text-white">
