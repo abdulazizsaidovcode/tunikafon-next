@@ -5,21 +5,25 @@ import { toast } from 'sonner';
 import useGet from '../../hooks/get';
 import { Button } from '@material-tailwind/react';
 
+type DetailCategory = {
+  id: number;
+  name: string;
+};
 interface DetailAddModalProps {
   onClose: () => void;
 }
 type AddData = {
   name: string;
   attachmentId: number;
-  detailCategoryId: number | string;
-  measure: string | number;
+  detailCategoryId: number;
+  measure: string;
   price: number;
   description: string;
   width: number;
   height: number;
   largeDiagonal: number;
   smallDiagonal: number;
-  side: string | null;
+  side: string | null; // Added 'side' field
   detailTypeStatus: string;
 };
 
@@ -43,7 +47,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
   const [addData, setAddData] = useState<AddData>({
     name: '',
     attachmentId: 0,
-    detailCategoryId: '',
+    detailCategoryId: 0,
     measure: '',
     price: 0,
     description: '',
@@ -51,25 +55,13 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
     height: 0,
     largeDiagonal: 0,
     smallDiagonal: 0,
-    side: null,
+    side: null, // Initialize side as null
     detailTypeStatus: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { post, isLoading: postIsLoading } = usePost();
-  const [isFormValid, setIsFormValid] = useState(false);
-
-  useEffect(() => {
-    const isValid =
-      !!file &&
-      !!addData.name &&
-      !!addData.detailCategoryId &&
-      !!addData.measure &&
-      !!addData.price;
-
-    setIsFormValid(isValid);
-  }, [addData, file]);
-
+  useEffect(() => {});
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -78,10 +70,25 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
 
   const handleClick = async () => {
     try {
+      if (
+        !file ||
+        !addData.name ||
+        !addData.detailCategoryId ||
+        !addData.measure ||
+        !addData.price ||
+        !addData.description ||
+        !addData.width ||
+        !addData.height ||
+        !addData.largeDiagonal ||
+        !addData.smallDiagonal //||
+      ) {
+        throw new Error('All fields are required');
+      }
+
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append('file', file!);
+      formData.append('file', file);
 
       const { data } = await axios.post(`/attachment/upload`, formData);
 
@@ -89,11 +96,10 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         ...addData,
         attachmentId: data.body,
         detailCategoryId: +addData.detailCategoryId,
-        width: addData.width ? +addData.width : null,
-        height: addData.height ? +addData.height : null,
-        largeDiagonal: addData.largeDiagonal ? +addData.largeDiagonal : null,
-        smallDiagonal: addData.smallDiagonal ? +addData.smallDiagonal : null,
-        side: addData.side ? addData.side : null,
+        width: +addData.width,
+        height: +addData.height,
+        largeDiagonal: +addData.largeDiagonal,
+        smallDiagonal: +addData.smallDiagonal,
         detailTypeStatus: addData.detailTypeStatus,
       });
 
@@ -102,7 +108,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
       setAddData({
         name: '',
         attachmentId: 0,
-        detailCategoryId: '',
+        detailCategoryId: 0,
         measure: '',
         price: 0,
         description: '',
@@ -154,6 +160,10 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
                 {item.name}
               </option>
             ))
+          ) : !data ? (
+            <option disabled className="text-lg">
+              Malumot yuq
+            </option>
           ) : (
             <option>Loading...</option>
           )}
@@ -177,6 +187,21 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           ))}
         </select>
         <div className="flex gap-2">
+          {/* <div className="w-full">
+            <label className="block mb-2">Measure Value</label>
+            <input
+              type="number"
+              name="measureValue"
+              onChange={(e) =>
+                setAddData({
+                  ...addData,
+                  measureValue: parseFloat(e.target.value),
+                })
+              }
+              value={addData.measureValue}
+              className="w-full p-2 mb-4 border rounded"
+            />
+          </div> */}
           <div className="w-full">
             <label className="block mb-2">Measure</label>
             <select
@@ -186,8 +211,6 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
               }
               value={addData.measure}
             >
-
-              <option disabled>Measure</option>
               <option value="DONA">Dona</option>
               <option value="METER">Meter</option>
               <option value="SM">Sm</option>
@@ -201,7 +224,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           onChange={(e) =>
             setAddData({ ...addData, width: parseFloat(e.target.value) })
           }
-          value={addData?.width || ''}
+          value={addData.width}
           className="w-full p-2 mb-4 border rounded"
         />
         <label className="block mb-2">Height</label>
@@ -224,7 +247,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
               largeDiagonal: parseFloat(e.target.value),
             })
           }
-          value={addData?.largeDiagonal || ""}
+          value={addData.largeDiagonal}
           className="w-full p-2 mb-4 border rounded"
         />
         <label className="block mb-2">Small Diagonal</label>
@@ -237,7 +260,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
               smallDiagonal: parseFloat(e.target.value),
             })
           }
-          value={addData?.smallDiagonal || ""}
+          value={addData.smallDiagonal}
           className="w-full p-2 mb-4 border rounded"
         />
         <label className="block mb-2">Side</label>
@@ -245,7 +268,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="number"
           name="side"
           onChange={(e) => setAddData({ ...addData, side: e.target.value })}
-          value={addData?.side || ''}
+          value={addData.side ?? ''}
           className="w-full p-2 mb-4 border rounded"
         />
         <label className="block mb-2">Price</label>
@@ -272,14 +295,14 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="file"
           onChange={handleImageChange}
           className="w-full p-2 mb-4 border rounded"
-          accept='.png, .jpg'
+          accept=".png, .jpg"
         />
         <div className="flex justify-end gap-5">
           <Button color="red" onClick={onClose}>
             Cancel
           </Button>
           <Button
-            disabled={isLoading || !isFormValid}
+            disabled={isLoading || postIsLoading}
             onClick={handleClick}
             color="green"
           >

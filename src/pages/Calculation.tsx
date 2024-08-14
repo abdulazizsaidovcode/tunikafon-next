@@ -270,7 +270,6 @@ const Calculation = () => {
                       src={attechment + detail.attachmentId}
                       alt={detail.name}
                     /> */}
-                    <span></span>
                     <div className="flex-1 px-4">
                       <h1 className="text-center">{detail.name}</h1>
                     </div>
@@ -288,38 +287,44 @@ const Calculation = () => {
             </div>
 
             <div className="flex justify-between py-5 items-end">
-              <div className="flex gap-5">
-                <div className="w-full flex flex-col">
-                  <label htmlFor="buyi">Bo'yi</label>
-                  <input
-                    type="number"
-                    value={req.tall ? req.tall : ''}
-                    id="buyi"
-                    placeholder="bo'yi"
-                    className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
-                    onChange={(e) => setReq({ ...req, tall: e.target.value })}
-                  />
+              <div className="flex flex-wrap gap-5">
+                <div className="flex">
+                  <div className="w-full flex flex-col flex-wrap">
+                    <label htmlFor="buyi">Bo'yi</label>
+                    <input
+                      type="number"
+                      value={req.tall ? req.tall : ''}
+                      id="buyi"
+                      placeholder="bo'yi"
+                      className="w-40 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
+                      onChange={(e) => setReq({ ...req, tall: e.target.value })}
+                    />
+                  </div>
+                  <div className="w-full flex flex-col">
+                    <label htmlFor="eni">Eni</label>
+                    <input
+                      type="number"
+                      value={req.width ? req.width : ''}
+                      id="eni"
+                      placeholder="eni"
+                      className="w-40 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
+                      onChange={(e) =>
+                        setReq({ ...req, width: e.target.value })
+                      }
+                    />
+                  </div>
                 </div>
-                <div className="w-full flex flex-col">
-                  <label htmlFor="eni">Eni</label>
-                  <input
-                    type="number"
-                    value={req.width ? req.width : ''}
-                    id="eni"
-                    placeholder="eni"
-                    className="w-44 h-10 p-2 border border-graydark rounded-md bg-black text-white focus:outline-none"
-                    onChange={(e) => setReq({ ...req, width: e.target.value })}
-                  />
+                <div className="flex items-end justify-between w-full flex-row">
+                  <div>
+                    <div className="flex">
+                      <h1 className="text-lg">{total ? total : '0'}</h1>
+                      <h1 className="text-lg ms-2">{`so'm`}</h1>
+                    </div>
+                  </div>
+                  <Button onClick={handleClick} className="bg-primary">
+                    Calculate
+                  </Button>
                 </div>
-                <div className="flex items-end flex-row">
-                  <h1 className="text-lg ">{total ? total : '0'}</h1>
-                  <h1 className="text-lg ms-2">{`so'm`}</h1>
-                </div>
-              </div>
-              <div>
-                <Button onClick={handleClick} className="bg-primary">
-                  Calculate
-                </Button>
               </div>
             </div>
             <div className="mb-4 flex gap-10 py-5">

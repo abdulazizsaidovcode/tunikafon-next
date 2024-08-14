@@ -41,7 +41,7 @@ const ECommerce: React.FC = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between gap-2 items-center">
         <div className="w-72 py-6 select-none">
           <label htmlFor="year">Year</label>
           <input
@@ -58,7 +58,7 @@ const ECommerce: React.FC = () => {
           />
           {!isYearValid && <div className="text-red-500">{yearErrorText}</div>}
         </div>
-        <div className="w-72 py-6 select-none">
+        <div className="w-72 py-6 select-none mt-5.5">
           {/* <label htmlFor="month">Month</label>
           <input
             id="month"
@@ -69,7 +69,7 @@ const ECommerce: React.FC = () => {
             onChange={(e) => setMonth(Number(e.target.value))}
           /> */}
           <select
-            className="w-full p-3 text-lg rounded dark:bg-black dark:placeholder-gray-400"
+            className="w-full p-3 text-lg rounded dark:bg-[#1a222b] dark:placeholder-gray-400"
             onChange={(e) => setMonth(+e.target.value)}
             value={month}
           >

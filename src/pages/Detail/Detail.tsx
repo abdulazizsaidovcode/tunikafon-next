@@ -10,7 +10,6 @@ import useDelete from '../../hooks/delete';
 import { toast } from 'sonner';
 import GlobalModal from '../../components/modal';
 import axios from '../../service/api';
-import usePost from '../../hooks/post';
 import '../../css/style.css';
 import ReactPaginate from 'react-paginate';
 import DetailAddModal from '../../components/modal/DetailAddModal';
@@ -30,8 +29,6 @@ const Detail = () => {
   // const [isValid, setIsValid] = useState<boolean>(false);
   // const [name, setName] = useState<string>('');
 
-
-
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleCloseEditModal = () => setEditModal(false);
@@ -49,7 +46,6 @@ const Detail = () => {
     }
   };
 
- 
   const handlePageClick = (page: any) => {
     get('/detail', page.selected);
   };
@@ -100,7 +96,7 @@ const Detail = () => {
 
       <div className="w-full flex justify-between items-center">
         <Button
-          className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-6 py-3"
+          className="rounded-lg my-5 shadow bg-gray-600 dark:bg-boxdark px-5 py-2"
           onClick={addToggleModal}
         >
           Add
@@ -116,15 +112,15 @@ const Detail = () => {
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
           <table className="lg:w-[1145px] w-[992px]  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead className="text-xs    text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6  py-3">
                   #
                 </th>
                 <th scope="col" className="px-6 min-w-[120px]  py-3">
                   Photo
-                </th> 
-                <th scope="col" className="px-6 w-[120px]  py-3">
+                </th>
+                <th scope="col" className="px-6   py-3">
                   Name
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -182,12 +178,12 @@ const Detail = () => {
                     <td className="px-6 py-4">{item.price}</td>
                     <td className="px-6 py-4">{item.measure}</td>
                     <td className="px-6">
-                      <Button onClick={() => openEditModal(item)}>
+                      <button onClick={() => openEditModal(item)}>
                         <FaRegEdit size={25} className="text-green-500" />
-                      </Button>
+                      </button>
                     </td>
                     <td className="px-6">
-                      <Button
+                      <button
                         onClick={() => {
                           deleteToggleModal();
                           setDeleteId(item.id);
@@ -195,7 +191,7 @@ const Detail = () => {
                         className="ml-3"
                       >
                         <RiDeleteBinLine size={25} className="text-red-500" />
-                      </Button>
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -233,7 +229,7 @@ const Detail = () => {
         onConfirm={handleDelete}
       />
       <GlobalModal isOpen={addModal} onClose={addToggleModal}>
-        <DetailAddModal onClose={addToggleModal}/>
+        <DetailAddModal onClose={addToggleModal} />
       </GlobalModal>
     </>
   );

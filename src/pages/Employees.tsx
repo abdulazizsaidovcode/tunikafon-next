@@ -166,12 +166,12 @@ const Employees = () => {
       <div className="mx-auto">
         <Breadcrumb pageName="Employees" />
 
-        <button
+        <Button
           onClick={toggleModal}
           className="rounded-lg shadow my-5 bg-gary-600 dark:bg-boxdark px-5 py-2"
         >
           Add
-        </button>
+        </Button>
         {isLoading ? (
           <div className="w-full flex justify-center">
             <div
@@ -206,49 +206,49 @@ const Employees = () => {
                 <tbody>
                   {data && data.object.length
                     ? data.object.map((item: any, i: number) => (
-                      <tr
-                        key={item.id}
-                        className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        <tr
+                          key={item.id}
+                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                         >
-                          {i + 1}
-                        </th>
-                        <td className="px-6 py-5">{item.fullName}</td>
-                        <td className="px-6 py-5">{item.phoneNumber}</td>
-                        <td className="px-6">
-                          <button
-                            onClick={() => {
-                              editToggleModal();
-                              setEdit(item);
-                            }}
+                          <th
+                            scope="row"
+                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
-                            <FaRegEdit size={25} className="text-green-500" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              deleteToggleModal();
-                              setDeleteId(item.id);
-                            }}
-                            className="ml-5"
-                          >
-                            <RiDeleteBinLine
-                              size={25}
-                              className="text-red-500"
-                            />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                            {i + 1}
+                          </th>
+                          <td className="px-6 py-5">{item.fullName}</td>
+                          <td className="px-6 py-5">{item.phoneNumber}</td>
+                          <td className="px-6">
+                            <button
+                              onClick={() => {
+                                editToggleModal();
+                                setEdit(item);
+                              }}
+                            >
+                              <FaRegEdit size={25} className="text-green-500" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                deleteToggleModal();
+                                setDeleteId(item.id);
+                              }}
+                              className="ml-5"
+                            >
+                              <RiDeleteBinLine
+                                size={25}
+                                className="text-red-500"
+                              />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
                     : !isLoading && (
-                      <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td className="px-6">
-                          <FaRegFolderOpen size={50} />
-                        </td>
-                      </tr>
-                    )}
+                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <td className="px-6">
+                            <FaRegFolderOpen size={50} />
+                          </td>
+                        </tr>
+                      )}
                 </tbody>
               </table>
             </div>
@@ -273,8 +273,8 @@ const Employees = () => {
         isOpen={toggle}
         onClose={toggleModal}
         children={
-          <div className="w-96">
-            <div>
+          <div className="sm:w-96 w-full">
+            <div className='w-80'>
               <Input
                 label="Full name"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
@@ -314,7 +314,7 @@ const Employees = () => {
         isOpen={editModal}
         onClose={editToggleModal}
         children={
-          <div className="w-96">
+          <div className="sm:w-96 w-full">
             <div>
               <Input onChange={handleImageChange} label="Image" type="file" />
               <Input
