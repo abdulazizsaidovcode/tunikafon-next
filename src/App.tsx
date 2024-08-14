@@ -42,12 +42,11 @@ function App() {
                 path="/dashboard"
                 element={
                   <>
-                    <PageTitle title="eCommerce Dashboard |" />
+                    <PageTitle title="Dashboard |" />
                     <ECommerce />
                   </>
                 }
               />
-
               <Route
                 path="/categor-detail"
                 element={
