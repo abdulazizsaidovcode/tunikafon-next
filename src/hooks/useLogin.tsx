@@ -18,11 +18,12 @@ const useLogin = () => {
 
       if (data.success) {
         localStorage.setItem('token', data.body);
+        localStorage.setItem('role', data.message);
         window.location.pathname = '/';
-        toast.success('Success');
+        toast.success('successfully entered');
       } else throw new Error();
     } catch (err: any) {
-      toast.error('Login or password invalid');
+      toast.error('Number or password invalid');
       throw new Error(err.response.data.message);
     } finally {
       setIsLoading(false);
