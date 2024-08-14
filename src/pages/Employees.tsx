@@ -274,7 +274,7 @@ const Employees = () => {
         onClose={toggleModal}
         children={
           <div className="sm:w-96 w-full">
-            <div className='w-80'>
+            <div className='w-80 sm:w-full'>
               <Input
                 label="Full name"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
