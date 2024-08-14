@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import CardDataStats from '../../components/CardDataStats';
 import ChartOne from '../../components/Charts/ChartOne';
-import TableOne from '../../components/Tables/TableOne';
 import useGet from '../../hooks/get';
-import Table from '../../components/Tables/Table';
 import TableOrderAll from '../../components/Tables/TableOrderAll';
 
+const months = [
+  { id: 1, name: 'January' },
+  { id: 2, name: 'February' },
+  { id: 3, name: 'March' },
+  { id: 4, name: 'April' },
+  { id: 5, name: 'May' },
+  { id: 6, name: 'June' },
+  { id: 7, name: 'July' },
+  { id: 8, name: 'August' },
+  { id: 9, name: 'September' },
+  { id: 10, name: 'October' },
+  { id: 11, name: 'November' },
+  { id: 12, name: 'December' },
+];
+
 const ECommerce: React.FC = () => {
-  const [month, setMonth] = useState<number | string>(1);
-  const [year, setYear] = useState<number | string>(2024);
+  const date = new Date();
+  const [month, setMonth] = useState<number | string>(date.getMonth());
+  const [year, setYear] = useState<number | string>(date.getFullYear());
+
   const { get, data } = useGet();
 
   useEffect(() => {
     if (year && month && Number(month) <= 12 && Number(month) >= 1) {
-      get(`/dashboard/status-income?year=${year}&month=${month}`);
+      get(`/order/dashboard/status-income?year=${year}&month=${month}`);
     }
   }, [month, year]);
 
@@ -26,13 +41,13 @@ const ECommerce: React.FC = () => {
 
   return (
     <>
-      <div className='flex justify-between'>
+      <div className="flex justify-between items-center">
         <div className="w-72 py-6 select-none">
           <label htmlFor="year">Year</label>
           <input
             id="year"
             placeholder="2024"
-            className='rounded select-none py-3 p-2 w-full'
+            className="rounded select-none py-3 p-2 w-full"
             value={year.toString()}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -44,16 +59,29 @@ const ECommerce: React.FC = () => {
           {!isYearValid && <div className="text-red-500">{yearErrorText}</div>}
         </div>
         <div className="w-72 py-6 select-none">
-          <label htmlFor="month">Month</label>
+          {/* <label htmlFor="month">Month</label>
           <input
             id="month"
             type="number"
             placeholder="01"
-            className='rounded select-none py-3 p-2 w-full'
+            className="rounded select-none py-3 p-2 w-full"
             value={month.toString()}
             onChange={(e) => setMonth(Number(e.target.value))}
-          />
-          {!isMonthValid && <div className="text-red-500">{monthErrorText}</div>}
+          /> */}
+          <select
+            className="w-full p-3 text-lg rounded dark:bg-black dark:placeholder-gray-400"
+            onChange={(e) => setMonth(+e.target.value)}
+            value={month}
+          >
+            {months.map((item: any) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+          {!isMonthValid && (
+            <div className="text-red-500">{monthErrorText}</div>
+          )}
         </div>
       </div>
 
@@ -88,7 +116,7 @@ const ECommerce: React.FC = () => {
         <div className="col-span-12">
           {/* ChartOne should take full width of its container */}
           <ChartOne />
-          <TableOrderAll/>
+          <TableOrderAll />
         </div>
       </div>
     </>
