@@ -13,7 +13,22 @@ interface ChartOneState {
 const ChartOne: React.FC = () => {
   const { get, data } = useGet();
   const [year, setYear] = useState<number>(2024);
-  const categories = data ? data.map((item: any) => item.monthName) : [];
+
+  // Default 12 months categories
+  const defaultCategories = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   const options: ApexOptions = {
     legend: {
@@ -89,7 +104,7 @@ const ChartOne: React.FC = () => {
     },
     xaxis: {
       type: 'category',
-      categories,
+      categories: defaultCategories,
       axisBorder: {
         show: false,
       },
@@ -109,7 +124,12 @@ const ChartOne: React.FC = () => {
   };
 
   const [state, setState] = useState<ChartOneState>({
-    series: [],
+    series: [
+      {
+        name: 'Income',
+        data: Array(12).fill(0), // Initialize with 0 for each month
+      },
+    ],
   });
 
   useEffect(() => {
@@ -118,14 +138,24 @@ const ChartOne: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      const chartData = [
-        {
-          name: 'Income',
-          data: data.map((item: any) => item.income || 0),
-        },
-      ];
+      // Prepare a mapping of month names to income
+      const incomeMapping: { [key: string]: number } = {};
+      data.forEach((item: any) => {
+        incomeMapping[item.monthName] = item.income || 0;
+      });
+
+      // Fill the series data array with income values or 0 if no data
+      const updatedData = defaultCategories.map(
+        (month) => incomeMapping[month] || 0,
+      );
+
       setState({
-        series: chartData,
+        series: [
+          {
+            name: 'Income',
+            data: updatedData,
+          },
+        ],
       });
     }
   }, [data]);
