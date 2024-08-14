@@ -44,7 +44,7 @@ const Employees = () => {
     setToggle(!toggle);
     setAll({
       fullName: '',
-      phoneNumber: null,
+      phoneNumber: '+998',
       password: '',
     });
   };
@@ -83,7 +83,7 @@ const Employees = () => {
 
       await post('/auth/register', {
         ...all,
-        phoneNumber: `+998${all.phoneNumber}`,
+        phoneNumber: all.phoneNumber,
       });
 
       toast.success('Succesfuly aded');
@@ -118,7 +118,7 @@ const Employees = () => {
       if (data.body) {
         await put('/auth/edit/by/admin', edit.id, {
           ...all,
-          phoneNumber: `+998${all.phoneNumber}`,
+          phoneNumber: all.phoneNumber,
           attachmentId: data.body,
         });
       }
@@ -155,7 +155,7 @@ const Employees = () => {
     if (edit) {
       setAll({
         fullName: edit.fullName,
-        phoneNumber: edit.phoneNumber.slice(4, 13),
+        phoneNumber: edit.phoneNumber,
         password: '',
       });
     }
@@ -274,7 +274,7 @@ const Employees = () => {
         onClose={toggleModal}
         children={
           <div className="sm:w-96 w-full">
-            <div className='w-80 sm:w-full'>
+            <div className="w-80 sm:w-full">
               <Input
                 label="Full name"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
@@ -282,7 +282,7 @@ const Employees = () => {
               />
               <Input
                 label="PhoneNumber"
-                type="number"
+                type="text"
                 onChange={(e) => {
                   setAll({ ...all, phoneNumber: e.target.value });
                 }}
@@ -324,7 +324,7 @@ const Employees = () => {
               />
               <Input
                 label="PhoneNumber"
-                type="number"
+                type="text"
                 onChange={(e) =>
                   setAll({ ...all, phoneNumber: e.target.value })
                 }
