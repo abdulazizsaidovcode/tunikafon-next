@@ -48,8 +48,6 @@ const Header = (props: {
     return false;
   };
 
-  console.log(data);
-
   const handleClick = async () => {
     try {
       const formData = new FormData();
@@ -60,7 +58,7 @@ const Header = (props: {
 
       await put('/auth/edit/profile', null, {
         ...editUserData,
-        attachmentId: attechment,
+        attachmentId: attechment ? attechment : data.attachmentId,
       });
       get('/user/me');
       toggleModal();
