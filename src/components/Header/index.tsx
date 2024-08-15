@@ -176,6 +176,7 @@ const Header = (props: {
               }
               value={editUserData.password}
               label="Parol"
+              type="password"
             />
             <div className="w-full flex gap-5 justify-end">
               <Button onClick={toggleModal} color="red">
