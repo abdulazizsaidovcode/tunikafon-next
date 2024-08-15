@@ -128,11 +128,11 @@ const EditModal: React.FC<EditModalProps> = ({
         attachmentId: newAttachmentId ? newAttachmentId : formData.attachmentId,
       });
 
-      toast.success('Detail successfully edited');
+      toast.success('Detal muofaqiyatli tahrirlandi');
       getting();
       onClose();
     } catch (error) {
-      toast.error('Error updating Detail');
+      // toast.error('Error updating Detail');
       // console.error('Error updating Detail:', error);
     }
   };
@@ -164,29 +164,19 @@ const EditModal: React.FC<EditModalProps> = ({
               ))}
           </select>
 
-          <label className="block mb-2">Detal kategoriyalar</label>
+          <label className="block mb-2">Detal bo'limzlari</label>
           <select
             name="detailCategoryId"
             className="w-full rounded bg-transparent px-1 mb-3 py-2 outline-none"
             onChange={handleChange}
           >
-            <option selected disabled className=''>Detal kategoriani tanlash </option>
+            <option selected disabled className=''>Detal bo'limini tanlash </option>
             {detailCategory &&
               detailCategory.map((item) => (
                 <option value={item.id}>{item.name}</option>
               ))}
           </select>
           <div className="flex w-full gap-2 justify-between">
-            {/* <div className="w-full">
-              <label className="block mb-2">Measure Value</label>
-              <input
-                type="number"
-                name="measureValue"
-                value={(formData && formData.measureValue) || ''}
-                onChange={handleChange}
-                className="w-full p-2 mb-4 border rounded"
-              />
-            </div> */}
             <div className="w-full">
               <label className="block mb-2">Ulchov</label>
               <select

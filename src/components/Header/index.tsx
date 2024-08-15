@@ -7,6 +7,7 @@ import { Button } from '@material-tailwind/react';
 import usePost from '../../hooks/post';
 import usePut from '../../hooks/put';
 import { toast } from 'sonner';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 // import DarkModeSwitcher from './DarkModeSwitcher';
 
 const Header = (props: {
@@ -20,6 +21,7 @@ const Header = (props: {
   const [toggle, setToggle] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [file, setFile] = useState<any>(0);
+  const [togglePassword, setTogglePassword] = useState(false);
   const [editUserData, setEditUserData] = useState<any>({
     fullName: '',
     phoneNumber: '+998',
@@ -164,20 +166,46 @@ const Header = (props: {
               onChange={(e: any) =>
                 setEditUserData({
                   ...editUserData,
-                  phoneNumber: e.target.value,
+                  phoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
                 })
               }
-              value={editUserData.phoneNumber}
+              value={
+                editUserData.phoneNumber &&
+                editUserData.phoneNumber.replace(/[^0-9+]/g, '')
+              }
               label="Telefon raqam"
             />
-            <Input
-              onChange={(e: any) =>
-                setEditUserData({ ...editUserData, password: e.target.value })
-              }
-              value={editUserData.password}
-              label="Parol"
-              type="password"
-            />
+            <div className="relative">
+              <Input
+                onChange={(e: any) =>
+                  setEditUserData({ ...editUserData, password: e.target.value })
+                }
+                value={editUserData.password}
+                label="Parol"
+                type={togglePassword ? 'text' : 'password'}
+              />
+              <span className="absolute right-4 top-10">
+                {!togglePassword ? (
+                  <button
+                    onClick={(e: any) => {
+                      e.preventDefault();
+                      setTogglePassword(!togglePassword);
+                    }}
+                  >
+                    <FaEye size={25} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={(e: any) => {
+                      e.preventDefault();
+                      setTogglePassword(!togglePassword);
+                    }}
+                  >
+                    <FaEyeSlash size={25} />
+                  </button>
+                )}
+              </span>
+            </div>
             <div className="w-full flex gap-5 justify-end">
               <Button onClick={toggleModal} color="red">
                 Yopish

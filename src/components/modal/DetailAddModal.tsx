@@ -107,7 +107,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.name}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Detal categoriya</label>
+        <label className="block mb-2">Detal bo'lim tanlash  </label>
         <select
           className="w-full rounded px-1 py-2 outline-none"
           onChange={(e) =>
@@ -118,7 +118,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailCategoryId}
         >
-          <option selected >Categoriya tanlash</option>
+          <option selected >Bo'lim tanlash</option>
           {data ? (
             data.object.map((item: any) => (
               <option key={item.id} value={item.id}>
