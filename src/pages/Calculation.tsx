@@ -19,7 +19,6 @@ import { Link } from "react-router-dom";
 
 const Calculation = () => {
   const { get, isLoading, data } = useGet();
-  const { get: getDetail, data: details } = useGet();
   const { get: getProductDetail, data: productdetail } = useGet();
   const { get: getcategoryDetail, data: categorydetail } = useGet();
   const { get: getDetailCategory, data: detailCategory } = useGet();
@@ -114,10 +113,10 @@ const Calculation = () => {
   }
 
   const handleClick = async () => {
-    try {
-      if (!req.width || !req.tall) {
-        throw new Error("Bo'yi va enini kiriting");
-      } else {
+    if (!req.width || !req.tall) {
+      toast.error("Bo'yi va enini kiriting");
+    } else {
+        try {
         await post("/order/calculation", {
           width: +req.width,
           tall: +req.tall,
@@ -125,9 +124,10 @@ const Calculation = () => {
         });
         // console.log(details2); // For debugging: see the structure of details2
       }
-    } catch (error) {
-      toast.error("Hisoblashda xatolik yuz berdi");
-    }
+      catch (error) {
+        toast.error("Hisoblashda xatolik yuz berdi");
+      }
+    } 
   };
 
   const handleSave = async () => {
@@ -158,9 +158,6 @@ const Calculation = () => {
     get("/product");
   }, []);
 
-  const getDetails = async (id: number) => {
-    await getDetail(`detail/for/detail/product/${id}`);
-  };
   const getDetailCategoryDetail = async (id: number) => {
     await getcategoryDetail(`detail/for/detail/category/${id}`);
   };
@@ -177,13 +174,13 @@ const Calculation = () => {
     <>
       <Breadcrumb pageName="Hisoblash" />
 
-      <div className="flex justify-between">
+      <div className="flex flex-col sm:flex-row justify-between ">
         <Button
           onClick={() => {
             resetAll()
             setSelect(true)
           }}
-          className="rounded-lg my-5 text-white bg-boxdark shadow px-6 py-3"
+          className="rounded-lg my-2 sm:my-5 text-white bg-boxdark shadow px-6 py-3"
         >
           Shablon bo’yicha
         </Button>
@@ -193,7 +190,7 @@ const Calculation = () => {
             resetAll()
             setSelect(false)
           }}
-          className="rounded-lg my-5 text-white bg-boxdark shadow px-6 py-3"
+          className="rounded-lg my-2 sm:my-5 text-white bg-boxdark shadow px-6 py-3"
         >
           Qo’lda hisoblash
         </Button>
@@ -244,13 +241,13 @@ const Calculation = () => {
                 <h2 className="text-lg">Detal kategoriya</h2>
               </div>
             )}
-            <div className="flex gap-10 mb-4">
+            <div className="flex flex-col lg:flex-row gap-10 mb-4">
               {detailCategory ? (
-                <div className="w-1/2">
+                <div className="w-full lg:w-1/2 h-[260px] md:h-[350px] overflow-y-auto">
                   {detailCategory.map((item: any) => (
                     <Accordion key={item.id} open={open === item.id} className="mb-3">
                       <AccordionHeader
-                        className="border border-[#64748B] rounded-xl flex gap-10 items-center"
+                        className="border border-[#64748B] rounded-xl flex gap-10 items-center p-1 sm:p-3"
                         onClick={() => handleOpen(item.id)}
                       >
                         <div className="flex gap-10 items-center px-10">
@@ -264,7 +261,7 @@ const Calculation = () => {
                             alt={item.name}
                           />
                           {/* <div className="w-full flex items-center rounded-lg mt-5 text-center py-2"> */}
-                          <h1>{item.name}</h1>
+                          <h1 className="text-sm sm:text-lg">{item.name}</h1>
                           {/* </div> */}
                         </div>
                       </AccordionHeader>
@@ -273,10 +270,10 @@ const Calculation = () => {
                           categorydetail.map((detail: any) => (
                             <div
                               key={detail.id}
-                              className="flex items-center gap-10 border border-[#64748B] rounded-lg px-5 py-1 mb-4 mx-10"
+                              className="flex items-center gap-3 sm:gap-10 border border-[#64748B] rounded-lg p-0 sm:px-5 sm:py-1 mb-4 mx-3 sm:mx-10"
                             >
                               <Checkbox
-                                className="bg-blue-gray-300 w-6 h-6"
+                                className="bg-blue-gray-300 sm:w-6 sm:h-6"
                                 checked={details1.some(
                                   (d) => d.id === detail.id
                                 )}
@@ -291,12 +288,12 @@ const Calculation = () => {
                                 }
                                 alt={detail.name}
                               />
-                              <h1 className="text-lg">{detail.name}</h1>
+                              <h1 className="sm:text-lg">{detail.name}</h1>
                             </div>
                           ))
                         ) : (
                           <div className="flex flex-col justify-center items-center">
-                            <h4 className="text-red-400">
+                            <h4 className="text-red-400 text-center">
                               Detal topilmadi. Siz oldin detal qo'shishingiz
                               kerak
                             </h4>
@@ -315,7 +312,7 @@ const Calculation = () => {
                 </div>
               ) : (
                 <div className="w-full flex flex-col justify-center items-center">
-                  <h4 className="text-red-400">
+                  <h4 className="text-red-400 text-center">
                     ❗Detal topilmadi. Siz oldin detal kategoriya qo'shishingiz
                     kerak
                   </h4>
@@ -331,14 +328,14 @@ const Calculation = () => {
                 </div>
               )}
               {detailCategory && 
-              <div className="w-1/2 flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
+              <div className="w-full lg:w-1/2 h-[350px] overflow-y-auto flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
                 {details1.length > 0 ? details1.map((detail) => (
                   <div
                     key={detail.id}
-                    className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full"
+                    className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full overflow-auto gap-3"
                   >
                     <img
-                      className="w-10 h-10 bg-cover object-cover rounded-xl"
+                      className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
                       src={
                         detail.attachmentId
                           ? attechment + detail.attachmentId
@@ -346,8 +343,8 @@ const Calculation = () => {
                       }
                       alt={detail.name}
                     />
-                    <div className="flex-1 px-4">
-                      <h1 className="text-center">{detail.name}</h1>
+                    <div className="flex-1 px-0">
+                      <h1 className="text-sm sm:text-md text-center">{detail.name}</h1>
                     </div>
                     <input
                       type="number"
@@ -360,7 +357,7 @@ const Calculation = () => {
                   </div>
                 )) : 
                 <div className="w-full flex flex-col justify-center items-center" py-10>
-                  <h1 className="text-gray-600 font-semibold text-lg" >
+                  <h1 className="text-gray-600 font-semibold text-lg text-center" >
                     Bu qismda siz tanlagan detallar ko'rinadi.
                   </h1>
                 </div>
@@ -370,7 +367,7 @@ const Calculation = () => {
             </div>
 
             <div className="flex flex-col md:flex-row md:gap-5 xl:gap-0 justify-between py-5 items-center">
-              <div className="flex flex-col sm:flex-row gap-5 w-full justify-center items-center xl:justify-start">
+              <div className="flex flex-col sm:flex-row sm:gap-5 w-full justify-center items-center xl:justify-start">
                 <Input
                   placeholder="Bo'yini kiriting"
                   onChange={(e) => setReq({ ...req, tall: e.target.value })}
@@ -398,7 +395,7 @@ const Calculation = () => {
                 </Button>
               </div>
             </div>
-            <div className="mb-4 flex flex-col sm:flex-row gap-10 py-5">
+            <div className="mb-4 flex flex-col sm:flex-row sm:gap-10 py-5">
               <div className="w-full">
                 <Input
                   placeholder="Manzilni kiriting"
@@ -491,7 +488,7 @@ const Calculation = () => {
                 </div>
               ) : (
                 <div className="flex flex-col justify-center items-center">
-                  <h4 className="text-red-400">
+                  <h4 className="text-red-400 text-center">
                     ❗Detal topilmadi. Siz oldin detal qo'shishingiz kerak
                   </h4>
                   <Link
