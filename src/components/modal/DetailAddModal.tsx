@@ -107,7 +107,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.name}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Detal bo'lim tanlash  </label>
+        <label className="block mb-2">Detal bo'lim tanlash </label>
         <select
           className="w-full rounded px-1 py-2 outline-none"
           onChange={(e) =>
@@ -125,8 +125,8 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
                 {item.name}
               </option>
             ))
-          ) : (
-            <option>Loading...</option>
+          ) : !data ? <option disabled>Malumot yuq</option> : (
+            <option disabled>Loading...</option>
           )}
         </select>
         <label className="block my-2">Turi</label>
