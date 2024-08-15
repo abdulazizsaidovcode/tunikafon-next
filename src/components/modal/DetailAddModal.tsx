@@ -128,8 +128,8 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
   return (
     <div>
       <div className="p-4">
-        <h2 className="text-xl mb-4">Add Detail</h2>
-        <label className="block mb-2">Name</label>
+        <h2 className="text-xl lg:w-[600px] min-w-full mb-4">Detal Kiritish</h2>
+        <label className="block mb-2">Detal nomi</label>
         <input
           type="text"
           name="name"
@@ -137,7 +137,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.name}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Detail Category ID</label>
+        <label className="block mb-2">Detal categoriya</label>
         <select
           className="w-full rounded px-1 py-2 outline-none"
           onChange={(e) =>
@@ -148,7 +148,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailCategoryId}
         >
-          <option selected >Select Category</option>
+          <option selected >Categoriya tanlash</option>
           {data ? (
             data.object.map((item: any) => (
               <option key={item.id} value={item.id}>
@@ -159,7 +159,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
             <option>Loading...</option>
           )}
         </select>
-        <label className="block my-2">Detail type status</label>
+        <label className="block my-2">Turi</label>
         <select
           className="w-full rounded px-1 py-2 outline-none"
           onChange={(e) =>
@@ -170,7 +170,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailTypeStatus}
         >
-          <option selected>Select Category</option>
+          <option selected>Turini tanlash</option>
           {detailTypeStatus.map((item: any) => (
             <option key={item.id} value={item.value}>
               {item.name}
@@ -179,7 +179,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         </select>
         <div className="flex gap-2">
           <div className="w-full">
-            <label className="block mb-2">Measure</label>
+            <label className="block mb-2">O'lchov</label>
             <select
               className="w-full rounded px-1 py-2"
               onChange={(e) =>
@@ -187,14 +187,14 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
               }
               value={addData.measure}
             >
-              <option selected>Measure</option>
+              <option selected>O'lchov belgilash</option>
               <option value="DONA">Dona</option>
               <option value="METER">Meter</option>
               <option value="SM">Sm</option>
             </select>
           </div>
         </div>
-        <label className="block mb-2">Width</label>
+        <label className="block mb-2">Eni</label>
         <input
           type="number"
           name="width"
@@ -204,7 +204,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.width}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Height</label>
+        <label className="block mb-2">Buyi</label>
         <input
           type="number"
           name="height"
@@ -214,7 +214,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.height}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Large Diagonal</label>
+        <label className="block mb-2">Katta Diagonal</label>
         <input
           type="number"
           name="largeDiagonal"
@@ -227,7 +227,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.largeDiagonal}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Small Diagonal</label>
+        <label className="block mb-2">Kichik Diagonal</label>
         <input
           type="number"
           name="smallDiagonal"
@@ -240,7 +240,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.smallDiagonal || " "}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Side</label>
+        <label className="block mb-2">Tomoni</label>
         <input
           type="number"
           name="side"
@@ -248,7 +248,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData?.side || ' '}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Price</label>
+        <label className="block mb-2">Narxi</label>
         <input
           type="number"
           name="price"
@@ -258,7 +258,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.price}
           className="w-full p-2 mb-4 border rounded"
         />
-        <label className="block mb-2">Description</label>
+        <label className="block mb-2">Tavsif</label>
         <input
           type="text"
           name="description"
@@ -268,6 +268,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           value={addData.description}
           className="w-full p-2 mb-4 border rounded"
         />
+        <label className="block mb-2">Rasm</label>
         <input
           type="file"
           onChange={handleImageChange}
@@ -276,14 +277,14 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         />
         <div className="flex justify-end gap-5">
           <Button color="red" onClick={onClose}>
-            Cancel
+            Chiqish
           </Button>
           <Button
             disabled={isLoading || !isFormValid}
             onClick={handleClick}
             color="green"
           >
-            {isLoading || postIsLoading ? 'Loading...' : 'Save'}
+            {isLoading || postIsLoading ? 'Loading...' : 'Saqlash'}
           </Button>
         </div>
       </div>

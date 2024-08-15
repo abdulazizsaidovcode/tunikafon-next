@@ -60,13 +60,13 @@ const Table = ({
                       #
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Photo
+                      Rasm
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      {name ? name : 'Name'}
+                      {name ? name : 'Ism'}
                     </th>
                     <th colSpan={2} scope="col" className="px-6 py-3">
-                      Action
+                      Harakat
                     </th>
                   </tr>
                 </thead>

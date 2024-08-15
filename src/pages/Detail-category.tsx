@@ -25,7 +25,7 @@ const DetailCategory = () => {
   const [update, setUpdate] = useState<any>();
   const [file, setFile] = useState<any>(null);
   const [val, setVal] = useState<string>('');
-  const [name, setName] = useState<string>();
+  const [name, setName] = useState<string>('');
   const [editModal, setEditModal] = useState(false);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
@@ -46,7 +46,7 @@ const DetailCategory = () => {
       formData.append('file', file);
 
       if (!name?.trim() || !file) {
-        throw new Error('All fields required');
+        throw new Error('Iltimos Rasm kiriting');
       }
 
       setImgUploadLoading(true);
@@ -64,7 +64,7 @@ const DetailCategory = () => {
       setImgUploadLoading(false);
       setName('');
       setFile(null);
-      toast.success('Successfully added');
+      toast.success('Muvaffaqiyatli qo\'shildi');
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -91,7 +91,7 @@ const DetailCategory = () => {
       formData.append('file', file);
 
       if (!val?.trim().length) {
-        throw new Error('All fields required');
+        throw new Error('');
       }
 
       if (update) {
@@ -107,7 +107,7 @@ const DetailCategory = () => {
         get('/detail-category/list', page);
         setVal('');
         setFile(null);
-        toast.success('Successfully updated');
+        toast.success("Muvaffaqiyatli yangilandi");
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -119,7 +119,7 @@ const DetailCategory = () => {
       await remove(`/detail-category/`, deleteId);
       await get('/detail-category/list', page);
       deleteToggleModal();
-      toast.success('Successfully deleted');
+      toast.success("Muvaffaqiyatli oʻchirildi");
     }
   };
 
@@ -139,12 +139,12 @@ const DetailCategory = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Detail Category" />
+      <Breadcrumb pageName="Detal categoria" />
       <Button
         onClick={toggleModal}
-        className="bg-gray-600  my-5"
+        className="bg-boxdark my-5"
       >
-        Add
+        Qushish
       </Button>
       <div>
         <Table
@@ -156,14 +156,14 @@ const DetailCategory = () => {
           setDeleteId={setDeleteId}
         />
       </div>
-      {!isLoading && data && data.object ? (
+      {!isLoading && data && data.object  ? (
         <ReactPaginate
           className="flex gap-3 navigation mt-5"
           breakLabel="..."
           nextLabel=">"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={data && data.totalPage}
+          pageCount={data.totalPage} // Change the way pageCount is set
           previousLabel="<"
           renderOnZeroPageCount={null}
           forcePage={page}
@@ -181,27 +181,28 @@ const DetailCategory = () => {
         children={
           <div>
             <div>
-              <Input label="Image" onChange={handleImageChange} type="file" />
+              <Input label="Rasm kiritish" onChange={handleImageChange} type="file" />
               <div className="mt-5">
                 <Input
-                  label="Enter detail category name"
+                  label="Detal catigoria nomimni kiritish"
                   value={name}
                   onChange={(e) => {
-                    setName(e.target.value), handleNameChange;
+                    setName(e.target.value);
+                    handleNameChange(e);
                   }}
                 />
               </div>
             </div>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
-                Close
+                Yopish
               </Button>
               <Button
-                disabled={imgUploadLoading || postIsLoading}
+                disabled={imgUploadLoading || postIsLoading || !isValid}
                 onClick={addDetailCategory}
                 color="green"
               >
-                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Add'}
+                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Qushish'}
               </Button>
             </div>
           </div>
@@ -209,24 +210,25 @@ const DetailCategory = () => {
       />
       <GlobalModal isOpen={editModal} onClose={editToggleModal}>
         <div>
-          <Input label="Image" type="file" onChange={handleImageChange} />
+          <Input label="Rasm Kiritish" type="file" onChange={handleImageChange} />
           <div>
-            <label className="block mb-2">Enter detail category name</label>
+            <label className="block mb-2">Detal catigoria nomimni kiritish</label>
             <input
               value={val}
               type="text"
               onChange={(e) => {
-                setVal(e.target.value), handleNameChange;
+                setVal(e.target.value);
+                handleNameChange(e);
               }}
               className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
             />
           </div>
           <div className="flex justify-end gap-5">
             <Button color="red" onClick={editToggleModal}>
-              Close
+              Yopish
             </Button>
-            <Button color="green" disabled={putIsLoading} onClick={handleEdit}>
-              {putIsLoading ? 'Loading...' : 'Edit'}
+            <Button color="green" disabled={putIsLoading || !isValid} onClick={handleEdit}>
+              {putIsLoading ? 'Kuting...' : 'O\'zgartirish'}
             </Button>
           </div>
         </div>

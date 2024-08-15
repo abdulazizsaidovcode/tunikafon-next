@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import Logo from '../../images/logo/logo.svg';
 import { BsBarChart, BsBlockquoteRight, BsBoxSeam, BsFileSpreadsheet } from 'react-icons/bs';
-import { FaUser } from 'react-icons/fa';
-
+import { FaRegUser } from "react-icons/fa";
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
@@ -115,7 +114,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }`}
                 >
                   <BsBarChart />
-                  Dashboard
+                  Statistika
                 </NavLink>
               </li>
               {/* <!-- Menu Item Dashboard --> */}
@@ -212,8 +211,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     'bg-gray '
                   }`}
                 >
-                  <FaUser />
-                  Employees
+                  <FaRegUser />
+                  Hodimlar 
                 </NavLink>
               </li>
             </ul>
