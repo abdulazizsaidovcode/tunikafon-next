@@ -5,18 +5,18 @@ import useGet from '../../hooks/get';
 import TableOrderAll from '../../components/Tables/TableOrderAll';
 
 const months = [
-  { id: 1, name: 'January' },
-  { id: 2, name: 'February' },
-  { id: 3, name: 'March' },
-  { id: 4, name: 'April' },
+  { id: 1, name: 'Yanvar' },
+  { id: 2, name: 'Fevral' },
+  { id: 3, name: 'Mart' },
+  { id: 4, name: 'Aprel' },
   { id: 5, name: 'May' },
-  { id: 6, name: 'June' },
-  { id: 7, name: 'July' },
-  { id: 8, name: 'August' },
-  { id: 9, name: 'September' },
-  { id: 10, name: 'October' },
-  { id: 11, name: 'November' },
-  { id: 12, name: 'December' },
+  { id: 6, name: 'Iyun' },
+  { id: 7, name: 'Iyul' },
+  { id: 8, name: 'Avgust' },
+  { id: 9, name: 'Sentyabr' },
+  { id: 10, name: 'Oktyabr' },
+  { id: 11, name: 'Noyabr' },
+  { id: 12, name: 'Dekabr' },
 ];
 
 const ECommerce: React.FC = () => {
@@ -43,7 +43,7 @@ const ECommerce: React.FC = () => {
     <>
       <div className="flex justify-between gap-2 items-center">
         <div className="w-72 py-6 select-none">
-          <label htmlFor="year">Year</label>
+          <label htmlFor="year">Yil Kiritish</label>
           <input
             id="year"
             placeholder="2024"
@@ -90,15 +90,15 @@ const ECommerce: React.FC = () => {
           isYearValid ? (
             <div className="md:flex md:flex-row flex-col justify-between gap-5">
               <CardDataStats
-                title="Completed Income"
+                title="Tugallangan daromad"
                 total={data?.completedIncome ?? 0}
               />
               <CardDataStats
-                title="Waiting Income"
+                title="Kutilayotgan daromad"
                 total={data?.waitingIncome ?? 0}
               />
               <CardDataStats
-                title="Rejected Income"
+                title="Rad etilgan daromad"
                 total={data?.completedIncome ?? 0}
               />
             </div>

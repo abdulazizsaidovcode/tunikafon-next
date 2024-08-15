@@ -141,8 +141,8 @@ const EditModal: React.FC<EditModalProps> = ({
     isModal && (
       <GlobalModal isOpen={isModal} onClose={onClose}>
         <div className="p-4">
-          <h2 className="text-xl mb-4">Edit Category</h2>
-          <label className="block mb-2">Name</label>
+          <h2 className="text-xl lg:w-[600px] mb-4">Detalni Tahrirlash</h2>
+          <label className="block mb-2">Nomi</label>
           <input
             type="text"
             name="name"
@@ -151,26 +151,26 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full p-2 mb-4 border rounded"
           />
 
-          <label className="block mb-2">Status</label>
+          <label className="block mb-2">Turi</label>
           <select
             name="detailTypeStatus"
             className="w-full rounded  mb-3 px-1 py-2 outline-none"
             onChange={handleChange}
           >
-            <option selected>Select Status</option>
+            <option selected>Turini tanlash</option>
             {detailTypeStatus &&
               detailTypeStatus.map((item) => (
                 <option value={item.value}>{item.name}</option>
               ))}
           </select>
 
-          <label className="block mb-2">Detail Category ID</label>
+          <label className="block mb-2">Detal kategoriyalar</label>
           <select
             name="detailCategoryId"
-            className="w-full rounded bg-black/70  px-1 mb-3 py-2 outline-none"
+            className="w-full rounded bg-transparent px-1 mb-3 py-2 outline-none"
             onChange={handleChange}
           >
-            <option selected disabled className=''>Select Category</option>
+            <option selected disabled className=''>Detal kategoriani tanlash </option>
             {detailCategory &&
               detailCategory.map((item) => (
                 <option value={item.id}>{item.name}</option>
@@ -188,7 +188,7 @@ const EditModal: React.FC<EditModalProps> = ({
               />
             </div> */}
             <div className="w-full">
-              <label className="block mb-2">Measure</label>
+              <label className="block mb-2">Ulchov</label>
               <select
                 name="measure"
                 value={(formData && formData.measure) || ''}
@@ -201,7 +201,7 @@ const EditModal: React.FC<EditModalProps> = ({
               </select>
             </div>
           </div>
-          <label className="block mb-2">Price</label>
+          <label className="block mb-2">Narxi</label>
           <input
             type="number"
             name="price"
@@ -210,7 +210,7 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full p-2 mb-4 border rounded"
           />
 
-          <label className="block mb-2">width</label>
+          <label className="block mb-2">Eni</label>
           <input
             type="number"
             name="width"
@@ -218,8 +218,15 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-
-          <label className="block mb-2">height</label>
+          <label className="block mb-2">Tomoni</label>
+          <input
+            type="number"
+            name="height"
+            value={(formData && formData.side) || ''}
+            onChange={handleChange}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <label className="block mb-2">Buyi</label>
           <input
             type="number"
             name="height"
@@ -227,7 +234,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Large Diagonal</label>
+          <label className="block mb-2">Katta Diagonal</label>
           <input
             type="number"
             name="largeDiagonal"
@@ -235,7 +242,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Small Diagonal</label>
+          <label className="block mb-2">Kichik Diagonal</label>
           <input
             type="number"
             name="smallDiagonal"
@@ -243,7 +250,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Description</label>
+          <label className="block mb-2">Tavsif</label>
           <input
             type="text"
             name="description"
@@ -251,7 +258,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <Input label="Image" onChange={handleImageChange} type="file" />
+          <Input label="Rasm" onChange={handleImageChange} type="file" />
           {/* {formData.attachmentId && (
             <img
               key={formData.attachmentId}
@@ -262,10 +269,10 @@ const EditModal: React.FC<EditModalProps> = ({
           )} */}
           <div className="flex justify-end gap-5">
             <Button onClick={onClose} color="red">
-              Cancel
+              Chiqish
             </Button>
             <Button disabled={isLoading} onClick={handleSave} color="green">
-              {isLoading ? 'Loading...' : 'Save'}
+              {isLoading ? 'Loading...' : 'O\'zgartirish  '}
             </Button>
           </div>
         </div>

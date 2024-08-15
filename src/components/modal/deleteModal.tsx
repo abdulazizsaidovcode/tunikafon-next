@@ -15,15 +15,15 @@ const DeleteModal = ({ isModal, onClose, onConfirm, isLoading }: ModalType) => {
       onClose={onClose}
       children={
         <div>
-          <h1 className="text-lg my-3">
-            Are you sure you want to delete the data?
+          <h1 className="text-lg my-10 mx-5">
+          Haqiqatan ham maʼlumotlarni oʻchirib tashlamoqchimisiz?
           </h1>
           <div className="w-full flex justify-between gap-5">
             <Button onClick={onClose} className="bg-graydark">
-              Close
+              Yopish
             </Button>
             <Button disabled={isLoading} onClick={onConfirm} color="red">
-              {isLoading ? 'Loading...' : 'Delete'}
+              {isLoading ? 'Loading...' : 'Uchirish'}
             </Button>
           </div>
         </div>

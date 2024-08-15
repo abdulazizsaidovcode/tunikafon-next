@@ -92,63 +92,66 @@ const Detail = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Detail" />
+      <Breadcrumb pageName="Detallar" />
 
       <div className="w-full flex justify-between items-center">
         <Button
           className="rounded-lg my-5 text-white bg-boxdark shadow   px-6 py-3"
           onClick={addToggleModal}
         >
-          Add
+          Qushish
         </Button>
         <input
           className="bg-transparent border rounded-lg outline-none px-3 py-2"
           type="text"
-          placeholder="Search"
+          placeholder="Qidirish"
           value={searchQuery}
           onChange={handleSearch}
         />
       </div>
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default ">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-          <table className="lg:w-[1145px] w-[992px]  text-sm text-left rtl:text-right text-gray-500 ">
-            <thead className="text-xs    text-gray-700 uppercase bg-gray-50 ">
+          <table className="lg:w-min-[1145px] w-min-[992px]  text-sm text-left rtl:text-right text-gray-500 ">
+            <thead className="text-xs  text-gray-700 uppercase bg-gray-50 ">
               <tr>
                 <th scope="col" className="px-6  py-3">
                   #
                 </th>
                 <th scope="col" className="px-6 min-w-[120px]  py-3">
-                  Photo
+                  Rasm
                 </th>
-                <th scope="col" className="px-6   py-3">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Width
+                <th scope="col" className="px-6 min-w-40  py-3">
+                  Detal nomi
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Height
+                  Eni
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Detail Type Status
+                  Buyi
+                </th>
+                <th scope="col" className="px-6 w-40 py-3">
+                  Detal turi
                 </th>
                 <th scope="col" className="px-6 min-w-[170px] py-3">
-                  Large Diagonal
+                  Katta diagonal
                 </th>
                 <th scope="col" className="px-6 min-w-[170px]  py-3">
-                  Small Diagonal
+                  Kichik Diagonal
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Description
+                  Tavsif
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Price
+                  Narxi
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Measure
+                  Tomoni
                 </th>
-                <th colSpan={2} scope="col" className="px-6 py-3">
-                  Action
+                <th scope="col" className="px-6 py-3">
+                  O'lchov
+                </th>
+                <th colSpan={2} scope="col" className="px-6 min-w-[300px] py-3">
+                  Tahrirlash va o'chirish
                 </th>
               </tr>
             </thead>
@@ -180,6 +183,7 @@ const Detail = () => {
                     <td className="px-6 py-4">{item.smallDiagonal}</td>
                     <td className="px-6 py-4">{item.description}</td>
                     <td className="px-6 py-4">{item.price}</td>
+                    <td className="px-6 py-4">{item.side}</td>
                     <td className="px-6 py-4">{item.measure}</td>
                     <td className="px-6">
                       <button onClick={() => openEditModal(item)}>

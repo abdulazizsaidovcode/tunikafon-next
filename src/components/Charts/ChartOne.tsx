@@ -16,18 +16,18 @@ const ChartOne: React.FC = () => {
 
   // Default 12 months categories
   const defaultCategories = [
-    'January',
-    'February',
-    'March',
-    'April',
+    'Yanvar',
+    'Fevral',
+    'Mart',
+    'Aprel',
     'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'Iyun',
+    'Iyul',
+    'Avgust',
+    'Sentyabr',
+    'Okyabr',
+    'Noyabr',
+    'Dekabr',
   ];
 
   const options: ApexOptions = {
@@ -152,7 +152,7 @@ const ChartOne: React.FC = () => {
       setState({
         series: [
           {
-            name: 'Income',
+            name: 'Foyda',
             data: updatedData,
           },
         ],
@@ -162,7 +162,7 @@ const ChartOne: React.FC = () => {
 
   return (
     <div className="col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default  sm:px-7.5 xl:col-span-8">
-      <h1 className="text-2xl p-3">Year</h1>
+      <h1 className="text-2xl p-3">Yil kiriting</h1>
       <input
         id="year"
         type="number"
