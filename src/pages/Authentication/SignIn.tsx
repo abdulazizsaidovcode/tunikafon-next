@@ -11,7 +11,7 @@ const SignIn: React.FC = () => {
     e.preventDefault();
     try {
       if (!val.phoneNumber.trim() || !val.password.trim()) throw new Error();
-      login(val.phoneNumber, val.password);
+      login(val.phoneNumber.trim(), val.password.trim());
     } catch (error) {
       toast.error('Please enter correct information');
     }

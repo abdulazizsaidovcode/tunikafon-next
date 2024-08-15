@@ -5,6 +5,7 @@ interface InputType {
   type?: string;
   label?: string;
   value?: string;
+  placeholder?: string
 }
 
 const Input: React.FC<InputType> = ({
@@ -12,11 +13,13 @@ const Input: React.FC<InputType> = ({
   type = 'text',
   label,
   value,
+  placeholder,
 }) => {
   return (
     <div>
       <label className="block mb-2">{label}</label>
       <input
+        placeholder={`${placeholder ? placeholder : ""}`}
         type={type}
         value={value}
         onChange={onChange}
