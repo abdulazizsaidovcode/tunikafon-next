@@ -4,37 +4,8 @@ import axios from '../../service/api';
 import { toast } from 'sonner';
 import useGet from '../../hooks/get';
 import { Button } from '@material-tailwind/react';
-
-interface DetailAddModalProps {
-  onClose: () => void;
-}
-type AddData = {
-  name: string;
-  attachmentId: number;
-  detailCategoryId: number | string;
-  measure: string | number;
-  price: number;
-  description: string;
-  width: number;
-  height: number;
-  largeDiagonal: number;
-  smallDiagonal: number;
-  side: string | null;
-  detailTypeStatus: string;
-};
-
-const detailTypeStatus = [
-  { value: 'HOVUZ_ROMB', name: 'Hovuz Romb' },
-  { value: 'HOVUZ_LAMPA', name: 'Hovuz Lampa' },
-  { value: 'HOVUZ_LENTA', name: 'Hovuz Lenta' },
-  { value: 'HOVUZ_YULDUZCHA', name: 'Hovuz Yulduzcha' },
-  { value: 'LAMPA', name: 'Lampa' },
-  { value: 'HOVUZ_YONI_KAPALAK', name: 'Hovuz Yoni Kapalak' },
-  { value: 'HOVUZ_YONI', name: 'Hovuz Yoni' },
-  { value: 'HOVUZ_YONI_TUNIKA', name: 'Hovuz Yoni Tunika' },
-  { value: 'HOVUZ_YONI_TUNIKA_BEZAK', name: 'Hovuz Yoni Tunika Bezak' },
-  { value: 'HOVUZ_YONI_TUNIKA_DETAIL', name: 'Hovuz Yoni Tunika Detail' },
-];
+import { AddData, DetailAddModalProps } from '../../types/AddData';
+import { detailTypeStatus } from '../StatusDetail';
 
 export default function DetailAddModal({ onClose }: DetailAddModalProps) {
   const [addModal, setAddModal] = useState<boolean>(false);
@@ -89,11 +60,11 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         ...addData,
         attachmentId: data.body,
         detailCategoryId: +addData.detailCategoryId,
-        width: addData.width ? +addData.width : null,
-        height: addData.height ? +addData.height : null,
-        largeDiagonal: addData.largeDiagonal ? +addData.largeDiagonal : null,
-        smallDiagonal: addData.smallDiagonal ? +addData.smallDiagonal : null,
-        side: addData.side ? addData.side : null,
+        width: addData.width || null,
+        height: addData.height || null,
+        largeDiagonal: addData.largeDiagonal || null,
+        smallDiagonal: addData.smallDiagonal || null,
+        side: addData.side || null,
         detailTypeStatus: addData.detailTypeStatus,
       });
 
@@ -120,7 +91,6 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
     }
   };
 
-
   useEffect(() => {
     get('/detail-category/list');
   }, []);
@@ -143,7 +113,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           onChange={(e) =>
             setAddData({
               ...addData,
-              detailCategoryId: parseInt(e.target.value),
+              detailCategoryId: e.target.value,
             })
           }
           value={addData.detailCategoryId}
@@ -199,7 +169,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="number"
           name="width"
           onChange={(e) =>
-            setAddData({ ...addData, width: parseFloat(e.target.value) })
+            setAddData({ ...addData, width: e.target.value })
           }
           value={addData.width}
           className="w-full p-2 mb-4 border rounded"
@@ -209,7 +179,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="number"
           name="height"
           onChange={(e) =>
-            setAddData({ ...addData, height: parseFloat(e.target.value) })
+            setAddData({ ...addData, height: e.target.value })
           }
           value={addData.height}
           className="w-full p-2 mb-4 border rounded"
@@ -221,7 +191,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           onChange={(e) =>
             setAddData({
               ...addData,
-              largeDiagonal: parseFloat(e.target.value),
+              largeDiagonal: e.target.value,
             })
           }
           value={addData.largeDiagonal}
@@ -234,18 +204,19 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           onChange={(e) =>
             setAddData({
               ...addData,
-              smallDiagonal: parseFloat(e.target.value),
+              smallDiagonal: e.target.value,
             })
           }
-          value={addData.smallDiagonal || " "}
+          value={addData.smallDiagonal || ""}
           className="w-full p-2 mb-4 border rounded"
         />
         <label className="block mb-2">Tomoni</label>
         <input
           type="number"
           name="side"
+          step="any"
           onChange={(e) => setAddData({ ...addData, side: e.target.value })}
-          value={addData?.side || ' '}
+          value={addData?.side || ""}
           className="w-full p-2 mb-4 border rounded"
         />
         <label className="block mb-2">Narxi</label>
@@ -253,7 +224,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="number"
           name="price"
           onChange={(e) =>
-            setAddData({ ...addData, price: parseFloat(e.target.value) })
+            setAddData({ ...addData, price: e.target.value })
           }
           value={addData.price}
           className="w-full p-2 mb-4 border rounded"
