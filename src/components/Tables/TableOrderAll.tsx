@@ -5,46 +5,28 @@ import { FaArrowDownLong } from "react-icons/fa6";
 import useGet from '../../hooks/get';
 import GlobalModal from '../modal';
 import ReactPaginate from 'react-paginate';
-import { MdOutlineBrowserNotSupported } from "react-icons/md";
-
-
-interface OrderDetail {
-    detailId: number;
-    detailName: string;
-    detailAttachmentId: number;
-    amount: number;
-    residual: string | null;
-}
-
-interface Order {
-    id: string;
-    employeeName: string;
-    productName: string | number;
-    orderDetails: string | null;
-    orderDetailsRes: OrderDetail[];
-    width: number;
-    tall: number;
-    price: number | null;
-    date: string | null;
-    orderStatus: string | null;
-    address: string | null;
-}
-
+import { Order } from '../../types/Order';
+import usePut from '../../hooks/put';
 export default function TableOrderAll() {
     const { get, data, isLoading } = useGet();
     const { get: getOne, data: dateOne } = useGet();
     const [toggle, setToggle] = useState(false);
     const [page, setPage] = useState<number>(0);
-
-    // const [selectedItem, setSelectedItem] = useState<Order | null>(null);
-
+    const { put } = usePut();
     useEffect(() => {
         get('/order/all', page);
     }, [page]);
-
+    const handleEditStatus = (orderId: string, status: string) => {
+        put(`/order/update-status/${orderId}?status=${status}`, null, {})
+            .then(response => {
+                get('/order/all')
+                console.log("Buyurtma holati yangilandi:", response);
+            })
+    };
     const toggleModal = () => {
         setToggle(!toggle);
     };
+
     const handlePageClick = (page: any) => {
         setPage(page.selected);
     };
@@ -53,6 +35,7 @@ export default function TableOrderAll() {
         await getOne(`/order/one/${id}`);
         toggleModal()
     };
+    
 
     return (
         <div>
@@ -80,6 +63,7 @@ export default function TableOrderAll() {
                                     <th scope="col" className="px-6 py-3">
                                         Sana
                                     </th>
+
                                     <th colSpan={2} scope="col" className="px-6 py-3">
                                         qushimcha
                                     </th>
@@ -110,6 +94,16 @@ export default function TableOrderAll() {
                                             <td className="px-6 py-4">{item.orderStatus}</td>
                                             <td className="px-6 py-4">{item.address}</td>
                                             <td className="px-6 py-4">{item.date}</td>
+                                            <td className="px-6">
+                                                <select
+                                                    name="editStatus"
+                                                    id="editStatus"
+                                                    onChange={(e) => handleEditStatus(item.id, e.target.value)}
+                                                >
+                                                    <option value="COMPLETED">TUGATILGAN</option>
+                                                    <option value="REJECTED">BEKOR QILINGAN</option>
+                                                </select>
+                                            </td>
                                             <td className="px-6">
                                                 <button
                                                     onClick={() => handleViewClick(item.id)}
