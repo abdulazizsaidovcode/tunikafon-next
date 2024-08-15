@@ -193,10 +193,10 @@ const Product = () => {
         onClose={toggleModal}
         children={
           <div className="sm:w-96 w-full relative">
-            <Input onChange={handleImageChange} label="Image" type="file" />
+            <Input onChange={handleImageChange} label="Rasm" type="file" />
             <Input
               onChange={(e: any) => setName(e.target.value)}
-              label="Product name"
+              label="Mahsulot nomi"
             />
             <Menu
               dismiss={{
@@ -281,11 +281,11 @@ const Product = () => {
         onClose={toggleEditModal}
         children={
           <div className="sm:w-96 w-full relative">
-            <Input onChange={handleImageChange} label="Image" type="file" />
+            <Input onChange={handleImageChange} label="Rasm" type="file" />
             <Input
               onChange={(e: any) => setName(e.target.value)}
               value={name}
-              label="Product name"
+              label="Masulot nomi"
             />
             <Menu
               dismiss={{

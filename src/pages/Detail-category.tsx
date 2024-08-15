@@ -184,7 +184,7 @@ const DetailCategory = () => {
               <Input label="Rasm kiritish" onChange={handleImageChange} type="file" />
               <div className="mt-5">
                 <Input
-                  label="Detal catigoria nomimni kiritish"
+                  label="Detal bo'lim nomi nomimni kiritish"
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
@@ -212,7 +212,7 @@ const DetailCategory = () => {
         <div>
           <Input label="Rasm Kiritish" type="file" onChange={handleImageChange} />
           <div>
-            <label className="block mb-2">Detal catigoria nomimni kiritish</label>
+            <label className="block mb-2">Detal bo'lim nomimni kiritish</label>
             <input
               value={val}
               type="text"

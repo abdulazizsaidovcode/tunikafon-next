@@ -163,7 +163,7 @@ const Employees = () => {
   return (
     <>
       <div className="mx-auto">
-        <Breadcrumb pageName="Employees" />
+        <Breadcrumb pageName="Hodimlar" />
 
         <Button
           onClick={toggleModal}
