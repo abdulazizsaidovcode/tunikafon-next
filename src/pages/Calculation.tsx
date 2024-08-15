@@ -383,13 +383,11 @@ const Calculation = () => {
                   type="number"
                 />
               </div>
-              <div className="flex items-end justify-between w-full flex-row ">
-                <div>
+              <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
                   <div className="flex">
                     <h1 className="text-lg">{total ? total : "0"}</h1>
                     <h1 className="text-lg ms-2">{`so'm`}</h1>
                   </div>
-                </div>
                 <Button onClick={handleClick} className="bg-primary">
                   Hisoblash
                 </Button>
