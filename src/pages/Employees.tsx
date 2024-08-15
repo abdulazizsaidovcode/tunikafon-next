@@ -3,7 +3,7 @@ import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import useGet from '../hooks/get';
 import GlobalModal from '../components/modal';
 import Input from '../components/inputs/input';
-import { FaRegEdit, FaRegFolderOpen } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaRegEdit, FaRegFolderOpen } from 'react-icons/fa';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import usePost from '../hooks/post';
 import { toast } from 'sonner';
@@ -34,6 +34,7 @@ const Employees = () => {
   const [file, setFile] = useState<any>();
   const [page, setPage] = useState<number>(0);
   const [imageUpdateLoading, setImageUpdateLoading] = useState(false);
+  const [togglePassword, setTogglePassword] = useState(false);
   const [all, setAll] = useState<Type>({
     fullName: '',
     phoneNumber: '+998',
@@ -292,12 +293,35 @@ const Employees = () => {
                 }}
                 value={all.phoneNumber.replace(/[^0-9+]/g, '')}
               />
-              <Input
-                label="Parol"
-                type="password"
-                onChange={(e) => setAll({ ...all, password: e.target.value })}
-                value={all.password}
-              />
+              <div className="relative">
+                <Input
+                  label="Parol"
+                  type={togglePassword ? 'text' : 'password'}
+                  onChange={(e) => setAll({ ...all, password: e.target.value })}
+                  value={all.password}
+                />
+                <span className="absolute right-4 top-10">
+                  {!togglePassword ? (
+                    <button
+                      onClick={(e: any) => {
+                        e.preventDefault();
+                        setTogglePassword(!togglePassword);
+                      }}
+                    >
+                      <FaEye size={25} />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={(e: any) => {
+                        e.preventDefault();
+                        setTogglePassword(!togglePassword);
+                      }}
+                    >
+                      <FaEyeSlash size={25} />
+                    </button>
+                  )}
+                </span>
+              </div>
             </div>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
