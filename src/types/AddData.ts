@@ -15,3 +15,17 @@ export type AddData = {
  export interface DetailAddModalProps {
     onClose: () => void;
   }
+ export interface Item {
+    name: string;
+    attachmentId: number;
+    detailCategoryId: number;
+    measure: string;
+    price: number;
+    description: string;
+    width: number;
+    height: number;
+    largeDiagonal: number;
+    smallDiagonal: number;
+    side: number | null | string;
+    detailTypeStatus: string;
+  }

@@ -127,7 +127,7 @@ const Detail = () => {
                   Eni
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Buyi
+                  buyi
                 </th>
                 <th scope="col" className="px-6 w-40 py-3">
                   Detal turi

@@ -5,21 +5,8 @@ import usePut from '../../hooks/put';
 import { toast } from 'sonner';
 import GlobalModal from '.';
 import { Button } from '@material-tailwind/react';
-
-interface Item {
-  name: string;
-  attachmentId: number;
-  detailCategoryId: number;
-  measure: string;
-  price: number;
-  description: string;
-  width: number;
-  height: number;
-  largeDiagonal: number;
-  smallDiagonal: number;
-  side: number | null | string;
-  detailTypeStatus: string;
-}
+import { detailTypeStatus } from '../StatusDetail';
+import { Item } from '../../types/AddData';
 
 interface EditModalProps {
   isModal: boolean;
@@ -27,18 +14,7 @@ interface EditModalProps {
   item: Item;
   getting: () => void;
 }
-const detailTypeStatus = [
-  { value: 'HOVUZ_ROMB', name: 'Hovuz Romb' },
-  { value: 'HOVUZ_LAMPA', name: 'Hovuz Lampa' },
-  { value: 'HOVUZ_LENTA', name: 'Hovuz Lenta' },
-  { value: 'HOVUZ_YULDUZCHA', name: 'Hovuz Yulduzcha' },
-  { value: 'LAMPA', name: 'Lampa' },
-  { value: 'HOVUZ_YONI_KAPALAK', name: 'Hovuz Yoni Kapalak' },
-  { value: 'HOVUZ_YONI', name: 'Hovuz Yoni' },
-  { value: 'HOVUZ_YONI_TUNIKA', name: 'Hovuz Yoni Tunika' },
-  { value: 'HOVUZ_YONI_TUNIKA_BEZAK', name: 'Hovuz Yoni Tunika Bezak' },
-  { value: 'HOVUZ_YONI_TUNIKA_DETAIL', name: 'Hovuz Yoni Tunika Detail' },
-];
+
 const EditModal: React.FC<EditModalProps> = ({
   isModal,
   onClose,
@@ -208,19 +184,20 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Tomoni</label>
-          <input
-            type="number"
-            name="height"
-            value={(formData && formData.side) || ''}
-            onChange={handleChange}
-            className="w-full p-2 mb-4 border rounded"
-          />
+          
           <label className="block mb-2">Buyi</label>
           <input
             type="number"
             name="height"
             value={(formData && formData.height) || ''}
+            onChange={handleChange}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <label className="block mb-2">Tomoni</label>
+          <input
+            type="number"
+            name="side"
+            value={(formData && formData.side) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />

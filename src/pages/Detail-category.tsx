@@ -185,7 +185,7 @@ const DetailCategory = () => {
               />
               <div className="mt-5">
                 <Input
-                  label="Detal bo'lim nomimni kiritish"
+                  label="Detal bo'lim nomini kiritish"
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
