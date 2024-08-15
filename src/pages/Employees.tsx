@@ -166,9 +166,9 @@ const Employees = () => {
 
         <Button
           onClick={toggleModal}
-          className="rounded-lg shadow my-5 bg-gary-600 px-5 py-2"
+          className="rounded-lg shadow bg-boxdark  my-5  px-6 py-3"
         >
-          Add
+          Qushish
         </Button>
         {isLoading ? (
           <div className="w-full flex justify-center">
@@ -191,13 +191,13 @@ const Employees = () => {
                       #
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Name
+                      ISm
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Phone number
+                      Telefon raqam
                     </th>
                     <th colSpan={2} scope="col" className="px-6 py-3">
-                      Action
+                      Tahrirlash va uchirish
                     </th>
                   </tr>
                 </thead>
@@ -216,7 +216,7 @@ const Employees = () => {
                           </th>
                           <td className="px-6 py-5">{item.fullName}</td>
                           <td className="px-6 py-5">{item.phoneNumber}</td>
-                          <td className="px-6">
+                          <td className="px-6 py-5">
                             <button
                               onClick={() => {
                                 editToggleModal();
@@ -225,7 +225,10 @@ const Employees = () => {
                             >
                               <FaRegEdit size={25} className="text-green-500" />
                             </button>
-                            <button
+                            
+                          </td>
+                          <td className='px-6 py-5'>
+                          <button
                               onClick={() => {
                                 deleteToggleModal();
                                 setDeleteId(item.id);
@@ -274,12 +277,12 @@ const Employees = () => {
           <div className="sm:w-96 w-full">
             <div className="w-80 sm:w-full">
               <Input
-                label="Full name"
+                label="To'liq F I"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
                 value={all.fullName}
               />
               <Input
-                label="PhoneNumber"
+                label="Telefon raqam"
                 type="text"
                 onChange={(e) => {
                   setAll({ ...all, phoneNumber: e.target.value });
@@ -287,7 +290,7 @@ const Employees = () => {
                 value={all.phoneNumber}
               />
               <Input
-                label="Password"
+                label="Parol"
                 type="password"
                 onChange={(e) => setAll({ ...all, password: e.target.value })}
                 value={all.password}
@@ -295,14 +298,14 @@ const Employees = () => {
             </div>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
-                Close
+                Yopish
               </Button>
               <Button
                 disabled={postIsloading}
                 onClick={handleClick}
                 color="green"
               >
-                {postIsloading ? 'Loading...' : 'Save'}
+                {postIsloading ? 'Loading...' : 'Saqlash'}
               </Button>
             </div>
           </div>
@@ -314,14 +317,14 @@ const Employees = () => {
         children={
           <div className="sm:w-96 w-full">
             <div>
-              <Input onChange={handleImageChange} label="Image" type="file" />
+              <Input onChange={handleImageChange} label="Rasm" type="file" />
               <Input
-                label="Full name"
+                label="Tuliq F I"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
                 value={all.fullName}
               />
               <Input
-                label="PhoneNumber"
+                label="Telefon raqam"
                 type="text"
                 onChange={(e) =>
                   setAll({ ...all, phoneNumber: e.target.value })
@@ -329,7 +332,7 @@ const Employees = () => {
                 value={all.phoneNumber}
               />
               <Input
-                label="Password"
+                label="Parol"
                 type="password"
                 onChange={(e) => setAll({ ...all, password: e.target.value })}
                 value={all.password}
@@ -337,14 +340,14 @@ const Employees = () => {
             </div>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={editToggleModal} color="red">
-                Close
+                yopish
               </Button>
               <Button
                 disabled={putIsLoading || imageUpdateLoading}
                 onClick={handleEdit}
                 color="green"
               >
-                {putIsLoading || imageUpdateLoading ? 'Loading...' : 'Edit'}
+                {putIsLoading || imageUpdateLoading ? 'Loading...' : 'Tahrirlash'}
               </Button>
             </div>
           </div>
