@@ -25,7 +25,7 @@ const ChartOne: React.FC = () => {
     'Iyul',
     'Avgust',
     'Sentyabr',
-    'Okyabr',
+    'Oktyabr',
     'Noyabr',
     'Dekabr',
   ];
