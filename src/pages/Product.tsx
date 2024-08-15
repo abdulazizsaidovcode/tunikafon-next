@@ -97,7 +97,7 @@ const Product = () => {
         attachmentId,
       });
       get('/product', page);
-      toast.success('Product added succesfuly');
+      toast.success("Mufaqiyatli qo'shildi");
       setName('');
       setDetailIds([]);
       setFile(null);
@@ -123,7 +123,7 @@ const Product = () => {
         attachmentId: update.attachmentId,
       });
       get('/product', page);
-      toast.success('Product updated succesfuly');
+      toast.success('Mufaqiyatli tahrirlandi');
       setName('');
       setDetailIds([]);
       setFile(null);
@@ -138,7 +138,7 @@ const Product = () => {
       await remove('/product/', deleteId);
       get('/product', page);
       toggleDeleteModal();
-      toast.success('Product deleted succsefuly');
+      toast.success("Mufaqiyatli o'chirildi");
     } catch (error: any) {
       toast.error(error.message);
     }

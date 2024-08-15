@@ -62,23 +62,26 @@ const Employees = () => {
       await remove('/user?userId=', deleteId);
       deleteToggleModal();
       get('/user/employees', page);
-      toast.success('Succesfuly deleted');
+      toast.success("Mufaqiyatli o'chirildi");
     } catch (error) {
-      toast.error('Error');
+      toast.error('Hatolik yuz berdi');
     }
+  };
+
+  const validate = () => {
+    if (
+      !all.fullName.trim().length ||
+      !all.phoneNumber.length ||
+      !all.password.trim().length
+    )
+      return true;
+    return false;
   };
 
   const handleClick = async () => {
     try {
-      if (
-        !all.fullName.trim().length ||
-        !all.phoneNumber.length ||
-        !all.password.trim().length
-      )
-        throw new Error('All fields required');
-
       if (all.phoneNumber.length !== 13) {
-        throw new Error("The number does't match");
+        throw new Error('Raqam mos kelmadi');
       }
 
       await post('/auth/register', {
@@ -86,7 +89,7 @@ const Employees = () => {
         phoneNumber: all.phoneNumber,
       });
 
-      toast.success('Succesfuly aded');
+      toast.success("Mufaqiyatli qo'shildi");
       toggleModal();
       get('/user/employees', page);
 
@@ -96,8 +99,7 @@ const Employees = () => {
         password: '',
       });
     } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+      toast.error('Hatolik yuz berdi');
     }
   };
 
@@ -106,10 +108,10 @@ const Employees = () => {
       const formData = new FormData();
       formData.append('file', file);
       if (!all.fullName.trim().length || !all.password.trim().length)
-        throw new Error('All fields required');
+        throw new Error("Bo'sh maydoni to'ldiring");
 
       if (all.phoneNumber.toString().length !== 13) {
-        throw new Error("The number does't match");
+        throw new Error('Raqam mos kelmadi');
       }
 
       setImageUpdateLoading(true);
@@ -123,7 +125,7 @@ const Employees = () => {
 
       if (putError) throw new Error();
       else {
-        toast.success('Successfully updated');
+        toast.success('Mufaqiyatli tahrirlandi');
 
         get('/user/employees', page);
       }
@@ -135,8 +137,7 @@ const Employees = () => {
       setFile(null);
       editToggleModal();
     } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+      toast.error('Hatolik yuz berdi');
     } finally {
       setImageUpdateLoading(false);
     }
@@ -225,10 +226,9 @@ const Employees = () => {
                             >
                               <FaRegEdit size={25} className="text-green-500" />
                             </button>
-                            
                           </td>
-                          <td className='px-6 py-5'>
-                          <button
+                          <td className="px-6 py-5">
+                            <button
                               onClick={() => {
                                 deleteToggleModal();
                                 setDeleteId(item.id);
@@ -301,7 +301,7 @@ const Employees = () => {
                 Yopish
               </Button>
               <Button
-                disabled={postIsloading}
+                disabled={validate() || postIsloading}
                 onClick={handleClick}
                 color="green"
               >
@@ -343,11 +343,13 @@ const Employees = () => {
                 yopish
               </Button>
               <Button
-                disabled={putIsLoading || imageUpdateLoading}
+                disabled={putIsLoading || imageUpdateLoading || validate()}
                 onClick={handleEdit}
                 color="green"
               >
-                {putIsLoading || imageUpdateLoading ? 'Loading...' : 'Tahrirlash'}
+                {putIsLoading || imageUpdateLoading
+                  ? 'Loading...'
+                  : 'Tahrirlash'}
               </Button>
             </div>
           </div>
