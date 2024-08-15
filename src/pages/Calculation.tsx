@@ -152,6 +152,7 @@
       }
     };
 
+
     useEffect(() => {
       get("/product");
     }, []);
@@ -363,8 +364,8 @@
                 }
               </div>
 
-              <div className="flex justify-between py-5 items-center">
-                <div className="flex gap-5 w-full">
+              <div className="flex flex-col md:flex-row md:gap-5 xl:gap-0 justify-between py-5 items-center">
+                <div className="flex flex-col sm:flex-row gap-5 w-full justify-center items-center xl:justify-start">
                   <Input
                     placeholder="Bo'yini kiriting"
                     onChange={(e) => setReq({ ...req, tall: e.target.value })}
@@ -392,7 +393,7 @@
                   </Button>
                 </div>
               </div>
-              <div className="mb-4 flex gap-10 py-5">
+              <div className="mb-4 flex flex-col sm:flex-row gap-10 py-5">
                 <div className="w-full">
                   <Input
                     placeholder="Manzilni kiriting"
@@ -454,7 +455,7 @@
                       </span>
                     </div>
                   </div>
-                ) : productdetail ? (
+                ) : productdetail && productdetail.length > 0 ? (
                   <div>
                     <h2>Detal</h2>
                     <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">
