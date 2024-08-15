@@ -51,8 +51,8 @@ const brandData: BRAND[] = [
 const TableOne = () => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
           <tr>
             <th scope="col" className="px-6 py-3">
               #
@@ -84,10 +84,10 @@ const TableOne = () => {
           </tr>
         </thead>
         <tbody className="text-center">
-          <tr className="bg-gray-600 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <tr className="bg-gray-600  hover:bg-gray-50 ">
             <th
               scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
             >
               1
             </th>
@@ -100,7 +100,7 @@ const TableOne = () => {
             <td className="px-6 py-4">ASA</td>
             <td className="px-6 py-4">
               <svg
-                className="dark:fill-white fill-black"
+                className=" fill-black"
                 version="1.1"
                 id="Capa_1"
                 xmlns="http://www.w3.org/2000/svg"

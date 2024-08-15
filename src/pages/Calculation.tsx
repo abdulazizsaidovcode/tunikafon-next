@@ -164,13 +164,13 @@ const Calculation = () => {
       <div className="flex justify-between">
         <Button
           onClick={() => setSelect(true)}
-          className="my-5 bg-gary-600 dark:bg-boxdark"
+          className="my-5 bg-gary-600"
         >
           Shablon bo’yicha
         </Button>
         <Button
           onClick={() => setSelect(false)}
-          className="my-5 bg-gary-600 dark:bg-boxdark"
+          className="my-5 bg-gary-600 "
         >
           Qo’lda hisoblash
         </Button>
@@ -325,7 +325,7 @@ const Calculation = () => {
                     Calculate
                   </Button>
                 </div>
-              </div>
+              </div>  
             </div>
             <div className="mb-4 flex gap-10 py-5">
               <div className="w-full">
@@ -436,7 +436,7 @@ const Calculation = () => {
               <Button
                 disabled={countLoading}
                 onClick={handleClick}
-                className="my-5 bg-gary-600 dark:bg-boxdark"
+                className="my-5 bg-gary-600 "
               >
                 {countLoading ? 'Loading...' : 'Hisoblash'}
               </Button>

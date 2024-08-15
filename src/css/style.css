@@ -247,19 +247,19 @@ select {
   margin-right: 7px;
   border-radius: 10%;
   transition: all 0.5s;
-  background-color: #243140;
+  background-color: #fff;
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
   position: relative;
   user-select: none;
   &:hover {
-    background-color: #00141dc4;
-    color: white;
+    background-color: #deedf4c4;
+    color: #000;
   }
 
   &:focus {
     background-color: #00141dc4;
-    color: white;
+    color: #000;
   }
 
   &:active {

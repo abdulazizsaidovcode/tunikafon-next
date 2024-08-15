@@ -154,7 +154,7 @@ const EditModal: React.FC<EditModalProps> = ({
           <label className="block mb-2">Status</label>
           <select
             name="detailTypeStatus"
-            className="w-full rounded dark:bg-black/70 mb-3 px-1 py-2 outline-none"
+            className="w-full rounded  mb-3 px-1 py-2 outline-none"
             onChange={handleChange}
           >
             <option selected>Select Status</option>
@@ -193,7 +193,7 @@ const EditModal: React.FC<EditModalProps> = ({
                 name="measure"
                 value={(formData && formData.measure) || ''}
                 onChange={handleChange}
-                className="w-full dark:bg-black/70 p-2 mb-4 border rounded"
+                className="w-full  p-2 mb-4 border rounded"
               >
                 <option value="METER">METER</option>
                 <option value="SM">SM</option>

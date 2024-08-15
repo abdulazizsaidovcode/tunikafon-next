@@ -26,7 +26,7 @@ const DropdownUser = () => {
         className="flex items-center gap-4"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
+          <span className="block text-sm font-medium text-black ">
             {data?.fullName}
           </span>
           <span className="block text-xs">{data?.phoneNumber}</span>
@@ -62,7 +62,7 @@ const DropdownUser = () => {
       </div>
       {dropdownOpen && (
         <div
-          className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}
+          className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default`}
         >
           <button
             onClick={logout}

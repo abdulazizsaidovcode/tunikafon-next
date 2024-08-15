@@ -69,7 +69,7 @@ const ECommerce: React.FC = () => {
             onChange={(e) => setMonth(Number(e.target.value))}
           /> */}
           <select
-            className="w-full p-3 text-lg rounded dark:bg-[#1a222b] dark:placeholder-gray-400"
+            className="w-full p-3 text-lg rounded "
             onChange={(e) => setMonth(+e.target.value)}
             value={month}
           >

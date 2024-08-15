@@ -142,7 +142,7 @@ const DetailCategory = () => {
       <Breadcrumb pageName="Detail Category" />
       <Button
         onClick={toggleModal}
-        className="bg-gray-600 dark:bg-boxdark my-5"
+        className="bg-gray-600  my-5"
       >
         Add
       </Button>

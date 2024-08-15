@@ -50,11 +50,11 @@ const Table = ({
           </div>
         </div>
       ) : (
-        <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-          <div className="w-full max-w-full rounded-sm border border-stroke bg-white dark:border-strokedark dark:bg-boxdark">
+        <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default ">
+          <div className="w-full max-w-full rounded-sm border border-stroke bg-white ">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-              <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 ">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                   <tr>
                     <th scope="col" className="px-6 py-3">
                       #
@@ -75,11 +75,11 @@ const Table = ({
                     ? data.map((item: any, i: any) => (
                         <tr
                           key={item.id}
-                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                          className="bg-gray-600 border-b  hover:bg-gray-50 "
                         >
                           <th
                             scope="row"
-                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                           >
                             {i + 1}
                           </th>
@@ -108,7 +108,7 @@ const Table = ({
                         </tr>
                       ))
                     : !isLoading && (
-                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <tr className="bg-gray-600 border-b   hover:bg-gray-50 ">
                           <td className="px-6">
                             <FaRegFolderOpen size={50} />
                           </td>

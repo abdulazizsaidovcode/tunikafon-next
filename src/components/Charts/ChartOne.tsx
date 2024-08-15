@@ -161,7 +161,7 @@ const ChartOne: React.FC = () => {
   }, [data]);
 
   return (
-    <div className="col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default  sm:px-7.5 xl:col-span-8">
       <h1 className="text-2xl p-3">Year</h1>
       <input
         id="year"

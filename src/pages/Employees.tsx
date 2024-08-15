@@ -166,7 +166,7 @@ const Employees = () => {
 
         <Button
           onClick={toggleModal}
-          className="rounded-lg shadow my-5 bg-gary-600 dark:bg-boxdark px-5 py-2"
+          className="rounded-lg shadow my-5 bg-gary-600 px-5 py-2"
         >
           Add
         </Button>
@@ -182,10 +182,10 @@ const Employees = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+          <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default  ">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-              <table className="lg:w-[1145px] md:w-[992px] w-[700px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <table className="lg:w-[1145px] md:w-[992px] w-[700px] text-sm text-left rtl:text-right text-gray-500 ">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
                       #
@@ -206,11 +206,11 @@ const Employees = () => {
                     ? data.object.map((item: any, i: number) => (
                         <tr
                           key={item.id}
-                          className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                          className="bg-gray-600 border-b hover:bg-gray-50 "
                         >
                           <th
                             scope="row"
-                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap "
                           >
                             {i + 1}
                           </th>
@@ -241,7 +241,7 @@ const Employees = () => {
                         </tr>
                       ))
                     : !isLoading && (
-                        <tr className="bg-gray-600 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <tr className="bg-gray-600 border-b hover:bg-gray-50 ">
                           <td className="px-6">
                             <FaRegFolderOpen size={50} />
                           </td>

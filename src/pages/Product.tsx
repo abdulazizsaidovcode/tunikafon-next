@@ -145,7 +145,7 @@ const Product = () => {
 
       <Button
         onClick={toggleModal}
-        className="rounded-lg shadow my-5 bg-gary-600 dark:bg-boxdark px-6 py-3"
+        className="rounded-lg shadow my-5 bg-gary-600 px-6 py-3"
       >
         Add
       </Button>

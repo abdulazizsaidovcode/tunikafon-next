@@ -41,14 +41,14 @@ const productData: Product[] = [
 
 const TableTwo = () => {
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="rounded-sm border border-stroke bg-white shadow-default ">
       <div className="py-6 px-4 md:px-6 xl:px-7.5">
-        <h4 className="text-xl font-semibold text-black dark:text-white">
+        <h4 className="text-xl font-semibold text-black ">
           Top Products
         </h4>
       </div>
 
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4  sm:grid-cols-8 md:px-6 2xl:px-7.5">
         <div className="col-span-3 flex items-center">
           <p className="font-medium">Product Name</p>
         </div>
@@ -68,7 +68,7 @@ const TableTwo = () => {
 
       {productData.map((product, key) => (
         <div
-          className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
+          className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 sm:grid-cols-8 md:px-6 2xl:px-7.5"
           key={key}
         >
           <div className="col-span-3 flex items-center">
@@ -76,23 +76,23 @@ const TableTwo = () => {
               <div className="h-12.5 w-15 rounded-md">
                 <img src={product.image} alt="Product" />
               </div>
-              <p className="text-sm text-black dark:text-white">
+              <p className="text-sm text-black">
                 {product.name}
               </p>
             </div>
           </div>
           <div className="col-span-2 hidden items-center sm:flex">
-            <p className="text-sm text-black dark:text-white">
+            <p className="text-sm text-black ">
               {product.category}
             </p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">
+            <p className="text-sm text-black ">
               ${product.price}
             </p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">{product.sold}</p>
+            <p className="text-sm text-black ">{product.sold}</p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-meta-3">${product.profit}</p>

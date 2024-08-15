@@ -40,14 +40,14 @@ const GlobalModal: React.FC<ModalProps> = ({
       className="fixed inset-0 z-[10000] flex items-center justify-center overflow-auto bg-slate-900 py-10 bg-black/70 modal"
     >
       <div
-        className={`bg-white animate-[animate_0.2s_ease-in-out] dark:text-gray-400 dark:bg-[#30303d] z-999 relative rounded-lg shadow-lg ${mt}`}
+        className={`bg-white animate-[animate_0.2s_ease-in-out]  z-999 relative rounded-lg shadow-lg ${mt}`}
         style={{ maxHeight: '90vh', overflowY: 'auto' }}
         onClick={(e) => e.stopPropagation()}
       >
         <button onClick={onClose} className="float-right pt-3 pr-3">
           <IoMdCloseCircleOutline
             size={30}
-            className="dark:text-white text-black"
+            className=" text-black"
           />
         </button>
         <div className="p-6">{children}</div>
