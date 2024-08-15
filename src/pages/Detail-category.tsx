@@ -139,12 +139,12 @@ const DetailCategory = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Detal categoria" />
+      <Breadcrumb pageName="Detal bo'limi" />
       <Button
         onClick={toggleModal}
         className="bg-boxdark my-5"
       >
-        Qushish
+        Qo'shish
       </Button>
       <div>
         <Table
@@ -202,7 +202,7 @@ const DetailCategory = () => {
                 onClick={addDetailCategory}
                 color="green"
               >
-                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Qushish'}
+                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Qo\'shish'}
               </Button>
             </div>
           </div>

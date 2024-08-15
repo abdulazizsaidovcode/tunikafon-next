@@ -12,22 +12,12 @@ interface ChartOneState {
 
 const ChartOne: React.FC = () => {
   const { get, data } = useGet();
-  const [year, setYear] = useState<number>(2024);
+  const [year, setYear] = useState<string>('2024');
+  const [isValidYear, setIsValidYear] = useState<boolean>(true);
 
-  // Default 12 months categories
   const defaultCategories = [
-    'Yanvar',
-    'Fevral',
-    'Mart',
-    'Aprel',
-    'May',
-    'Iyun',
-    'Iyul',
-    'Avgust',
-    'Sentyabr',
-    'Oktyabr',
-    'Noyabr',
-    'Dekabr',
+    'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 
+    'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr',
   ];
 
   const options: ApexOptions = {
@@ -127,24 +117,24 @@ const ChartOne: React.FC = () => {
     series: [
       {
         name: 'Income',
-        data: Array(12).fill(0), // Initialize with 0 for each month
+        data: Array(12).fill(0),
       },
     ],
   });
 
   useEffect(() => {
-    get(`/order/dashboard/month-income?year=${year}`);
-  }, [year]);
+    if (isValidYear && year !== '') {
+      get(`/order/dashboard/month-income?year=${year}`);
+    }
+  }, [year, isValidYear]);
 
   useEffect(() => {
     if (data) {
-      // Prepare a mapping of month names to income
       const incomeMapping: { [key: string]: number } = {};
       data.forEach((item: any) => {
         incomeMapping[item.monthName] = item.income || 0;
       });
 
-      // Fill the series data array with income values or 0 if no data
       const updatedData = defaultCategories.map(
         (month) => incomeMapping[month] || 0,
       );
@@ -160,22 +150,28 @@ const ChartOne: React.FC = () => {
     }
   }, [data]);
 
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setYear(newValue);
+
+    const isYearValid = /^\d{4}$/.test(newValue);
+    setIsValidYear(isYearValid);
+  };
+
   return (
     <div className="col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default  sm:px-7.5 xl:col-span-8">
       <h1 className="text-2xl p-3">Yil kiriting</h1>
       <input
         id="year"
-        type="number"
+        type="text"
         placeholder="2024"
-        className="rounded ml-3 select-none py-3 p-2 w-full"
+        className={`rounded ml-3 select-none py-3 p-2 w-full ${!isValidYear ? 'border-red-500' : ''}`}
         value={year}
-        onChange={(e) => {
-          const newValue = parseInt(e.target.value, 10);
-          if (!isNaN(newValue)) {
-            setYear(newValue);
-          }
-        }}
+        onChange={handleYearChange}
       />
+      {!isValidYear && (
+        <p className="text-red-500 mt-2">Iltimos, to'g'ri yil kiriting (4 xonali raqam).</p>
+      )}
       <div className="w-full mt-4">
         <ReactApexChart
           options={options}
