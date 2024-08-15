@@ -64,7 +64,7 @@ const DetailCategory = () => {
       setImgUploadLoading(false);
       setName('');
       setFile(null);
-      toast.success('Muvaffaqiyatli qo\'shildi');
+      toast.success("Muvaffaqiyatli qo'shildi");
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -107,7 +107,7 @@ const DetailCategory = () => {
         get('/detail-category/list', page);
         setVal('');
         setFile(null);
-        toast.success("Muvaffaqiyatli yangilandi");
+        toast.success('Muvaffaqiyatli yangilandi');
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -119,7 +119,7 @@ const DetailCategory = () => {
       await remove(`/detail-category/`, deleteId);
       await get('/detail-category/list', page);
       deleteToggleModal();
-      toast.success("Muvaffaqiyatli oʻchirildi");
+      toast.success('Muvaffaqiyatli oʻchirildi');
     }
   };
 
@@ -140,10 +140,7 @@ const DetailCategory = () => {
   return (
     <>
       <Breadcrumb pageName="Detal bo'limi" />
-      <Button
-        onClick={toggleModal}
-        className="bg-boxdark my-5"
-      >
+      <Button onClick={toggleModal} className="bg-boxdark my-5">
         Qo'shish
       </Button>
       <div>
@@ -156,7 +153,7 @@ const DetailCategory = () => {
           setDeleteId={setDeleteId}
         />
       </div>
-      {!isLoading && data && data.object  ? (
+      {!isLoading && data && data.object ? (
         <ReactPaginate
           className="flex gap-3 navigation mt-5"
           breakLabel="..."
@@ -181,10 +178,14 @@ const DetailCategory = () => {
         children={
           <div>
             <div>
-              <Input label="Rasm kiritish" onChange={handleImageChange} type="file" />
+              <Input
+                label="Rasm kiritish"
+                onChange={handleImageChange}
+                type="file"
+              />
               <div className="mt-5">
                 <Input
-                  label="Detal bo'lim nomi nomimni kiritish"
+                  label="Detal bo'lim nomimni kiritish"
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
@@ -202,7 +203,7 @@ const DetailCategory = () => {
                 onClick={addDetailCategory}
                 color="green"
               >
-                {imgUploadLoading || postIsLoading ? 'Loading...' : 'Qo\'shish'}
+                {imgUploadLoading || postIsLoading ? 'Loading...' : "Qo'shish"}
               </Button>
             </div>
           </div>
@@ -210,9 +211,13 @@ const DetailCategory = () => {
       />
       <GlobalModal isOpen={editModal} onClose={editToggleModal}>
         <div>
-          <Input label="Rasm Kiritish" type="file" onChange={handleImageChange} />
+          <Input
+            label="Rasm Kiritish"
+            type="file"
+            onChange={handleImageChange}
+          />
           <div>
-            <label className="block mb-2">Detal bo'lim nomimni kiritish</label>
+            <label className="block mb-2">Detal bo'lim nomini kiritish</label>
             <input
               value={val}
               type="text"
@@ -227,8 +232,12 @@ const DetailCategory = () => {
             <Button color="red" onClick={editToggleModal}>
               Yopish
             </Button>
-            <Button color="green" disabled={putIsLoading || !isValid} onClick={handleEdit}>
-              {putIsLoading ? 'Kuting...' : 'O\'zgartirish'}
+            <Button
+              color="green"
+              disabled={putIsLoading || !isValid}
+              onClick={handleEdit}
+            >
+              {putIsLoading ? 'Kuting...' : "O'zgartirish"}
             </Button>
           </div>
         </div>

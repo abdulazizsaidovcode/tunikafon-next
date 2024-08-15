@@ -291,7 +291,9 @@ const Employees = () => {
                     phoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
                   });
                 }}
-                value={all.phoneNumber.replace(/[^0-9+]/g, '')}
+                value={
+                  all.phoneNumber ? all.phoneNumber.replace(/[^0-9+]/g, '') : ''
+                }
               />
               <div className="relative">
                 <Input
@@ -359,14 +361,39 @@ const Employees = () => {
                     phoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
                   })
                 }
-                value={all.phoneNumber.replace(/[^0-9+]/g, '')}
+                value={
+                  all.phoneNumber ? all.phoneNumber.replace(/[^0-9+]/g, '') : ''
+                }
               />
-              <Input
-                label="Parol"
-                type="password"
-                onChange={(e) => setAll({ ...all, password: e.target.value })}
-                value={all.password}
-              />
+              <div className="relative">
+                <Input
+                  label="Parol"
+                  type={togglePassword ? 'text' : 'password'}
+                  onChange={(e) => setAll({ ...all, password: e.target.value })}
+                  value={all.password}
+                />
+                <span className="absolute right-4 top-10">
+                  {!togglePassword ? (
+                    <button
+                      onClick={(e: any) => {
+                        e.preventDefault();
+                        setTogglePassword(!togglePassword);
+                      }}
+                    >
+                      <FaEye size={25} />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={(e: any) => {
+                        e.preventDefault();
+                        setTogglePassword(!togglePassword);
+                      }}
+                    >
+                      <FaEyeSlash size={25} />
+                    </button>
+                  )}
+                </span>
+              </div>
             </div>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={editToggleModal} color="red">
