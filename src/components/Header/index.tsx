@@ -164,10 +164,13 @@ const Header = (props: {
               onChange={(e: any) =>
                 setEditUserData({
                   ...editUserData,
-                  phoneNumber: e.target.value,
+                  phoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
                 })
               }
-              value={editUserData.phoneNumber}
+              value={
+                editUserData.phoneNumber &&
+                editUserData.phoneNumber.replace(/[^0-9+]/g, '')
+              }
               label="Telefon raqam"
             />
             <Input
@@ -176,6 +179,7 @@ const Header = (props: {
               }
               value={editUserData.password}
               label="Parol"
+              type="password"
             />
             <div className="w-full flex gap-5 justify-end">
               <Button onClick={toggleModal} color="red">

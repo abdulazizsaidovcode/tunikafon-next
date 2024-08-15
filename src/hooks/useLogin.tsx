@@ -14,16 +14,14 @@ const useLogin = () => {
         password,
       });
       setData(data);
-      console.log(data);
 
       if (data.success) {
         localStorage.setItem('token', data.body);
         localStorage.setItem('role', data.message);
-        window.location.pathname = '/';
-        toast.success('successfully entered');
+        window.location.pathname = '/dashboard';
       } else throw new Error();
     } catch (err: any) {
-      toast.error('Number or password invalid');
+      toast.error('Telefon raqam yoki parolingiz hato');
       throw new Error(err.response.data.message);
     } finally {
       setIsLoading(false);

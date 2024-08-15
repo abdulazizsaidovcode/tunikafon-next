@@ -1,4 +1,4 @@
-  import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import PageTitle from './components/PageTitle';
@@ -36,98 +36,100 @@ function App() {
     <>
       {token ? (
         <>
-          {role === "ROLE_SUPER_ADMIN" ? <DefaultLayout>
-            <Routes>
-              <Route
-                path="/dashboard"
-                element={
-                  <>
-                    <PageTitle title="Dashboard |" />
-                    <ECommerce />
-                  </>
-                }
-              />
-              <Route
-                path="/categor-detail"
-                element={
-                  <>
-                    <PageTitle title="DetailCategory |" />
-                    <DetailCategory />
-                  </>
-                }
-              />
-              <Route
-                path="/detail"
-                element={
-                  <>
-                    <PageTitle title="Detail |" />
-                    <Detail />
-                  </>
-                }
-              />
-              <Route
-                path="/product"
-                element={
-                  <>
-                    <PageTitle title="Product |" />
-                    <Product />
-                  </>
-                }
-              />
-              <Route
-                path="/calculation"
-                element={
-                  <>
-                    <PageTitle title="Tables |" />
-                    <Calculation />
-                  </>
-                }
-              />
-              <Route
-                path="/employees"
-                element={
-                  <>
-                    <PageTitle title="Employees |" />
-                    <Employees />
-                  </>
-                }
-              />
-              <Route
-                path="/chart"
-                element={
-                  <>
-                    <PageTitle title="Basic Chart |" />
-                    <Chart />
-                  </>
-                }
-              />
-              <Route
-                path="/ui/alerts"
-                element={
-                  <>
-                    <PageTitle title="Alerts |" />
-                    <Alerts />
-                  </>
-                }
-              />
-              <Route
-                path="/ui/buttons"
-                element={
-                  <>
-                    <PageTitle title="Buttons |" />
-                    <Buttons />
-                  </>
-                }
-              />
-            </Routes>
-          </DefaultLayout> :
-            <EmployeeRoute >
+          {role === 'ROLE_SUPER_ADMIN' ? (
+            <DefaultLayout>
               <Routes>
                 <Route
                   path="/dashboard"
                   element={
                     <>
-                      <PageTitle title="eCommerce Dashboard |" />
+                      <PageTitle title="Dashboard" />
+                      <ECommerce />
+                    </>
+                  }
+                />
+                <Route
+                  path="/categor-detail"
+                  element={
+                    <>
+                      <PageTitle title="DetailCategory" />
+                      <DetailCategory />
+                    </>
+                  }
+                />
+                <Route
+                  path="/detail"
+                  element={
+                    <>
+                      <PageTitle title="Detail" />
+                      <Detail />
+                    </>
+                  }
+                />
+                <Route
+                  path="/product"
+                  element={
+                    <>
+                      <PageTitle title="Product" />
+                      <Product />
+                    </>
+                  }
+                />
+                <Route
+                  path="/calculation"
+                  element={
+                    <>
+                      <PageTitle title="Calculation" />
+                      <Calculation />
+                    </>
+                  }
+                />
+                <Route
+                  path="/employees"
+                  element={
+                    <>
+                      <PageTitle title="Employees" />
+                      <Employees />
+                    </>
+                  }
+                />
+                <Route
+                  path="/chart"
+                  element={
+                    <>
+                      <PageTitle title="Basic Chart" />
+                      <Chart />
+                    </>
+                  }
+                />
+                <Route
+                  path="/ui/alerts"
+                  element={
+                    <>
+                      <PageTitle title="Alerts" />
+                      <Alerts />
+                    </>
+                  }
+                />
+                <Route
+                  path="/ui/buttons"
+                  element={
+                    <>
+                      <PageTitle title="Buttons" />
+                      <Buttons />
+                    </>
+                  }
+                />
+              </Routes>
+            </DefaultLayout>
+          ) : (
+            <EmployeeRoute>
+              <Routes>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <>
+                      <PageTitle title="Dashboard" />
                       <ECommerce />
                     </>
                   }
@@ -136,14 +138,14 @@ function App() {
                   path="/calculation"
                   element={
                     <>
-                      <PageTitle title="Tables |" />
+                      <PageTitle title="Tables " />
                       <Calculation />
                     </>
                   }
                 />
               </Routes>
             </EmployeeRoute>
-          }
+          )}
         </>
       ) : (
         <Routes>
@@ -151,7 +153,7 @@ function App() {
             path="/login"
             element={
               <>
-                <PageTitle title="Signin |" />
+                <PageTitle title="Signin" />
                 <SignIn />
               </>
             }

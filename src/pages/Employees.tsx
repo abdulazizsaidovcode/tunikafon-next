@@ -285,9 +285,12 @@ const Employees = () => {
                 label="Telefon raqam"
                 type="text"
                 onChange={(e) => {
-                  setAll({ ...all, phoneNumber: e.target.value });
+                  setAll({
+                    ...all,
+                    phoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
+                  });
                 }}
-                value={all.phoneNumber}
+                value={all.phoneNumber.replace(/[^0-9+]/g, '')}
               />
               <Input
                 label="Parol"
@@ -327,9 +330,12 @@ const Employees = () => {
                 label="Telefon raqam"
                 type="text"
                 onChange={(e) =>
-                  setAll({ ...all, phoneNumber: e.target.value })
+                  setAll({
+                    ...all,
+                    phoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
+                  })
                 }
-                value={all.phoneNumber}
+                value={all.phoneNumber.replace(/[^0-9+]/g, '')}
               />
               <Input
                 label="Parol"
