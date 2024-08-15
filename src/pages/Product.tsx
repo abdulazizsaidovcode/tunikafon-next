@@ -158,7 +158,7 @@ const Product = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Product" />
+      <Breadcrumb pageName="Mahsulotlar" />
 
       <Button
         onClick={toggleModal}

@@ -169,7 +169,7 @@ const Employees = () => {
           onClick={toggleModal}
           className="rounded-lg shadow bg-boxdark  my-5  px-6 py-3"
         >
-          Qushish
+          Qo'shish
         </Button>
         {isLoading ? (
           <div className="w-full flex justify-center">

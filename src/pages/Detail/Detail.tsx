@@ -99,7 +99,7 @@ const Detail = () => {
           className="rounded-lg my-5 text-white bg-boxdark shadow   px-6 py-3"
           onClick={addToggleModal}
         >
-          Qushish
+          Qo'shish
         </Button>
         <input
           className="bg-transparent border rounded-lg outline-none px-3 py-2"

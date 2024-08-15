@@ -130,7 +130,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }`}
                 >
                   <BsBlockquoteRight /> 
-                  Detal categoria
+                  Detal bo'limlari
                 </NavLink>
               </li>
               {/* <!-- Menu Item Profile --> */}
