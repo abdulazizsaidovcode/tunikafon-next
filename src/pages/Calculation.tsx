@@ -404,6 +404,7 @@
                       }))
                     }
                     value={orderData.address ? orderData.address : ""}
+                    
                     label="Manzil"
                   />
                 </div>
@@ -417,7 +418,7 @@
                     }
                     value={orderData.date ? orderData.date : 0}
                     label="Sana"
-                    
+                    placeholder="Sanani kiriting"
                     type="date"
                   />
                 </div>
@@ -436,6 +437,7 @@
           children={
             <div>
               <Input
+              placeholder="Sanani kiriting"
                 onChange={(e) =>
                   setOrderData({ ...orderData, date: e.target.value })
                 }
