@@ -99,7 +99,7 @@ const ECommerce: React.FC = () => {
               />
               <CardDataStats
                 title="Rad etilgan daromad"
-                total={data?.completedIncome ?? 0}
+                total={data?.rejectedIncome ?? 0}
               />
             </div>
           ) : (

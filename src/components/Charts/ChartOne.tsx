@@ -16,9 +16,42 @@ const ChartOne: React.FC = () => {
   const [isValidYear, setIsValidYear] = useState<boolean>(true);
 
   const defaultCategories = [
-    'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 
+    'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
     'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr',
   ];
+  useEffect(() => {
+    if (isValidYear && year !== '') {
+      get(`/order/dashboard/month-income?year=${year}`);
+    }
+  }, [year, isValidYear]);
+
+  useEffect(() => {
+    if (data) {
+      const incomeMapping: { [key: string]: number } = {};
+      data.map((item: any) => {
+        incomeMapping[item.monthName] = item.income || 0;
+      });
+
+      setState({
+        series: [
+          {
+            name: 'Foyda',
+            data: data && data.map((item: any) => item.income || 0),
+          },
+        ],
+      });
+    }
+  }, [data]);
+  console.log(data);
+
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setYear(newValue);
+
+    const isYearValid = /^\d{4}$/.test(newValue);
+    setIsValidYear(isYearValid);
+  };
 
   const options: ApexOptions = {
     legend: {
@@ -109,54 +142,19 @@ const ChartOne: React.FC = () => {
         },
       },
       min: 0,
-      max: 100,
+      max: 10000000, 
     },
   };
 
   const [state, setState] = useState<ChartOneState>({
     series: [
       {
-        name: 'Income',
-        data: Array(12).fill(0),
+        name: 'Foyda',
+        data: [1000,10000,10000, 30000, 50000, 70000, 90000, 110000, 130000, 150000, 170000, 190000, 210000, 230000], // Kattaroq qiymatlar bilan ishlaydigan ma'lumotlar
       },
     ],
+
   });
-
-  useEffect(() => {
-    if (isValidYear && year !== '') {
-      get(`/order/dashboard/month-income?year=${year}`);
-    }
-  }, [year, isValidYear]);
-
-  useEffect(() => {
-    if (data) {
-      const incomeMapping: { [key: string]: number } = {};
-      data.forEach((item: any) => {
-        incomeMapping[item.monthName] = item.income || 0;
-      });
-
-      const updatedData = defaultCategories.map(
-        (month) => incomeMapping[month] || 0,
-      );
-
-      setState({
-        series: [
-          {
-            name: 'Foyda',
-            data: updatedData,
-          },
-        ],
-      });
-    }
-  }, [data]);
-
-  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setYear(newValue);
-
-    const isYearValid = /^\d{4}$/.test(newValue);
-    setIsValidYear(isYearValid);
-  };
 
   return (
     <div className="col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default  sm:px-7.5 xl:col-span-8">

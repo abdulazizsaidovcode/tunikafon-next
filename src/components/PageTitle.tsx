@@ -14,6 +14,4 @@ const PageTitle: React.FC<PageTitleProps> = ({ title }) => {
 
   return null;
 };
- 
 export default PageTitle;
-  
