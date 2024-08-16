@@ -104,6 +104,10 @@ const Employees = () => {
     }
   };
 
+  const formatNumberWithSpaces = (number: number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
+
   const handleEdit = async () => {
     try {
       const formData = new FormData();
@@ -217,7 +221,9 @@ const Employees = () => {
                             {i + 1}
                           </th>
                           <td className="px-6 py-5">{item.fullName}</td>
-                          <td className="px-6 py-5">{item.phoneNumber}</td>
+                          <td className="px-6 py-5">
+                            {formatNumberWithSpaces(item.phoneNumber)}
+                          </td>
                           <td className="px-6 py-5">
                             <button
                               onClick={() => {
