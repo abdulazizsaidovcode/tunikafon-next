@@ -7,11 +7,17 @@ import GlobalModal from '../modal';
 import ReactPaginate from 'react-paginate';
 import { Order } from '../../types/Order';
 import usePut from '../../hooks/put';
+import FilterForm from './filterTable';
+import { dashboardStore } from '../../helpers/dashboard';
+import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
 export default function TableOrderAll() {
-  const { get, data, isLoading } = useGet();
+  const { get, isLoading } = useGet();
+  const { page, setPage, setData, data, employeeName,
+    ORDER_STATUS,
+    address,
+    date} = dashboardStore();
   const { get: getOne, data: dateOne } = useGet();
   const [toggle, setToggle] = useState(false);
-  const [page, setPage] = useState<number>(0);
   const { put } = usePut();
 
   const formatNumberWithSpaces = (number: number | null) => {
@@ -19,7 +25,15 @@ export default function TableOrderAll() {
   };
 
   useEffect(() => {
-    get('/order/all', page);
+    if (employeeName || ORDER_STATUS || address || date) {
+      fetchFilteredData(
+        { employeeName, ORDER_STATUS, address, date, page },
+        setData
+    );
+    }
+    else {
+      get('/order/all', page, setData);
+    }
   }, [page]);
   const handleEditStatus = (orderId: string, status: string) => {
     put(`/order/update-status/${orderId}?status=${status}`, null, {}).then(
@@ -32,6 +46,9 @@ export default function TableOrderAll() {
   const toggleModal = () => {
     setToggle(!toggle);
   };
+
+  console.log(data);
+  
 
   const handlePageClick = (page: any) => {
     setPage(page.selected);
@@ -47,6 +64,7 @@ export default function TableOrderAll() {
       <div className="w-full mt-6 max-w-full rounded-sm border border-stroke bg-white shadow-default ">
         <div className="w-full max-w-full rounded-sm border border-stroke bg-white ">
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+            <FilterForm/>
             <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 ">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                 <tr>
