@@ -14,6 +14,8 @@ import '../../css/style.css';
 import ReactPaginate from 'react-paginate';
 import DetailAddModal from '../../components/modal/DetailAddModal';
 import { Button } from '@material-tailwind/react';
+import { CiImageOn } from "react-icons/ci";
+
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
@@ -169,21 +171,21 @@ const Detail = () => {
                       {i + 1}
                     </th>
                     <td className="px-6 py-4">
-                      <img
+                     { <img
                         className="w-15 h-15 rounded-full object-cover"
                         src={`${attechment}${item.attachmentId}`}
                         alt=""
-                      />
+                      /> || <CiImageOn />}
                     </td>
                     <td className="px-6 py-4">{item.name}</td>
-                    <td className="px-6 py-4">{item.width}</td>
-                    <td className="px-6 py-4">{item.height}</td>
-                    <td className="px-6 py-4">{item.detailTypeStatus}</td>
-                    <td className="px-6 py-4">{item.largeDiagonal}</td>
-                    <td className="px-6 py-4">{item.smallDiagonal}</td>
-                    <td className="px-6 py-4">{item.description}</td>
+                    <td className="px-6 py-4">{item.width || '-'}</td>
+                    <td className="px-6 py-4">{item.height || '-'}</td>
+                    <td className="px-6 py-4">{item.detailTypeStatus || '-'}</td>
+                    <td className="px-6 py-4">{item.largeDiagonal || '-'}</td>
+                    <td className="px-6 py-4">{item.smallDiagonal || '-'}</td>
+                    <td className="px-6 py-4">{item.description|| '-'}</td>
                     <td className="px-6 py-4">{item.price}</td>
-                    <td className="px-6 py-4">{item.side ? item.side : "Malumot yuq"}</td>
+                    <td className="px-6 py-4">{item.side || '-'}</td>
                     <td className="px-6 py-4">{item.measure}</td>
                     <td className="px-6">
                       <button onClick={() => openEditModal(item)}>
