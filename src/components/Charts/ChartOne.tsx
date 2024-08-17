@@ -42,7 +42,6 @@ const ChartOne: React.FC = () => {
       });
     }
   }, [data]);
-  console.log(data);
 
 
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +141,7 @@ const ChartOne: React.FC = () => {
         },
       },
       min: 0,
-      max: 10000000, 
+      max: 100000000, 
     },
   };
 
@@ -150,7 +149,7 @@ const ChartOne: React.FC = () => {
     series: [
       {
         name: 'Foyda',
-        data: [1000,10000,10000, 30000, 50000, 70000, 90000, 110000, 130000, 150000, 170000, 190000, 210000, 230000], // Kattaroq qiymatlar bilan ishlaydigan ma'lumotlar
+        data: [1000,10000,10000, 30000, 50000, 70000, 90000, 110000, 130000, 150000, 170000, 190000, 210000, 230000],
       },
     ],
 

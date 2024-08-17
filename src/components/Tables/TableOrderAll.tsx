@@ -77,59 +77,59 @@ export default function TableOrderAll() {
               <tbody>
                 {data && data.object && data.object.length > 0
                   ? data.object.map((item: Order, i: number) => (
-                      <tr
-                        key={item.id}
-                        className="bg-gray-600 border-b   hover:bg-gray-50 "
+                    <tr
+                      key={item.id}
+                      className="bg-gray-600 border-b   hover:bg-gray-50 "
+                    >
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                       >
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                        >
-                          {i + 1}
-                        </th>
-                        {/* <td className="px-6 py-4">
+                        {i + 1}
+                      </th>
+                      {/* <td className="px-6 py-4">
                                                 <img
                                                     className="w-20 h-20 rounded-full object-cover"
                                                     src={attechment + item.productAttachmentId}
                                                     alt="(404)"
                                                 />
                                             </td> */}
-                        <td className="px-6 py-4">{item.employeeName}</td>
-                        <td className="px-6 py-4">
-                          {formatNumberWithSpaces(item.price)}
-                        </td>
-                        <td className="px-6 py-4">{item.orderStatus}</td>
-                        <td className="px-6 py-4">{item.address}</td>
-                        <td className="px-6 py-4">{item.date}</td>
-                        <td className="px-6">
-                          <select
-                            name="editStatus"
-                            id="editStatus"
-                            onChange={(e) =>
-                              handleEditStatus(item.id, e.target.value)
-                            }
-                          >
-                            <option value="COMPLETED">TUGATILGAN</option>
-                            <option value="REJECTED">BEKOR QILINGAN</option>
-                          </select>
-                        </td>
-                        <td className="px-6">
-                          <button
-                            onClick={() => handleViewClick(item.id)}
-                            className="ml-5"
-                          >
-                            <FaEye size={25} className="text-red-500" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                      <td className="px-6 py-4">{item.employeeName}</td>
+                      <td className="px-6 py-4">
+                        {formatNumberWithSpaces(item.price)}
+                      </td>
+                      <td className="px-6 py-4">{item.orderStatus}</td>
+                      <td className="px-6 py-4">{item.address}</td>
+                      <td className="px-6 py-4">{item.date}</td>
+                      <td className="px-6">
+                        <select
+                          name="editStatus"
+                          id="editStatus"
+                          onChange={(e) =>
+                            handleEditStatus(item.id, e.target.value)
+                          }
+                        >
+                          <option value="COMPLETED">TUGATILGAN</option>
+                          <option value="REJECTED">BEKOR QILINGAN</option>
+                        </select>
+                      </td>
+                      <td className="px-6">
+                        <button
+                          onClick={() => handleViewClick(item.id)}
+                          className="ml-5"
+                        >
+                          <FaEye size={25} className="text-red-500" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                   : !isLoading && (
-                      <tr className="bg-gray-600 border-b  hover:bg-gray-50 ">
-                        <td className="px-6 py-4 text-center" colSpan={9}>
-                          <FaRegFolderOpen size={50} />
-                        </td>
-                      </tr>
-                    )}
+                    <tr className="bg-gray-600 border-b  hover:bg-gray-50 ">
+                      <td className="px-6 py-4 text-center" colSpan={9}>
+                        <FaRegFolderOpen size={50} />
+                      </td>
+                    </tr>
+                  )}
               </tbody>
             </table>
           </div>
@@ -180,7 +180,7 @@ export default function TableOrderAll() {
               </div>
               <div className="flex flex-col text-lg gap-3 mt-3">
                 {dateOne.orderDetailsRes &&
-                dateOne.orderDetailsRes.length > 0 ? (
+                  dateOne.orderDetailsRes.length > 0 ? (
                   dateOne.orderDetailsRes.map((detail: any, index: number) =>
                     detail ? (
                       <div

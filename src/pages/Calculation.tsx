@@ -338,7 +338,7 @@ const Calculation = () => {
                     details1.map((detail) => (
                       <div
                         key={detail.id}
-                        className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full overflow-auto gap-3"
+                        className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
                       >
                         <img
                           className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"

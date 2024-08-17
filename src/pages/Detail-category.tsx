@@ -24,7 +24,7 @@ const DetailCategory = () => {
   const [deleteId, setDeleteId] = useState<number>();
   const [update, setUpdate] = useState<any>();
   const [file, setFile] = useState<any>(null);
-  const [val, setVal] = useState<string>('');
+  const [val, setVal] = useState<any>('');
   const [name, setName] = useState<string>('');
   const [editModal, setEditModal] = useState(false);
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -63,7 +63,9 @@ const DetailCategory = () => {
       toggleModal();
       setImgUploadLoading(false);
       setName('');
+      setVal(''); // Edit modal uchun input qiymatini tozalash
       setFile(null);
+      
       toast.success("Muvaffaqiyatli qo'shildi");
     } catch (error: any) {
       toast.error(error.message);
@@ -102,11 +104,10 @@ const DetailCategory = () => {
           attachmentId: update.attachmentId,
         });
         if (error) throw new Error();
-
         editToggleModal();
-        get('/detail-category/list', page);
         setVal('');
         setFile(null);
+        get('/detail-category/list', page);
         toast.success('Muvaffaqiyatli yangilandi');
       }
     } catch (error: any) {
@@ -160,7 +161,7 @@ const DetailCategory = () => {
           nextLabel=">"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={data.totalPage} // Change the way pageCount is set
+          pageCount={data.totalPage}
           previousLabel="<"
           renderOnZeroPageCount={null}
           forcePage={page}
@@ -223,7 +224,7 @@ const DetailCategory = () => {
               type="text"
               onChange={(e) => {
                 setVal(e.target.value);
-                handleNameChange(e);
+                validateInput(e.target.value);
               }}
               className="mb-4 w-full py-2 px-4 border rounded outline-none bg-transparent"
             />
