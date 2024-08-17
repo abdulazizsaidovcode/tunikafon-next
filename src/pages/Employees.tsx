@@ -222,7 +222,7 @@ const Employees = () => {
                           </th>
                           <td className="px-6 py-5">{item.fullName}</td>
                           <td className="px-6 py-5">
-                            {formatNumberWithSpaces(item.phoneNumber)}
+                            {item.phoneNumber}
                           </td>
                           <td className="px-6 py-5">
                             <button

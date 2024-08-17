@@ -38,7 +38,8 @@ const FilterForm: React.FC = () => {
     };
 
     return (
-        <div className="p-6">
+        <div className="py-2 px-5">
+            <h1 className='text-3xl my-2 text-boxdark font-semibold'>Tartiblash</h1>
             <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 sm:gap-5 items-center mb-6">
                 <div className="w-full">
                     <Input

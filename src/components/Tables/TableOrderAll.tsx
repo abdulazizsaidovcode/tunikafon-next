@@ -10,12 +10,13 @@ import usePut from '../../hooks/put';
 import FilterForm from './filterTable';
 import { dashboardStore } from '../../helpers/dashboard';
 import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
+import { toast } from 'sonner';
 export default function TableOrderAll() {
   const { get, isLoading } = useGet();
   const { page, setPage, setData, data, employeeName,
     ORDER_STATUS,
     address,
-    date} = dashboardStore();
+    date } = dashboardStore();
   const { get: getOne, data: dateOne } = useGet();
   const [toggle, setToggle] = useState(false);
   const { put } = usePut();
@@ -29,26 +30,37 @@ export default function TableOrderAll() {
       fetchFilteredData(
         { employeeName, ORDER_STATUS, address, date, page },
         setData
-    );
+      );
     }
     else {
       get('/order/all', page, setData);
     }
   }, [page]);
   const handleEditStatus = (orderId: string, status: string) => {
-    put(`/order/update-status/${orderId}?status=${status}`, null, {}).then(
-      (response) => {
-        get('/order/all');
+    put(`/order/update-status/${orderId}?status=${status}`, null, {})
+      .then((response) => {
         console.log('Buyurtma holati yangilandi:', response);
-      },
-    );
+        if (employeeName || ORDER_STATUS || address || date) {
+          fetchFilteredData(
+            { employeeName, ORDER_STATUS, address, date, page },
+            setData
+          );
+        }
+        else {
+          get('/order/all', page, setData);
+        }
+      })
+      .catch((err) => {
+        toast.error('Error updating order status:', err);
+      });
   };
+
   const toggleModal = () => {
     setToggle(!toggle);
   };
 
   console.log(data);
-  
+
 
   const handlePageClick = (page: any) => {
     setPage(page.selected);
@@ -61,29 +73,31 @@ export default function TableOrderAll() {
 
   return (
     <div>
-      <div className="w-full mt-6 max-w-full rounded-sm border border-stroke bg-white shadow-default ">
+      <div className="w-full mt-6  max-w-full rounded-sm border border-stroke bg-white shadow-default ">
         <div className="w-full max-w-full rounded-sm border border-stroke bg-white ">
+          <h1 className='text-3xl ml-6 my-10 text-boxdark font-semibold'>Barcha buyurtmalar </h1>
+          <FilterForm />
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-            <FilterForm/>
+
             <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 ">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     #
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
                     Hodim ismi
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 min-w-[160px] py-3">
                     Narxi
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
                     Buyurtma holati
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 min-w-[200px]  py-3">
                     Manzil
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
                     Sana
                   </th>
 
@@ -127,8 +141,9 @@ export default function TableOrderAll() {
                             handleEditStatus(item.id, e.target.value)
                           }
                         >
-                          <option value="COMPLETED">TUGATILGAN</option>
-                          <option value="REJECTED">BEKOR QILINGAN</option>
+                          <option selected={item.orderStatus == "WAIT"} disabled>Kutilmoqda</option>
+                          <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">TUGATILGAN</option>
+                          <option selected={item.orderStatus == "REJECTED"} value="REJECTED">BEKOR QILINGAN</option>
                         </select>
                       </td>
                       <td className="px-6">
