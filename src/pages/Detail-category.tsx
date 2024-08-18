@@ -152,6 +152,7 @@ const DetailCategory = () => {
           data={data?.object}
           isLoading={isLoading}
           setDeleteId={setDeleteId}
+          page={page}
         />
       </div>
       {!isLoading && data && data.object ? (
