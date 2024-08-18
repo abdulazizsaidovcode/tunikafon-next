@@ -190,7 +190,7 @@ const Employees = () => {
         ) : (
           <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default  ">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-              <table className="lg:w-[1145px] md:w-[992px] w-[700px] text-sm text-left rtl:text-right text-gray-500 ">
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
@@ -210,53 +210,53 @@ const Employees = () => {
                 <tbody>
                   {data && data.object.length
                     ? data.object.map((item: any, i: number) => (
-                        <tr
-                          key={item.id}
-                          className="bg-gray-600 border-b hover:bg-gray-50 "
+                      <tr
+                        key={item.id}
+                        className="bg-gray-600 border-b hover:bg-gray-50 "
+                      >
+                        <th
+                          scope="row"
+                          className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap "
+                          {(page * 10) + i + 1}
+                        </th>
+                        <td className="px-6 py-5">{item.fullName}</td>
+                        <td className="px-6 py-5">
+                          {item.phoneNumber}
+                        </td>
+                        <td className="px-6 py-5">
+                          <button
+                            onClick={() => {
+                              editToggleModal();
+                              setEdit(item);
+                            }}
                           >
-                            {i + 1}
-                          </th>
-                          <td className="px-6 py-5">{item.fullName}</td>
-                          <td className="px-6 py-5">
-                            {item.phoneNumber}
-                          </td>
-                          <td className="px-6 py-5">
-                            <button
-                              onClick={() => {
-                                editToggleModal();
-                                setEdit(item);
-                              }}
-                            >
-                              <FaRegEdit size={25} className="text-green-500" />
-                            </button>
-                          </td>
-                          <td className="px-6 py-5">
-                            <button
-                              onClick={() => {
-                                deleteToggleModal();
-                                setDeleteId(item.id);
-                              }}
-                              className="ml-5"
-                            >
-                              <RiDeleteBinLine
-                                size={25}
-                                className="text-red-500"
-                              />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
+                            <FaRegEdit size={25} className="text-green-500" />
+                          </button>
+                        </td>
+                        <td className="px-6 py-5">
+                          <button
+                            onClick={() => {
+                              deleteToggleModal();
+                              setDeleteId(item.id);
+                            }}
+                            className="ml-5"
+                          >
+                            <RiDeleteBinLine
+                              size={25}
+                              className="text-red-500"
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                     : !isLoading && (
-                        <tr className="bg-gray-600 border-b hover:bg-gray-50 ">
-                          <td className="px-6">
-                            <FaRegFolderOpen size={50} />
-                          </td>
-                        </tr>
-                      )}
+                      <tr className="bg-gray-600 border-b hover:bg-gray-50 ">
+                        <td className="px-6">
+                          <FaRegFolderOpen size={50} />
+                        </td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
