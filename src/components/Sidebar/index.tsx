@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import Logo from '../../images/logo/logo.svg';
+// import Logo from '../../images/logo/logo.svg';
 import { BsBarChart, BsBlockquoteRight, BsBoxSeam, BsFileSpreadsheet } from 'react-icons/bs';
 import { FaRegUser } from "react-icons/fa";
 interface SidebarProps {
@@ -55,12 +55,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
+  const styles = {
+    sidemenu: 'group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray'
+  }
+
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white duration-300 ease-linear  lg:static lg:translate-x-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}
+      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white duration-300 ease-linear  lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
@@ -108,10 +111,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/dashboard"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                    pathname.includes('/dashboard') &&
-                    'bg-gray '
-                  }`}
+                  className={`${styles.sidemenu} ${pathname.includes('/dashboard') && 'bg-gray '}`}
                 >
                   <BsBarChart />
                   Statistika
@@ -124,12 +124,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/categor-detail"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                    pathname.includes('/categor-detail') &&
-                    'bg-gray '
-                  }`}
+                  className={`${styles.sidemenu} ${pathname.includes('/categor-detail') && 'bg-gray '}`}
                 >
-                  <BsBlockquoteRight /> 
+                  <BsBlockquoteRight />
                   Detal bo'limlari
                 </NavLink>
               </li>
@@ -140,10 +137,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/detail"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                    pathname.includes('/detail') &&
-                    'bg-gray '
-                  }`}
+                  className={`${styles.sidemenu} ${pathname.includes('/detail') && 'bg-gray '}`}
                 >
                   <svg
                     className="fill-current"
@@ -180,10 +174,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/product"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                    pathname.includes('/product') &&
-                    'bg-gray '
-                  }`}
+                  className={`${styles.sidemenu} ${pathname.includes('/product') && 'bg-gray '}`}
                 >
                   <BsBoxSeam />
                   Mahsulot
@@ -193,10 +184,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/calculation"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                    pathname.includes('/Calculation') &&
-                    'bg-gray '
-                  }`}
+                  className={`${styles.sidemenu} ${pathname.includes('/calculation') && 'bg-gray '}`}
                 >
                   <BsFileSpreadsheet />
                   Hisoblash
@@ -206,13 +194,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/employees"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                    pathname.includes('/employees') &&
-                    'bg-gray '
-                  }`}
+                  className={`${styles.sidemenu} ${pathname.includes('/employees') && 'bg-gray '}`}
                 >
                   <FaRegUser />
-                  Hodimlar 
+                  Hodimlar
                 </NavLink>
               </li>
             </ul>

@@ -66,6 +66,18 @@ export default function TableOrderAll() {
     toggleModal();
   };
 
+  const statusOrder = (name: any) => {
+    if (name === 'REJECTED') return 'Bekor qilingan'
+    else if (name === 'COMPLETED') return 'Tasdiqlangan'
+    else if (name === 'WAIT') return 'Kutilmoqda'
+  }
+
+  const statusColor = (status: any) => {
+    if (status === 'WAIT') return 'bg-yellow-300';
+    else if (status === 'REJECTED') return 'bg-red-500';
+    else if (status === 'COMPLETED') return 'bg-green-500';
+  };
+
   return (
     <div>
       <div className="w-full mt-6  max-w-full rounded-sm border border-stroke bg-white shadow-default ">
@@ -125,7 +137,11 @@ export default function TableOrderAll() {
                       <td className="px-6 py-4">
                         {formatNumberWithSpaces(item.price)}
                       </td>
-                      <td className="px-6 py-4">{item.orderStatus}</td>
+                      <td className="px-6 py-4">
+                        <p className={`${statusColor(item.orderStatus)} ${item.orderStatus === 'WAIT' ? 'text-black' : 'text-white'} rounded-md text-center py-2`}>
+                          {statusOrder(item.orderStatus)}
+                        </p>
+                      </td>
                       <td className="px-6 py-4">{item.address}</td>
                       <td className="px-6 py-4">{item.date}</td>
                       <td className="px-6">
