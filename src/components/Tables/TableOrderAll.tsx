@@ -11,6 +11,8 @@ import FilterForm from './filterTable';
 import { dashboardStore } from '../../helpers/dashboard';
 import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
 import { toast } from 'sonner';
+import { Button } from '@material-tailwind/react';
+import { clearFunction } from '../../service/clearFunction';
 export default function TableOrderAll() {
   const { get, isLoading } = useGet();
   const { page, setPage, setData, data, employeeName,
@@ -19,6 +21,9 @@ export default function TableOrderAll() {
     date } = dashboardStore();
   const { get: getOne, data: dateOne } = useGet();
   const [toggle, setToggle] = useState(false);
+  const [toggleStatus, setToggleStatus] = useState(false);
+  const [orderID, setOrderID] = useState('');
+  const [rejectedInformation, setRejectedInformation] = useState('');
   const { put } = usePut();
 
   const formatNumberWithSpaces = (number: number | null) => {
@@ -37,30 +42,36 @@ export default function TableOrderAll() {
     }
   }, [page]);
 
-  const handleEditStatus = (orderId: string, status: string) => {
-    put(`/order/update-status/${orderId}?status=${status}`, null, {})
-      .then((response) => {
-        console.log('Buyurtma holati yangilandi:', response);
+  const handleEditStatus = (orderId: string, status: string, rejectedInformation?: string) => {
+    put(`/order/update-status/${orderId}?status=${status}${rejectedInformation ? `&rejectedInformation=${rejectedInformation}` : ''}`, null, {})
+      .then(() => {
         if (employeeName || ORDER_STATUS || address || date) {
           fetchFilteredData(
             { employeeName, ORDER_STATUS, address, date, page },
             setData
           );
-        } else get('/order/all', page, setData);
+          closeModalStatus()
+        } else {
+          closeModalStatus()
+          get('/order/all', page, setData);
+        }
       })
       .catch((err) => {
         toast.error('Error updating order status:', err);
+        closeModalStatus()
+        clearFunction()
       });
   };
 
-  const toggleModal = () => {
-    setToggle(!toggle);
-  };
+  const toggleModal = () => setToggle(!toggle)
+  const openModalStatus = () => setToggleStatus(true)
+  const closeModalStatus = () => {
+    setToggleStatus(false)
+    setOrderID('')
+    setRejectedInformation('')
+  }
 
-  const handlePageClick = (page: any) => {
-    setPage(page.selected);
-  };
-
+  const handlePageClick = (page: any) => setPage(page.selected);
   const handleViewClick = async (id: string) => {
     await getOne(`/order/one/${id}`);
     toggleModal();
@@ -149,9 +160,13 @@ export default function TableOrderAll() {
                           className='w-40'
                           name="editStatus"
                           id="editStatus"
-                          onChange={(e) =>
-                            handleEditStatus(item.id, e.target.value)
-                          }
+                          onChange={(e) => {
+                            if (e.target.value === 'REJECTED') {
+                              setOrderID(item.id)
+                              openModalStatus()
+                            }
+                            else handleEditStatus(item.id, e.target.value)
+                          }}
                         >
                           <option selected={item.orderStatus == "WAIT"} disabled>Kutilmoqda</option>
                           <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">Tugatilgan</option>
@@ -265,6 +280,31 @@ export default function TableOrderAll() {
             </div>
           </div>
         )}
+      </GlobalModal>
+
+      {/* status modal */}
+      <GlobalModal isOpen={toggleStatus} onClose={closeModalStatus}>
+        <div className="lg:w-[600px] w-[300px]  flex flex-col gap-2 text-xl md:w-[500px]">
+          <input
+            placeholder="Rad etish uchun bironta sabab keltiring"
+            className="rounded select-none py-3 p-2 w-full mt-4"
+            value={rejectedInformation}
+            onChange={(e) => setRejectedInformation(e.target.value)}
+          />
+
+          <div className="flex justify-end gap-5">
+            <Button color="red" onClick={closeModalStatus}>
+              Yopish
+            </Button>
+            <Button
+              color="green"
+              disabled={!rejectedInformation}
+              onClick={() => handleEditStatus(orderID, 'REJECTED', rejectedInformation)}
+            >
+              Saqlash
+            </Button>
+          </div>
+        </div>
       </GlobalModal>
     </div>
   );

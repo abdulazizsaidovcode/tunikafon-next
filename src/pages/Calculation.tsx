@@ -135,7 +135,7 @@ const Calculation = () => {
 
   const handleSave = async () => {
     try {
-      if (!req.width || !req.tall || !orderData.address || !orderData.date)
+      if (!req.width || !req.tall || !orderData.address || !orderData.date || !orderData.clientPhoneNumber || !orderData.clientFullName || !orderData.location)
         throw new Error('Barcha malumotlarni kiriting');
 
       await save('/order/save', {
@@ -145,6 +145,9 @@ const Calculation = () => {
         date: orderData.date,
         // productAttachmentId: 0,
         orderDetails: details2,
+        clientPhoneNumber: orderData.clientPhoneNumber,
+        clientFullName: orderData.clientFullName,
+        location: orderData.location
       });
 
       // Reset the state after a successful save
@@ -546,6 +549,33 @@ const Calculation = () => {
               value={orderData.address}
               label="Manzil"
               placeholder="Manzilni kiriting"
+            />
+            {/* "clientPhoneNumber": "string",
+  "clientFullName": "string",
+  "location": "string" */}
+            <Input
+              onChange={(e) =>
+                setOrderData({ ...orderData, clientFullName: e.target.value })
+              }
+              value={orderData.clientFullName}
+              label="Mijoz F.I.O"
+              placeholder="Mijoz tuliq ism sharfini kiriting"
+            />
+            <Input
+              onChange={(e) =>
+                setOrderData({ ...orderData, clientPhoneNumber: e.target.value })
+              }
+              value={orderData.clientPhoneNumber}
+              label="Mijoz telifon raqami"
+              placeholder="Mijoz telifon raqamini kiriting"
+            />
+            <Input
+              onChange={(e) =>
+                setOrderData({ ...orderData, location: e.target.value })
+              }
+              value={orderData.location}
+              label="Mijoz lokatsiyasi"
+              placeholder="Mijoz lokatsitsiyasini kiriting"
             />
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
