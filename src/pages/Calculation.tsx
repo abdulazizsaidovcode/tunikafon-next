@@ -408,7 +408,48 @@ const Calculation = () => {
                 </Button>
               </div>
             </div>
-            <div className="mb-4 flex flex-col sm:flex-row sm:gap-10 py-5">
+            <div className="mb-4 flex flex-col md:flex-row sm:gap-10 pt-5">
+              <div className="w-full">
+                <Input
+                  onChange={(e) =>
+                    setOrderData((prevState: any) => ({
+                      ...prevState,
+                      clientFullName: e.target.value,
+                    }))
+                  }
+                  value={orderData.clientFullName ? orderData.clientFullName : ''}
+                  label="Mijoz F.I.O"
+                  placeholder="Mijoz tuliq ism sharfini kiriting"
+                />
+              </div>
+              <div className="w-full">
+                <Input
+                  onChange={(e) =>
+                    setOrderData((prevState: any) => ({
+                      ...prevState,
+                      clientPhoneNumber: e.target.value,
+                    }))
+                  }
+                  value={orderData.clientPhoneNumber ? orderData.clientPhoneNumber : ''}
+                  label="Mijoz telifon raqami"
+                  placeholder="Mijoz telifon raqamini kiriting"
+                />
+              </div>
+              <div className="w-full">
+                <Input
+                  onChange={(e) =>
+                    setOrderData((prevState: any) => ({
+                      ...prevState,
+                      location: e.target.value,
+                    }))
+                  }
+                  value={orderData.location ? orderData.location : ''}
+                  label="Mijoz lokatsiyasi"
+                  placeholder="Mijoz lokatsitsiyasini kiriting"
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col sm:flex-row sm:gap-10">
               <div className="w-full">
                 <Input
                   placeholder="Manzilni kiriting"
@@ -550,9 +591,6 @@ const Calculation = () => {
               label="Manzil"
               placeholder="Manzilni kiriting"
             />
-            {/* "clientPhoneNumber": "string",
-  "clientFullName": "string",
-  "location": "string" */}
             <Input
               onChange={(e) =>
                 setOrderData({ ...orderData, clientFullName: e.target.value })
