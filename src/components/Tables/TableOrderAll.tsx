@@ -36,6 +36,7 @@ export default function TableOrderAll() {
       get('/order/all', page, setData);
     }
   }, [page]);
+
   const handleEditStatus = (orderId: string, status: string) => {
     put(`/order/update-status/${orderId}?status=${status}`, null, {})
       .then((response) => {
@@ -45,10 +46,7 @@ export default function TableOrderAll() {
             { employeeName, ORDER_STATUS, address, date, page },
             setData
           );
-        }
-        else {
-          get('/order/all', page, setData);
-        }
+        } else get('/order/all', page, setData);
       })
       .catch((err) => {
         toast.error('Error updating order status:', err);
@@ -58,9 +56,6 @@ export default function TableOrderAll() {
   const toggleModal = () => {
     setToggle(!toggle);
   };
-
-  console.log(data);
-
 
   const handlePageClick = (page: any) => {
     setPage(page.selected);
@@ -117,7 +112,7 @@ export default function TableOrderAll() {
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                       >
-                        {i + 1}
+                        {(page * 10) + i + 1}
                       </th>
                       {/* <td className="px-6 py-4">
                                                 <img
@@ -135,6 +130,7 @@ export default function TableOrderAll() {
                       <td className="px-6 py-4">{item.date}</td>
                       <td className="px-6">
                         <select
+                          className='w-40'
                           name="editStatus"
                           id="editStatus"
                           onChange={(e) =>
@@ -142,8 +138,8 @@ export default function TableOrderAll() {
                           }
                         >
                           <option selected={item.orderStatus == "WAIT"} disabled>Kutilmoqda</option>
-                          <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">TUGATILGAN</option>
-                          <option selected={item.orderStatus == "REJECTED"} value="REJECTED">BEKOR QILINGAN</option>
+                          <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">Tugatilgan</option>
+                          <option selected={item.orderStatus == "REJECTED"} value="REJECTED">Bekor qilingan</option>
                         </select>
                       </td>
                       <td className="px-6">

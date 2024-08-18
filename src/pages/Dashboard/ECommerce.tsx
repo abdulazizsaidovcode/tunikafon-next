@@ -3,7 +3,7 @@ import CardDataStats from '../../components/CardDataStats';
 import ChartOne from '../../components/Charts/ChartOne';
 import useGet from '../../hooks/get';
 import TableOrderAll from '../../components/Tables/TableOrderAll';
-import FilterForm from '../../components/Tables/filterTable';
+// import FilterForm from '../../components/Tables/filterTable';
 
 const months = [
   { id: 1, name: 'Yanvar' },
@@ -22,7 +22,7 @@ const months = [
 
 const ECommerce: React.FC = () => {
   const date = new Date();
-  const [month, setMonth] = useState<number | string>(date.getMonth());
+  const [month, setMonth] = useState<number | string>(date.getMonth() + 1);
   const [year, setYear] = useState<number | string>(date.getFullYear());
 
   const { get, data } = useGet();
