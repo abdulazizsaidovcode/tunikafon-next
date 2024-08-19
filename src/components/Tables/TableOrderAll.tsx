@@ -106,6 +106,15 @@ export default function TableOrderAll() {
                   <th scope="col" className="px-6 min-w-[200px] py-3">
                     Hodim ismi
                   </th>
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
+                    Mijoz ismi
+                  </th>
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
+                    Mijoz telefon raqami
+                  </th>
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
+                    Mijoz lokatsiyasi
+                  </th>
                   <th scope="col" className="px-6 min-w-[160px] py-3">
                     Narxi
                   </th>
@@ -126,7 +135,7 @@ export default function TableOrderAll() {
               </thead>
               <tbody>
                 {data && data.object && data.object.length > 0
-                  ? data.object.map((item: Order, i: number) => (
+                  ? data.object.map((item: Order | any, i: number) => (
                     <tr
                       key={item.id}
                       className="bg-gray-600 border-b   hover:bg-gray-50 "
@@ -138,6 +147,11 @@ export default function TableOrderAll() {
                         {(page * 10) + i + 1}
                       </th>
                       <td className="px-6 py-4">{item.employeeName}</td>
+                      <td className="px-6 py-4">{item.clientFullName}</td>
+                      <td className="px-6 py-4">{item.clientPhoneNumber}</td>
+                      <td className="px-6 py-4">
+                        <a href={item.location} target='_blank'>{item.location ? 'Manzilni ko\'rish' : ''}</a>
+                      </td>
                       <td className="px-6 py-4">
                         {formatNumberWithSpaces(item.price)}
                       </td>
@@ -207,6 +221,15 @@ export default function TableOrderAll() {
           <div className="lg:w-[600px] w-[300px]  flex flex-col gap-2 text-xl md:w-[500px]">
             <h2 className="text-lg font-semibold">Buyurtma ma'lumotlari</h2>
             {/* <p className='flex justify-between'>Employee Name: <span>{dateOne.employeeName || "not included"}</span></p> */}
+            <p className="flex justify-between">
+              Mijoz ismi: <span>{dateOne.clientFullName}</span>
+            </p>
+            <p className="flex justify-between">
+              Mijoz telefon raqami: <span>{dateOne.clientPhoneNumber}</span>
+            </p>
+            <p className="flex justify-between">
+              Mijoz lokatsiyasi: <span>{dateOne.location}</span>
+            </p>
             <p className="flex justify-between">
               Eni: <span>{dateOne.width || "Ma'lumot kiritilmagan!"}</span>
             </p>

@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
-import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
-import useGet from '../hooks/get';
-import { attechment } from '../service/urls';
-import GlobalModal from '../components/modal';
-import Input from '../components/inputs/input';
+import { useEffect, useState } from "react";
+import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
+import useGet from "../hooks/get";
+import { attechment } from "../service/urls";
+import GlobalModal from "../components/modal";
+import Input from "../components/inputs/input";
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
   Button,
   Checkbox,
-} from '@material-tailwind/react';
-import usePost from '../hooks/post';
-import { toast } from 'sonner';
-import { FaRegFolderOpen } from 'react-icons/fa6';
-import { RiShareForwardFill } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+} from "@material-tailwind/react";
+import usePost from "../hooks/post";
+import { toast } from "sonner";
+import { FaRegFolderOpen } from "react-icons/fa6";
+import { RiShareForwardFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const Calculation = () => {
   const { get, isLoading, data } = useGet();
@@ -32,6 +32,9 @@ const Calculation = () => {
   const [orderData, setOrderData] = useState<any>({
     date: null,
     address: null,
+    location: null,
+    clientFullName: null,
+    clientPhoneNumber: null,
   });
   const [select, setSelect] = useState(true);
   const [toggle, setToggle] = useState(false);
@@ -48,6 +51,7 @@ const Calculation = () => {
   const toggleModal = () => {
     setToggle(!toggle);
     setDetails3([]);
+    resetAll();
   };
 
   const handleCheckboxChange = (item: any) => {
@@ -69,7 +73,7 @@ const Calculation = () => {
   };
 
   const formatNumberWithSpaces = (number: number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
 
   const handleInputChange = (id: number, value: string) => {
@@ -77,8 +81,8 @@ const Calculation = () => {
       details2.map((detail) =>
         detail.detailId === id
           ? { ...detail, count: value ? +value : 0 }
-          : detail,
-      ),
+          : detail
+      )
     );
   };
   useEffect(() => {
@@ -87,7 +91,7 @@ const Calculation = () => {
         productdetail.map((item: any) => ({
           detailId: item.id,
           count: 0,
-        })),
+        }))
       );
     }
   }, [productdetail]);
@@ -97,19 +101,25 @@ const Calculation = () => {
       details3.map((detail) =>
         detail.detailId === id
           ? { ...detail, count: value ? +value : 0 }
-          : detail,
-      ),
+          : detail
+      )
     );
   };
 
   const resetAll = () => {
     setReq({ width: null, tall: null });
-    setOrderData({ date: null, address: null });
+    setOrderData({
+      date: null,
+      address: null,
+      location: null,
+      clientFullName: null,
+      clientPhoneNumber: null,
+    });
     setDetails1([]);
     setDetails2([]);
     setDetails3([]);
-    setToggle(false);
-    post('/order/calculation', {
+    
+    post("/order/calculation", {
       width: 0,
       tall: 0,
       orderDetailDtos: [],
@@ -121,46 +131,55 @@ const Calculation = () => {
       toast.error("Bo'yi va enini kiriting");
     } else {
       try {
-        await post('/order/calculation', {
+        await post("/order/calculation", {
           width: +req.width,
           tall: +req.tall,
           orderDetailDtos: select ? details3 : details2,
         });
         // console.log(details2); // For debugging: see the structure of details2
       } catch (error) {
-        toast.error('Hisoblashda xatolik yuz berdi');
+        toast.error("Hisoblashda xatolik yuz berdi");
       }
     }
   };
 
   const handleSave = async () => {
     try {
-      if (!req.width || !req.tall || !orderData.address || !orderData.date || !orderData.clientPhoneNumber || !orderData.clientFullName || !orderData.location)
-        throw new Error('Barcha malumotlarni kiriting');
+      if (
+        !req.width ||
+        !req.tall ||
+        !orderData.address ||
+        !orderData.date ||
+        !orderData.clientPhoneNumber ||
+        !orderData.clientFullName ||
+        !orderData.location
+      )
+        throw new Error("Barcha malumotlarni kiriting");
 
-      await save('/order/save', {
+      await save("/order/save", {
         width: +req.width,
         tall: +req.tall,
         address: orderData.address,
         date: orderData.date,
         // productAttachmentId: 0,
-        orderDetails: details2,
+        orderDetails: select ? details3 : details2,
         clientPhoneNumber: orderData.clientPhoneNumber,
         clientFullName: orderData.clientFullName,
-        location: orderData.location
+        location: orderData.location,
       });
 
       // Reset the state after a successful save
       resetAll();
+      setToggle(false);
 
-      toast.success('Malumotlaringiz kiritildi!');
+      toast.success("Malumotlaringiz kiritildi!");
     } catch (error) {
-      toast.error('Malumotlaringizni yuklashda xatolik yuz berdi');
+      toast.error("Malumotlaringizni yuklashda xatolik yuz berdi");
     }
   };
 
   useEffect(() => {
-    get('/product');
+    get("/product");
   }, []);
 
   const getDetailCategoryDetail = async (id: number) => {
@@ -264,7 +283,7 @@ const Calculation = () => {
                             src={
                               item.attachmentId
                                 ? attechment + item.attachmentId
-                                : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                                : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
                             }
                             alt={item.name}
                           />
@@ -283,7 +302,7 @@ const Calculation = () => {
                               <Checkbox
                                 className="bg-blue-gray-300 sm:w-6 sm:h-6"
                                 checked={details1.some(
-                                  (d) => d.id === detail.id,
+                                  (d) => d.id === detail.id
                                 )}
                                 onChange={() => handleCheckboxChange(detail)}
                               />
@@ -292,7 +311,7 @@ const Calculation = () => {
                                 src={
                                   detail.attachmentId
                                     ? attechment + detail.attachmentId
-                                    : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                                    : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
                                 }
                                 alt={detail.name}
                               />
@@ -306,7 +325,7 @@ const Calculation = () => {
                               kerak
                             </h4>
                             <Link
-                              to={'/detail'}
+                              to={"/detail"}
                               className="flex gap-2 justify-center items-center"
                             >
                               <h4 className="text-gray-700">Detal qo'shish </h4>
@@ -325,11 +344,11 @@ const Calculation = () => {
                     kerak
                   </h4>
                   <Link
-                    to={'/categor-detail'}
+                    to={"/categor-detail"}
                     className="flex gap-2 justify-center items-center border-b border-blue-700"
                   >
                     <h4 className="text-blue-700">
-                      Detal kategoriya qo'shish{' '}
+                      Detal kategoriya qo'shish{" "}
                     </h4>
                     <RiShareForwardFill />
                   </Link>
@@ -348,7 +367,7 @@ const Calculation = () => {
                           src={
                             detail.attachmentId
                               ? attechment + detail.attachmentId
-                              : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                              : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
                           }
                           alt={detail.name}
                         />
@@ -386,21 +405,23 @@ const Calculation = () => {
                 <Input
                   placeholder="Bo'yini kiriting"
                   onChange={(e) => setReq({ ...req, tall: e.target.value })}
-                  value={req.tall ? req.tall : ''}
+                  value={req.tall ? req.tall : ""}
                   label="Bo'yi"
                   type="number"
                 />
                 <Input
                   placeholder="Enini kiriting"
                   onChange={(e) => setReq({ ...req, width: e.target.value })}
-                  value={req.width ? req.width : ''}
+                  value={req.width ? req.width : ""}
                   label="Eni"
                   type="number"
                 />
               </div>
               <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
                 <div className="flex">
-                  <h1 className="text-lg">{total ? formatNumberWithSpaces(total) : '0'}</h1>
+                  <h1 className="text-lg">
+                    {total ? formatNumberWithSpaces(total) : "0"}
+                  </h1>
                   <h1 className="text-lg ms-2">{`so'm`}</h1>
                 </div>
                 <Button onClick={handleClick} className="bg-primary">
@@ -417,7 +438,9 @@ const Calculation = () => {
                       clientFullName: e.target.value,
                     }))
                   }
-                  value={orderData.clientFullName ? orderData.clientFullName : ''}
+                  value={
+                    orderData.clientFullName ? orderData.clientFullName : ""
+                  }
                   label="Mijoz F.I.O"
                   placeholder="Mijoz tuliq ism sharfini kiriting"
                 />
@@ -430,7 +453,11 @@ const Calculation = () => {
                       clientPhoneNumber: e.target.value,
                     }))
                   }
-                  value={orderData.clientPhoneNumber ? orderData.clientPhoneNumber : ''}
+                  value={
+                    orderData.clientPhoneNumber
+                      ? orderData.clientPhoneNumber
+                      : ""
+                  }
                   label="Mijoz telifon raqami"
                   placeholder="Mijoz telifon raqamini kiriting"
                 />
@@ -443,7 +470,7 @@ const Calculation = () => {
                       location: e.target.value,
                     }))
                   }
-                  value={orderData.location ? orderData.location : ''}
+                  value={orderData.location ? orderData.location : ""}
                   label="Mijoz lokatsiyasi"
                   placeholder="Mijoz lokatsitsiyasini kiriting"
                 />
@@ -459,7 +486,7 @@ const Calculation = () => {
                       address: e.target.value,
                     }))
                   }
-                  value={orderData.address ? orderData.address : ''}
+                  value={orderData.address ? orderData.address : ""}
                   label="Manzil"
                 />
               </div>
@@ -523,7 +550,7 @@ const Calculation = () => {
                           src={
                             item.attachmentId
                               ? attechment + item.attachmentId
-                              : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                              : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
                           }
                           alt={item.name}
                         />
@@ -546,7 +573,7 @@ const Calculation = () => {
                     ❗Detal topilmadi. Siz oldin detal qo'shishingiz kerak
                   </h4>
                   <Link
-                    to={'/detail'}
+                    to={"/detail"}
                     className="flex gap-2 justify-center items-center border-b border-blue-700"
                   >
                     <h4 className="text-blue-700">Detal qo'shish </h4>
@@ -574,13 +601,15 @@ const Calculation = () => {
               </div>
             </div>
             <div className="flex w-full gap-10 justify-end items-center">
-              <h1 className="text-lg text-center">{total ? formatNumberWithSpaces(total) : 0} so'm</h1>
+              <h1 className="text-lg text-center">
+                {total ? formatNumberWithSpaces(total) : 0} so'm
+              </h1>
               <Button
                 disabled={countLoading}
                 onClick={handleClick}
                 className="h-10 bg-primary"
               >
-                {countLoading ? 'Loading...' : 'Hisoblash'}
+                {countLoading ? "Loading..." : "Hisoblash"}
               </Button>
             </div>
             <Input
@@ -601,7 +630,10 @@ const Calculation = () => {
             />
             <Input
               onChange={(e) =>
-                setOrderData({ ...orderData, clientPhoneNumber: e.target.value })
+                setOrderData({
+                  ...orderData,
+                  clientPhoneNumber: e.target.value,
+                })
               }
               value={orderData.clientPhoneNumber}
               label="Mijoz telifon raqami"
@@ -620,7 +652,7 @@ const Calculation = () => {
                 Yopish
               </Button>
               <Button disabled={saveLoading} onClick={handleSave} color="green">
-                {saveLoading ? 'Yuklanyapti...' : 'Saqlash'}
+                {saveLoading ? "Yuklanyapti..." : "Saqlash"}
               </Button>
             </div>
           </div>
