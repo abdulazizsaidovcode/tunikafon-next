@@ -274,12 +274,12 @@ const Calculation = () => {
                       className="mb-3"
                     >
                       <AccordionHeader
-                        className="border border-[#64748B] rounded-xl flex gap-10 items-center p-1 sm:p-3"
+                        className="border w-full border-[#64748B] rounded-xl flex gap-10 items-center p-1 sm:p-3"
                         onClick={() => handleOpen(item.id)}
                       >
-                        <div className="flex gap-10 items-center px-10">
+                        <div className="flex gap-10 items-center sm:px-10">
                           <img
-                            className="w-11 h-11 bg-cover object-cover rounded-xl "
+                            className="sm:w-11 sm:h-11 w-10 h-10 bg-cover object-cover rounded-xl "
                             src={
                               item.attachmentId
                                 ? attechment + item.attachmentId
@@ -315,7 +315,7 @@ const Calculation = () => {
                                 }
                                 alt={detail.name}
                               />
-                              <h1 className="sm:text-lg">{detail.name}</h1>
+                              <h1 className=" text-sm sm:text-lg">{detail.name}</h1>
                             </div>
                           ))
                         ) : (
@@ -518,15 +518,7 @@ const Calculation = () => {
         onClose={toggleModal}
         children={
           <div>
-            <Input
-              onChange={(e) =>
-                setOrderData({ ...orderData, date: e.target.value })
-              }
-              value={orderData.date}
-              label="Sana"
-              placeholder="Sanani kiriting"
-              type="date"
-            />
+           
             <div>
               {isLoading ? (
                 <div className="w-full flex justify-center">
@@ -544,26 +536,34 @@ const Calculation = () => {
                   <h2>Detal</h2>
                   <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">
                     {productdetail.map((item: any) => (
-                      <div className="w-full flex items-center justify-between border rounded-lg px-5 py-2">
-                        <img
-                          className="w-8 h-8 bg-cover object-cover rounded-xl "
-                          src={
-                            item.attachmentId
-                              ? attechment + item.attachmentId
-                              : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                          }
-                          alt={item.name}
-                        />
-                        <h4>{item.name}</h4>
-                        <input
-                          type="number"
-                          placeholder="soni"
-                          className="rounded outline-none px-1 py-0.5"
-                          onChange={(e) =>
-                            handleProductDetailChange(item.id, e.target.value)
-                          }
-                        />
+                      <div
+                      key={item.id}
+                      className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                    >
+                      <img
+                        className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                        src={
+                          item.attachmentId
+                            ? attechment + item.attachmentId
+                            : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                        }
+                        alt={item.name}
+                      />
+                      <div className="flex-1 px-0">
+                        <h1 className="text-sm sm:text-md text-center">
+                          {item.name}
+                        </h1>
                       </div>
+                      <input
+                        type="number"
+                        placeholder="Soni"
+                        onChange={(e) =>
+                          handleInputChange(item.id, e.target.value)
+                        }
+                        className="rounded outline-none px-1 py-0.5 w-20"
+                      />
+                    </div>
+                      
                     ))}
                   </div>
                 </div>
@@ -612,6 +612,15 @@ const Calculation = () => {
                 {countLoading ? "Loading..." : "Hisoblash"}
               </Button>
             </div>
+            <Input
+              onChange={(e) =>
+                setOrderData({ ...orderData, date: e.target.value })
+              }
+              value={orderData.date}
+              label="Sana"
+              placeholder="Sanani kiriting"
+              type="date"
+            />
             <Input
               onChange={(e) =>
                 setOrderData({ ...orderData, address: e.target.value })
