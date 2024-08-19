@@ -144,7 +144,7 @@ const Calculation = () => {
         address: orderData.address,
         date: orderData.date,
         // productAttachmentId: 0,
-        orderDetails: details2,
+        orderDetails: select ? details3 : details2,
         clientPhoneNumber: orderData.clientPhoneNumber,
         clientFullName: orderData.clientFullName,
         location: orderData.location
