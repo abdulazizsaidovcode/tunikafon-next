@@ -137,13 +137,6 @@ export default function TableOrderAll() {
                       >
                         {(page * 10) + i + 1}
                       </th>
-                      {/* <td className="px-6 py-4">
-                                                <img
-                                                    className="w-20 h-20 rounded-full object-cover"
-                                                    src={attechment + item.productAttachmentId}
-                                                    alt="(404)"
-                                                />
-                                            </td> */}
                       <td className="px-6 py-4">{item.employeeName}</td>
                       <td className="px-6 py-4">
                         {formatNumberWithSpaces(item.price)}

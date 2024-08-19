@@ -14,7 +14,9 @@ const ChartOne: React.FC = () => {
   const { get, data } = useGet();
   const [year, setYear] = useState<string>('2024');
   const [isValidYear, setIsValidYear] = useState<boolean>(true);
-
+  const formatNumberWithSpaces = (number: number | null) => {
+    return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
   const defaultCategories = [
     'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
     'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr',

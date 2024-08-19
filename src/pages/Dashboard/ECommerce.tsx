@@ -32,7 +32,9 @@ const ECommerce: React.FC = () => {
       get(`/order/dashboard/status-income?year=${year}&month=${month}`);
     }
   }, [month, year]);
-
+  const formatNumberWithSpaces = (number: number | null) => {
+    return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
   const isMonthValid = Number(month) >= 1 && Number(month) <= 12;
   const isYearValid = /^\d{4}$/.test(year.toString());
 
@@ -92,15 +94,15 @@ const ECommerce: React.FC = () => {
             <div className="md:flex md:flex-row flex-col justify-between gap-5">
               <CardDataStats
                 title="Tugallangan daromad"
-                total={data?.completedIncome ?? 0}
+                total={formatNumberWithSpaces(data?.completedIncome) ?? 0}
               />
               <CardDataStats
                 title="Kutilayotgan daromad"
-                total={data?.waitingIncome ?? 0}
+                total={formatNumberWithSpaces(data?.waitingIncome) ?? 0}
               />
               <CardDataStats
                 title="Rad etilgan daromad"
-                total={data?.rejectedIncome ?? 0}
+                total={formatNumberWithSpaces(data?.rejectedIncome) ?? 0}
               />
             </div>
           ) : (
