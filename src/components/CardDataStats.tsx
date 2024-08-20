@@ -2,7 +2,7 @@ import React from 'react';
 
 interface CardDataStatsProps {
   title: string;
-  total: string;
+  total: string | number;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({ title, total }) => {
