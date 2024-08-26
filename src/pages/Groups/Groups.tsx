@@ -134,7 +134,7 @@ export default function Groups() {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3">#</th>
-                <th scope="col" className="px-6 min-w-[200px] py-3">Employee Name</th>
+                <th scope="col" className="px-6 min-w-[200px] py-3">Hohim(Sardor) ismi</th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">Guruh Nomi</th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">Ishchilar soni</th>
                 <th colSpan={2} scope="col" className="px-6 py-3">Qushimcha</th>
@@ -201,13 +201,16 @@ export default function Groups() {
       >
         <div className="lg:min-w-[600px] min-w-[300px] py-4">
           <div className="flex flex-col">
+            <label className="block mb-2">
+              Hodim tanlash
+            </label>
             <select
               value={addData.userId}
 
               onChange={(e) => setAddData({ ...addData, userId: e.target.value })}
               className="w-full rounded  mb-3 px-1 py-2 outline-none"
             >
-              <option value="" disabled>Select Employee</option>
+              <option value="" disabled>Hodim tanlang</option>
               {Users && Users.map((item: any) => (
                 <option key={item.id} value={item.id}>
                   {item.fullName}
@@ -243,17 +246,20 @@ export default function Groups() {
       >
         <div className="lg:min-w-[600px] min-w-[300px] py-4">
           <div className="flex flex-col">
+          <label className="block mb-2">
+              Hodim tanlash
+            </label>
             <select
               // This binds the selected value to the current user's ID
               onChange={(e) => setEditData({ ...editData, userId: e.target.value })}
               className="w-full rounded  mb-3 px-1 py-2 outline-none"
             >
               <option selected value={editData.userId}>
-                Eski Sardor
-              </option>
+                Uzgratirilmasin 
+              </option> 
               {Users && Users.map(item => (
                 <option key={item.id} value={item.id}>
-                  {item.fullName}
+                  {item.fullName} 
                 </option>
               ))}
             </select>
