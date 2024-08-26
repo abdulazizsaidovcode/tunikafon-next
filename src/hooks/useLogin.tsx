@@ -8,6 +8,7 @@ const useLogin = () => {
 
   const login = async (phoneNumber: string, password: string) => {
     setIsLoading(true);
+    localStorage.clear();
     try {
       const { data } = await axios.post('/auth/login', {
         phoneNumber,
