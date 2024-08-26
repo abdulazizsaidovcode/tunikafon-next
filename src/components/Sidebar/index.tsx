@@ -3,6 +3,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 // import Logo from '../../images/logo/logo.svg';
 import { BsBarChart, BsBlockquoteRight, BsBoxSeam, BsFileSpreadsheet } from 'react-icons/bs';
 import { FaRegUser } from "react-icons/fa";
+import { PiUsersLight } from "react-icons/pi";
+
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
@@ -118,7 +120,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
               {/* <!-- Menu Item Dashboard --> */}
-
+              <li>
+                <NavLink
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  to="/groups"
+                  className={`${styles.sidemenu} ${pathname.includes('/groups') && 'bg-gray '}`}
+                >
+                  <PiUsersLight     />
+                  Guruhlar
+                </NavLink>
+              </li>
               {/* <!-- Menu Item Profile --> */}
               <li>
                 <NavLink

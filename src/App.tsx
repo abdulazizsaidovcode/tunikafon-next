@@ -15,6 +15,7 @@ import Detail from './pages/Detail/Detail';
 import Product from './pages/Product';
 import Employees from './pages/Employees';
 import EmployeeRoute from './layout/Employee';
+import Groups from './pages/Groups/Groups';
 
 function App() {
   const { pathname } = useLocation();
@@ -43,8 +44,17 @@ function App() {
                   path="/dashboard"
                   element={
                     <>
-                      <PageTitle title="Dashboard" />
+                      <PageTitle title="Dashboard |" />
                       <ECommerce />
+                    </>
+                  }
+                />
+                <Route
+                  path="/groups"
+                  element={
+                    <>
+                      <PageTitle title="Groups |" />
+                      <Groups />
                     </>
                   }
                 />
@@ -52,7 +62,7 @@ function App() {
                   path="/categor-detail"
                   element={
                     <>
-                      <PageTitle title="DetailCategory" />
+                      <PageTitle title="DetailCategory |" />
                       <DetailCategory />
                     </>
                   }

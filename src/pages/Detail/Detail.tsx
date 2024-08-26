@@ -69,7 +69,7 @@ const Detail = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(searchQuery);
-    }, 1000); // 1-second debounce
+    }, 500); // 1-second debounce
 
     return () => {
       clearTimeout(handler);
