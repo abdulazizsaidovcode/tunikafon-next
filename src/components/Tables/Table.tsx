@@ -14,7 +14,8 @@ interface TableType {
   deleteModal: () => void;
   isLoading: boolean;
   setDeleteId: (val: number) => void;
-  setUpdate : (val: number) => void;
+  setUpdate: (val: number) => void;
+  page?: number
 }
 
 const Table = ({
@@ -25,6 +26,7 @@ const Table = ({
   deleteModal,
   setDeleteId,
   setUpdate,
+  page=0
 }: TableType) => {
   const handleDelete = (id: number) => {
     deleteModal();
@@ -53,7 +55,8 @@ const Table = ({
         <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default ">
           <div className="w-full max-w-full rounded-sm border border-stroke bg-white ">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-              <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 ">
+              {/* lg:w-[1145px] w-[992px]  bunaqa qlib width berilmaydida......... */}
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                   <tr>
                     <th scope="col" className="px-6 py-3">
@@ -63,9 +66,9 @@ const Table = ({
                       Rasm
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      {name ? name : 'Ism'}
+                      {name ? name : 'Nomi'}
                     </th>
-                    <th colSpan={2} scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Harakat
                     </th>
                   </tr>
@@ -73,47 +76,47 @@ const Table = ({
                 <tbody>
                   {data && data.length
                     ? data.map((item: any, i: any) => (
-                        <tr
-                          key={item.id}
-                          className="bg-gray-600 border-b  hover:bg-gray-50 "
+                      <tr
+                        key={item.id}
+                        className="bg-gray-600 border-b  hover:bg-gray-50 "
+                      >
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                          {(page && page * 10) + i + 1}
+                        </th>
+                        <td className="px-6 py-4">
+                          <img
+                            className="w-20 h-20 rounded-full object-cover"
+                            src={attechment + item.attachmentId}
+                            alt="(404)"
+                          />
+                        </td>
+                        <td className="px-6 py-4">{item.name}</td>
+                        <td className="px-6">
+                          <button onClick={() => handleEdit(item)}>
+                            <FaRegEdit size={25} className="text-green-500" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item.id)}
+                            className="ml-5"
                           >
-                            {i + 1}
-                          </th>
-                          <td className="px-6 py-4">
-                            <img
-                              className="w-20 h-20 rounded-full object-cover"
-                              src={attechment + item.attachmentId}
-                              alt="(404)"
+                            <RiDeleteBinLine
+                              size={25}
+                              className="text-red-500"
                             />
-                          </td>
-                          <td className="px-6 py-4">{item.name}</td>
-                          <td className="px-6">
-                            <button onClick={() => handleEdit(item)}>
-                              <FaRegEdit size={25} className="text-green-500" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(item.id)}
-                              className="ml-5"
-                            >
-                              <RiDeleteBinLine
-                                size={25}
-                                className="text-red-500"
-                              />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                     : !isLoading && (
-                        <tr className="bg-gray-600 border-b   hover:bg-gray-50 ">
-                          <td className="px-6">
-                            <FaRegFolderOpen size={50} />
-                          </td>
-                        </tr>
-                      )}
+                      <tr className="bg-gray-600 border-b   hover:bg-gray-50 ">
+                        <td className="px-6">
+                          <FaRegFolderOpen size={50} />
+                        </td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>

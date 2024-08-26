@@ -33,7 +33,7 @@ const EditModal: React.FC<EditModalProps> = ({
     height: 0,
     largeDiagonal: 0,
     smallDiagonal: 0,
-    side: 0 || null,
+    detailWidth: 0 || null,
     detailTypeStatus: '',
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -109,7 +109,7 @@ const EditModal: React.FC<EditModalProps> = ({
       onClose();
     } catch (error) {
       // toast.error('Error updating Detail');
-      // console.error('Error updating Detail:', error);
+      //  console.error('Error updating Detail:', error);
     }
   };
 
@@ -193,11 +193,11 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Tomoni</label>
+          <label className="block mb-2">Detal Eni</label>
           <input
             type="number"
-            name="side"
-            value={(formData && formData.side) || ''}
+            name="detailWidth"
+            value={(formData && formData.detailWidth) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
@@ -226,14 +226,6 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full p-2 mb-4 border rounded"
           />
           <Input label="Rasm" onChange={handleImageChange} type="file" />
-          {/* {formData.attachmentId && (
-            <img
-              key={formData.attachmentId}
-              src={`${attechment}${formData.attachmentId}`}
-              alt="Current"
-              className="w-20 h-20 mb-4"
-            />
-          )} */}
           <div className="flex justify-end gap-5">
             <Button onClick={onClose} color="red">
               Chiqish
