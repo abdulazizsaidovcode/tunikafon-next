@@ -109,7 +109,7 @@ export default function TableOrderAll() {
                   <th scope="col" className="px-6 min-w-[200px] py-3">
                     Mijoz ismi
                   </th>
-                  <th scope="col" className="px-6 min-w-[200px] py-3">
+                  <th scope="col" className="px-6 min-w-[250px] py-3">
                     Mijoz telefon raqami
                   </th>
                   <th scope="col" className="px-6 min-w-[200px] py-3">
