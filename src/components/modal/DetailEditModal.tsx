@@ -109,7 +109,7 @@ const EditModal: React.FC<EditModalProps> = ({
       onClose();
     } catch (error) {
       // toast.error('Error updating Detail');
-      // console.error('Error updating Detail:', error);
+      //  console.error('Error updating Detail:', error);
     }
   };
 
@@ -226,14 +226,6 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full p-2 mb-4 border rounded"
           />
           <Input label="Rasm" onChange={handleImageChange} type="file" />
-          {/* {formData.attachmentId && (
-            <img
-              key={formData.attachmentId}
-              src={`${attechment}${formData.attachmentId}`}
-              alt="Current"
-              className="w-20 h-20 mb-4"
-            />
-          )} */}
           <div className="flex justify-end gap-5">
             <Button onClick={onClose} color="red">
               Chiqish

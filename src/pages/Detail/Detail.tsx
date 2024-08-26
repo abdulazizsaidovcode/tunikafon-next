@@ -184,9 +184,9 @@ const Detail = () => {
                     <td className="px-6 py-4">{item.largeDiagonal || '-'}</td>
                     <td className="px-6 py-4">{item.smallDiagonal || '-'}</td>
                     <td className="px-6 py-4">{item.description|| '-'}</td>
-                    <td className="px-6 py-4">{item.price}</td>
+                    <td className="px-6 py-4">{item.price || "-"}</td>
                     <td className="px-6 py-4">{item.side || '-'}</td>
-                    <td className="px-6 py-4">{item.measure}</td>
+                    <td className="px-6 py-4">{item.measure || "-"}</td>
                     <td className="px-6">
                       <button onClick={() => openEditModal(item)}>
                         <FaRegEdit size={25} className="text-green-500" />
