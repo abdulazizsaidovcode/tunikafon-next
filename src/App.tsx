@@ -34,7 +34,7 @@ function App() {
     } else {
       navigate('/login');
     }
-  }, [data, navigate]);
+  }, [data]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
