@@ -26,7 +26,7 @@ const Detail = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [addModal, setAddModal] = useState(false);
-  const [detailCategory, setDetailCategory] = useState<any[]>();
+  const [setDetailCategory] = useState<any[]>();
   // const [file, setFile] = useState<any>();
   // const [isValid, setIsValid] = useState<boolean>(false);
   // const [name, setName] = useState<string>('');
