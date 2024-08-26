@@ -257,7 +257,6 @@ export default function Groups() {
                 </option>
               ))}
             </select>
-
             <Input
               label="Hodim ismi"
               value={editData.name}
