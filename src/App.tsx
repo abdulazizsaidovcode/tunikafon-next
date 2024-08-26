@@ -16,6 +16,7 @@ import Product from './pages/Product';
 import Employees from './pages/Employees';
 import EmployeeRoute from './layout/Employee';
 import useGet from './hooks/get';
+import Groups from './pages/Groups/Groups';
 
 function App() {
   const { pathname } = useLocation();
