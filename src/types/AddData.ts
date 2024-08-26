@@ -26,6 +26,6 @@ export interface Item {
     height: number;
     largeDiagonal: number;
     smallDiagonal: number;
-    side: number | null | string;
+    detailWidth: number | null | string;
     detailTypeStatus: string;
   }

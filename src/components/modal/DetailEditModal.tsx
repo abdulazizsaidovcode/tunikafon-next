@@ -33,7 +33,7 @@ const EditModal: React.FC<EditModalProps> = ({
     height: 0,
     largeDiagonal: 0,
     smallDiagonal: 0,
-    side: 0 || null,
+    detailWidth: 0 || null,
     detailTypeStatus: '',
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -193,11 +193,11 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          <label className="block mb-2">Tomoni</label>
+          <label className="block mb-2">Detal Eni</label>
           <input
             type="number"
-            name="side"
-            value={(formData && formData.side) || ''}
+            name="detailWidth"
+            value={(formData && formData.detailWidth) || ''}
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
