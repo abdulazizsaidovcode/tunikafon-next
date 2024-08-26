@@ -15,26 +15,50 @@ import Detail from './pages/Detail/Detail';
 import Product from './pages/Product';
 import Employees from './pages/Employees';
 import EmployeeRoute from './layout/Employee';
+import useGet from './hooks/get';
 
 function App() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { get, data, isLoading } = useGet();
 
-  const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
 
   useEffect(() => {
-    if (token) navigate('/dashboard');
-    else navigate('/login');
+    get('/user/me');
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  }, [data, navigate]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  if (isLoading) {
+    return (
+      <div>
+        <div className="w-full flex justify-center items-center h-screen">
+          <div
+            className="inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
-      {token ? (
+      {data ? (
         <>
           {role === 'ROLE_SUPER_ADMIN' ? (
             <DefaultLayout>
