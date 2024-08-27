@@ -85,9 +85,18 @@ const Employees = () => {
         throw new Error('Raqam mos kelmadi');
       }
 
+      if (!file) {
+        throw new Error('Rasm quyish shart');
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const { data } = await axios.post('/attachment/upload', formData);
+
       await post('/auth/register', {
         ...all,
-        phoneNumber: all.phoneNumber,
+        attachmentId: data ? data.body : 0,
       });
 
       toast.success("Mufaqiyatli qo'shildi");
@@ -99,15 +108,12 @@ const Employees = () => {
         phoneNumber: null,
         password: '',
       });
+      setFile(null);
     } catch (error: any) {
       toast.error('Hatolik yuz berdi');
     }
   };
 
-  const formatNumberWithSpaces = (number: number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  };  
- 
   const handleEdit = async () => {
     try {
       const formData = new FormData();
@@ -210,53 +216,51 @@ const Employees = () => {
                 <tbody>
                   {data && data.object.length
                     ? data.object.map((item: any, i: number) => (
-                      <tr
-                        key={item.id}
-                        className="bg-gray-600 border-b hover:bg-gray-50 "
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap "
+                        <tr
+                          key={item.id}
+                          className="bg-gray-600 border-b hover:bg-gray-50 "
                         >
-                          {(page * 10) + i + 1}
-                        </th>
-                        <td className="px-6 py-5">{item.fullName}</td>
-                        <td className="px-6 py-5">
-                          {item.phoneNumber}
-                        </td>
-                        <td className="px-6 py-5">
-                          <button
-                            onClick={() => {
-                              editToggleModal();
-                              setEdit(item);
-                            }}
+                          <th
+                            scope="row"
+                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap "
                           >
-                            <FaRegEdit size={25} className="text-green-500" />
-                          </button>
-                        </td>
-                        <td className="px-6 py-5">
-                          <button
-                            onClick={() => {
-                              deleteToggleModal();
-                              setDeleteId(item.id);
-                            }}
-                            className="ml-5"
-                          >
-                            <RiDeleteBinLine
-                              size={25}
-                              className="text-red-500"
-                            />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                            {page * 10 + i + 1}
+                          </th>
+                          <td className="px-6 py-5">{item.fullName}</td>
+                          <td className="px-6 py-5">{item.phoneNumber}</td>
+                          <td className="px-6 py-5">
+                            <button
+                              onClick={() => {
+                                editToggleModal();
+                                setEdit(item);
+                              }}
+                            >
+                              <FaRegEdit size={25} className="text-green-500" />
+                            </button>
+                          </td>
+                          <td className="px-6 py-5">
+                            <button
+                              onClick={() => {
+                                deleteToggleModal();
+                                setDeleteId(item.id);
+                              }}
+                              className="ml-5"
+                            >
+                              <RiDeleteBinLine
+                                size={25}
+                                className="text-red-500"
+                              />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
                     : !isLoading && (
-                      <tr className="bg-gray-600 border-b hover:bg-gray-50 ">
-                        <td className="px-6">
-                          <FaRegFolderOpen size={50} />
-                        </td>
-                      </tr>
-                    )}
+                        <tr className="bg-gray-600 border-b hover:bg-gray-50 ">
+                          <td className="px-6">
+                            <FaRegFolderOpen size={50} />
+                          </td>
+                        </tr>
+                      )}
                 </tbody>
               </table>
             </div>
@@ -283,6 +287,7 @@ const Employees = () => {
         children={
           <div className="sm:w-96 w-full">
             <div className="w-80 sm:w-full">
+              <Input type="file" label="Rasm" onChange={handleImageChange} />
               <Input
                 label="To'liq F I"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}
