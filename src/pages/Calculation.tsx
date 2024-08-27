@@ -10,6 +10,8 @@ import {
   AccordionHeader,
   Button,
   Checkbox,
+  Option,
+  Select,
 } from '@material-tailwind/react';
 import usePost from '../hooks/post';
 import { toast } from 'sonner';
@@ -43,6 +45,7 @@ const Calculation = () => {
   const [details1, setDetails1] = useState<any[]>([]);
   const [details2, setDetails2] = useState<any[]>([]);
   const [details3, setDetails3] = useState<any[]>([]);
+  const [value, setValue] = useState('THE_GATE_IS_INSIDE_THE_ROOM');
   const [orderProductDto, setOrderProductDto] = useState<any>([
     {
       orderDetails: [],
@@ -148,15 +151,54 @@ const Calculation = () => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
 
-  const handleInputChange = (id: number, value: string) => {
-    setDetails2(
-      details2.map((detail) =>
-        detail.detailId === id
-          ? { ...detail, count: value ? +value : 0 }
-          : detail,
-      ),
-    );
+  const handleInputChange = (
+    id: number,
+    index: number,
+    field: 'count' | 'number' | 'color',
+    value: string,
+  ) => {
+    setOrderProductDto((prev: any) => {
+      return prev.map((product: any, i: number) => {
+        if (index === i) {
+          return {
+            ...product,
+            orderDetails: product.orderDetails.map((data: any, idx: number) => {
+              if (id === idx) {
+                return {
+                  ...data,
+                  [field]:
+                    field === 'count' || field === 'number' ? +value : value,
+                };
+              }
+              return data;
+            }),
+          };
+        }
+        return product;
+      });
+    });
   };
+
+  const handleChange = (
+    index: number,
+    field: 'width' | 'height' | 'orderProductStatus',
+    value: number,
+  ) => {
+    setOrderProductDto((prev: any) => {
+      return prev.map((product: any, i: number) => {
+        if (index === i) {
+          return {
+            ...product,
+            [field]: +value,
+          };
+        }
+        return product;
+      });
+    });
+  };
+
+  console.log(orderProductDto);
+
   useEffect(() => {
     if (productdetail) {
       setDetails3(
@@ -349,7 +391,20 @@ const Calculation = () => {
             )}
             {/* orderProductDto start */}
             {orderProductDto.map((item: any, index: number) => (
-              <div key={item.id}>
+              <div className="border rounded-lg p-2 my-5" key={item.id}>
+                <div className="w-72 mb-5">
+                  <Select value={value} onChange={(val: any) => setValue(val)}>
+                    <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
+                      Uyning tashqi ko'rinishi
+                    </Option>
+                    <Option value="INTERIOR_VIEW_OF_THE_HOUSE">
+                      Uyning ichki ko'rinishi
+                    </Option>
+                    <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
+                      Darvoza xona
+                    </Option>
+                  </Select>
+                </div>
                 <div className="flex flex-col lg:flex-row gap-10 mb-4">
                   {detailCategory ? (
                     <div className="w-full lg:w-1/2 h-[260px] md:h-[350px] overflow-y-auto">
@@ -480,7 +535,7 @@ const Calculation = () => {
                   {detailCategory && (
                     <div className="w-full lg:w-1/2 h-[350px] overflow-y-auto flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
                       {item.orderDetails.length > 0 ? (
-                        item.orderDetails.map((detail: any) => (
+                        item.orderDetails.map((detail: any, i: number) => (
                           <div
                             key={detail.id}
                             className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
@@ -503,9 +558,40 @@ const Calculation = () => {
                               type="number"
                               placeholder="Soni"
                               onChange={(e) =>
-                                handleInputChange(detail.id, e.target.value)
+                                handleInputChange(
+                                  i,
+                                  index,
+                                  'count',
+                                  e.target.value,
+                                )
                               }
                               className="rounded outline-none px-1 py-0.5 w-20"
+                            />
+                            <input
+                              type="number"
+                              placeholder="Raqam"
+                              className="rounded outline-none px-1 py-0.5 w-20"
+                              onChange={(e) =>
+                                handleInputChange(
+                                  i,
+                                  index,
+                                  'number',
+                                  e.target.value,
+                                )
+                              }
+                            />
+                            <input
+                              type="text"
+                              placeholder="Rang"
+                              className="rounded outline-none px-1 py-0.5 w-20"
+                              onChange={(e) =>
+                                handleInputChange(
+                                  i,
+                                  index,
+                                  'color',
+                                  e.target.value,
+                                )
+                              }
                             />
                           </div>
                         ))
@@ -523,35 +609,37 @@ const Calculation = () => {
                   <div className="flex flex-col sm:flex-row sm:gap-5 w-full justify-center items-center xl:justify-start">
                     <Input
                       placeholder="Bo'yini kiriting"
-                      onChange={(e) => setReq({ ...req, tall: e.target.value })}
-                      value={req.tall ? req.tall : ''}
+                      onChange={(e: any) =>
+                        handleChange(index, 'width', e.target.value)
+                      }
                       label="Bo'yi"
                       type="number"
                     />
                     <Input
                       placeholder="Enini kiriting"
-                      onChange={(e) =>
-                        setReq({ ...req, width: e.target.value })
+                      onChange={(e: any) =>
+                        handleChange(index, 'height', e.target.value)
                       }
-                      value={req.width ? req.width : ''}
                       label="Eni"
                       type="number"
                     />
                   </div>
-                  <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
-                    <div className="flex">
-                      <h1 className="text-lg">
-                        {total ? formatNumberWithSpaces(total) : '0'}
-                      </h1>
-                      <h1 className="text-lg ms-2">{`so'm`}</h1>
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}
-            <Button onClick={handleClick} className="bg-primary">
-              Hisoblash
-            </Button>
+            <div className="flex gap-10 items-center">
+              <Button onClick={handleClick} className="bg-primary">
+                Hisoblash
+              </Button>
+              <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
+                <div className="flex">
+                  <h1 className="text-lg">
+                    {total ? formatNumberWithSpaces(total) : '0'}
+                  </h1>
+                  <h1 className="text-lg ms-2">{`so'm`}</h1>
+                </div>
+              </div>
+            </div>
             {/* orderProductDto end */}
             <div className="mb-4 flex flex-col md:flex-row sm:gap-10 pt-5">
               <div className="w-full">
@@ -680,9 +768,6 @@ const Calculation = () => {
                         <input
                           type="number"
                           placeholder="Soni"
-                          onChange={(e) =>
-                            handleInputChange(item.id, e.target.value)
-                          }
                           className="rounded outline-none px-1 py-0.5 w-20"
                         />
                       </div>

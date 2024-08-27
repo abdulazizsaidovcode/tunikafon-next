@@ -60,7 +60,11 @@ const Header = (props: {
 
       await put('/auth/edit/profile', null, {
         ...editUserData,
-        attachmentId: attechment ? attechment : data.attachmentId,
+        attachmentId: attechment
+          ? attechment
+          : data.attachmentId
+          ? data.attachmentId
+          : 0,
       });
       get('/user/me');
       toggleModal();
