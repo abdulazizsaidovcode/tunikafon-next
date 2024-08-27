@@ -4,6 +4,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { BsBarChart, BsBlockquoteRight, BsBoxSeam, BsFileSpreadsheet } from 'react-icons/bs';
 import { FaRegUser } from "react-icons/fa";
 import { PiUsersLight } from "react-icons/pi";
+import { LuListOrdered } from "react-icons/lu";
+
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -117,6 +119,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <BsBarChart />
                   Statistika
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  to="/orders"
+                  className={`${styles.sidemenu} ${pathname.includes('/orders') && 'bg-gray '}`}
+                >
+                  <LuListOrdered />
+                  Buyurtmalar
                 </NavLink>
               </li>
               {/* <!-- Menu Item Dashboard --> */}

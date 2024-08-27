@@ -1,15 +1,15 @@
-import { FaRegEdit, FaRegFolderOpen } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
 import useGet from "../../hooks/get";
 import { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
-import { dashboardStore } from "../../helpers/dashboard";
+// import ReactPaginate from "react-paginate";
+// import { dashboardStore } from "../../helpers/dashboard";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { toast } from "sonner";
 import DeleteModal from "../../components/modal/deleteModal";
 import useDelete from "../../hooks/delete";
 import { Button } from "@material-tailwind/react";
-import AddModal from "../../components/modal/add-modal";
+// import AddModal from "../../components/modal/add-modal";
 import GlobalModal from "../../components/modal";
 import usePost from "../../hooks/post";
 import Input from "../../components/inputs/input";
@@ -35,8 +35,8 @@ interface EditGroup {
   employCount: number | string;
 }
 export default function Groups() {
-  const { data, get, isLoading, error } = useGet<{ object: Group[]; totalPage: number }>();
-  const { data: Users, get: getUser, isLoading: LoadingUsers, error: errorUsers } = useGet();
+  const { data, get, isLoading } = useGet();
+  const { data: Users, get: getUser } = useGet();
 
   const { remove, isLoading: deleteIsLoading } = useDelete();
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -134,7 +134,7 @@ export default function Groups() {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3">#</th>
-                <th scope="col" className="px-6 min-w-[200px] py-3">Hohim(Sardor) ismi</th>
+                <th scope="col" className="px-6 min-w-[200px] py-3">Hodim(Sardor) ismi</th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">Guruh Nomi</th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">Ishchilar soni</th>
                 <th colSpan={2} scope="col" className="px-6 py-3">Qushimcha</th>
@@ -161,7 +161,7 @@ export default function Groups() {
                     <td className="px-6 py-3">
                       <button
                         onClick={() => {
-                          const selectedGroup = data?.object.find(group => group.id === item.id);
+                          const selectedGroup = data?.object.find((group: any) => group.id === item.id);
                           if (selectedGroup) {
                             setEditData({
                               userId: selectedGroup.userId,
@@ -211,11 +211,12 @@ export default function Groups() {
               className="w-full rounded  mb-3 px-1 py-2 outline-none"
             >
               <option value="" disabled>Hodim tanlang</option>
-              {Users && Users.map((item: any) => (
+              {Users && Users.map((item: number | any) => (
                 <option key={item.id} value={item.id}>
-                  {item.fullName}
+                  {item.fullName || "user topilmadi"}
                 </option>
               ))}
+
             </select>
             <Input
               label="Hodim ismi"
@@ -246,7 +247,7 @@ export default function Groups() {
       >
         <div className="lg:min-w-[600px] min-w-[300px] py-4">
           <div className="flex flex-col">
-          <label className="block mb-2">
+            <label className="block mb-2">
               Hodim tanlash
             </label>
             <select
@@ -254,17 +255,18 @@ export default function Groups() {
               className="w-full rounded  mb-3 px-1 py-2 outline-none"
             >
               <option selected value={editData.userId}>
-                Uzgratirilmasin 
-              </option> 
+                Uzgratirilmasin
+              </option>
               {Users && Users.map((item: number | any) => (
                 <option key={item.id} value={item.id}>
-                  {item.fullName} 
+                  {item.fullName || "user topilmadi"}
                 </option>
               ))}
+
             </select>
             <Input
               label="Hodim ismi"
-              value={editData.name}   
+              value={editData.name}
               onChange={(e) => setEditData({ ...editData, name: e.target.value })}
             />
             <Input
