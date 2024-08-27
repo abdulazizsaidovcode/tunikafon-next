@@ -44,7 +44,7 @@ const ChartThree: React.FC = ({ month, year }) => {
     },
     stroke: {
       show: true,
-      width: 2,
+      width: 10,
       colors: ['transparent'],
     },
     xaxis: {
