@@ -58,6 +58,16 @@ const Employees = () => {
     }
   };
 
+  function formatPhoneNumber(phoneNumber: any) {
+    const cleaned = phoneNumber.replace(/\D/g, ''); // Faqat raqamlarni qoldirish
+    const match = cleaned.match(/^(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/);
+
+    if (match) {
+      return `(+${match[1]}) ${match[2]} ${match[3]}-${match[4]}-${match[5]}`;
+    }
+    return null;
+  }
+
   const handleDelete = async () => {
     try {
       await remove('/user?userId=', deleteId);
@@ -227,7 +237,9 @@ const Employees = () => {
                             {page * 10 + i + 1}
                           </th>
                           <td className="px-6 py-5">{item.fullName}</td>
-                          <td className="px-6 py-5">{item.phoneNumber}</td>
+                          <td className="px-6 py-5">
+                            {formatPhoneNumber(item.phoneNumber)}
+                          </td>
                           <td className="px-6 py-5">
                             <button
                               onClick={() => {
