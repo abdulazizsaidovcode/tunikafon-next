@@ -6,7 +6,7 @@ const usePut = () => {
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
 
-  const put = async (url: string, id: string | null, updateData: {}) => {
+  const put = async (url: string, id: string | number | null, updateData: {}) => {
     setIsLoading(true);
     setError(null);
     setData(null);

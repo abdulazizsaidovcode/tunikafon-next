@@ -30,7 +30,6 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
   const { post, isLoading: postIsLoading } = usePost();
   const [isFormValid, setIsFormValid] = useState(false);
 
-  // Validate the form whenever input values change
   useEffect(() => {
     const isValid =
       !!file &&

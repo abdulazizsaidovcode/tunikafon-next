@@ -110,15 +110,15 @@ const Detail = () => {
           onClick={addToggleModal}
         >
           Qo'shish
-        </Button> 
-          <input
-            className="bg-transparent border rounded-lg outline-none px-3 py-2"
-            type="text"
-            placeholder="Qidirish"
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-        
+        </Button>
+        <input
+          className="bg-transparent border rounded-lg outline-none px-3 py-2"
+          type="text"
+          placeholder="Qidirish"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+
       </div>
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default ">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
