@@ -3,83 +3,94 @@ import useGet from '../../hooks/get';
 import ApexCharts from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 
+interface GroupData {
+  groupId: number;
+  groupName: string;
+  capitanName: string;
+  capitanId: number;
+  employCount: number;
+  groupFeedback: number;
+  completedOrderCount: number;
+  rejectedOrderCount: number;
+  income: number | null;
+  rejectedIncome: number | null;
+}
+
 const ChartTwo: React.FC = () => {
   const date = new Date();
   const [month, setMonth] = useState<number>(date.getMonth() + 1);
   const [year, setYear] = useState<number>(date.getFullYear());
 
   const { get, data, isLoading } = useGet();
-  
+
   useEffect(() => {
     get(`/dashboard/group/statistic?year=${year}&month=${month}`);
   }, [year, month]);
-
-  // Prepare column chart options and series for each group
-  const getColumnChartOptions = (groupName: string): ApexOptions => ({
-    chart: {
-      type: 'bar',
-      height: 350,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '55%',
-        endingShape: 'rounded',
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    xaxis: {
-      categories: ['Income', 'Completed Orders', 'Rejected Orders', 'Feedback', 'Employee Count'],
-    },
-    yaxis: {
-      title: {
-        text: 'Value',
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    tooltip: {
-      y: {
-        formatter: (val: number) => `${val}`,
-      },
-    },
-  });
-
-  const getColumnChartSeries = (data: any) => [
-    {
-      name: data.groupName,
-      data: [
-        data.income || 0,
-        data.completedOrderCount || 0,
-        data.rejectedOrderCount || 0,
-        data.groupFeedback || 0,
-        data.employCount || 0,
-      ],
-    },
-  ];
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  const chartOptions: ApexOptions = {
+    chart: {
+      type: 'pie',
+      width: 480,
+    },
+    labels: data && data.map((item: GroupData) => item.groupName),
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: 'bottom',
+          },
+        },
+      },
+    ],
+  };
+
+  const chartSeries =
+    (data && data.map((item: GroupData) => item.groupFeedback)) || 0;
+  const chartSeries2 =
+    (data && data.map((item: GroupData) => item.completedOrderCount)) || 0;
+  const chartSeries3 =
+    (data && data.map((item: GroupData) => item.rejectedOrderCount)) || 0;
+
   return (
-    <div className="">
-      <div className='col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default  sm:px-7.5 xl:col-span-8'>
-      {data?.map((group: any) => (
-        <div key={group.groupId} className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">{group.groupName}</h2>
-          <ApexCharts
-            options={getColumnChartOptions(group.groupName)}
-            series={getColumnChartSeries(group)}
-            type="bar"
-            height={350}
-          />
-        </div>
-      ))}
-    </div>
+    <div className="w-full flex flex-wrap  rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default sm:px-7.5 xl:col-span-8">
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Feadback</h2>
+        <ApexCharts
+          options={chartOptions}
+          series={chartSeries}
+          type="pie"
+          height={350}
+          width={320}
+        />
+      </div>
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Completed</h2>
+        <ApexCharts
+          options={chartOptions}
+          series={chartSeries2}
+          type="pie"
+          height={350}
+          width={320}
+        />
+      </div>
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Rejected</h2>
+        <ApexCharts
+          options={chartOptions}
+          series={chartSeries3}
+          type="pie"
+          height={350}
+          width={320}
+        />
+      </div>
     </div>
   );
 };
