@@ -4,7 +4,7 @@ interface InputType {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   label?: string;
-  value?: string;
+  value?: string | number;
   placeholder?: string
 }
 

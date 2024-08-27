@@ -250,14 +250,13 @@ export default function Groups() {
               Hodim tanlash
             </label>
             <select
-              // This binds the selected value to the current user's ID
               onChange={(e) => setEditData({ ...editData, userId: e.target.value })}
               className="w-full rounded  mb-3 px-1 py-2 outline-none"
             >
               <option selected value={editData.userId}>
                 Uzgratirilmasin 
               </option> 
-              {Users && Users.map(item => (
+              {Users && Users.map((item: number | any) => (
                 <option key={item.id} value={item.id}>
                   {item.fullName} 
                 </option>
@@ -265,7 +264,7 @@ export default function Groups() {
             </select>
             <Input
               label="Hodim ismi"
-              value={editData.name}
+              value={editData.name}   
               onChange={(e) => setEditData({ ...editData, name: e.target.value })}
             />
             <Input
