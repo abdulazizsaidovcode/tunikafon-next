@@ -17,6 +17,7 @@ import Employees from './pages/Employees';
 import EmployeeRoute from './layout/Employee';
 import useGet from './hooks/get';
 import Groups from './pages/Groups/Groups';
+import Orders from './pages/Orders/Orders';
 
 function App() {
   const { pathname } = useLocation();
@@ -70,6 +71,15 @@ function App() {
                     <>
                       <PageTitle title="Dashboard |" />
                       <ECommerce />
+                    </>
+                  }
+                />
+                <Route
+                  path="/orders"
+                  element={
+                    <>
+                      <PageTitle title="Orders |" />
+                      <Orders />
                     </>
                   }
                 />

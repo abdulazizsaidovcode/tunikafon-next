@@ -13,6 +13,9 @@ import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
 import { toast } from 'sonner';
 import { Button } from '@material-tailwind/react';
 import { clearFunction } from '../../service/clearFunction';
+// import StarRatingComponent from 'react-star-rating-component'; // Importing star rating component
+import usePost from '../../hooks/post'; // Importing your custom usePost hook
+
 export default function TableOrderAll() {
   const { get, isLoading } = useGet();
   const { page, setPage, setData, data, employeeName,
@@ -22,9 +25,14 @@ export default function TableOrderAll() {
   const { get: getOne, data: dateOne } = useGet();
   const [toggle, setToggle] = useState(false);
   const [toggleStatus, setToggleStatus] = useState(false);
+  const [toggleFeedback, setToggleFeedback] = useState(false);
   const [orderID, setOrderID] = useState('');
   const [rejectedInformation, setRejectedInformation] = useState('');
   const { put } = usePut();
+  const { post, isLoading: loadPost, data: dataPost } = usePost(); // Destructuring usePost
+
+  const [rating, setRating] = useState(0); // State for star rating
+  const [feedbackMessage, setFeedbackMessage] = useState(''); // State for feedback message
 
   const formatNumberWithSpaces = (number: number | null) => {
     return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -63,13 +71,36 @@ export default function TableOrderAll() {
       });
   };
 
-  const toggleModal = () => setToggle(!toggle)
-  const openModalStatus = () => setToggleStatus(true)
+  const handleSubmitFeedback = () => {
+    const feedbackData = {
+      orderId: orderID,
+      count: rating,
+      message: feedbackMessage,
+    };
+
+    post('/feedback', feedbackData, {})
+      .then(() => {
+        toast.success('Feedback submitted successfully');
+        closeModalFeedback();
+      })
+      .catch((err) => {
+        toast.error('Error submitting feedback:', err);
+      });
+  };
+
+  const toggleModal = () => setToggle(!toggle);
+  const openModalStatus = () => setToggleStatus(true);
+  const FeedbackModal = () => setToggleFeedback(true);
   const closeModalStatus = () => {
-    setToggleStatus(false)
-    setOrderID('')
-    setRejectedInformation('')
-  }
+    setToggleStatus(false);
+    setOrderID('');
+    setRejectedInformation('');
+  };
+  const closeModalFeedback = () => {
+    setToggleFeedback(false);
+    setRating(0);
+    setFeedbackMessage('');
+  };
 
   const handlePageClick = (page: any) => setPage(page.selected);
   const handleViewClick = async (id: string) => {
@@ -78,16 +109,17 @@ export default function TableOrderAll() {
   };
 
   const statusOrder = (name: any) => {
-    if (name === 'REJECTED') return 'Bekor qilingan'
-    else if (name === 'COMPLETED') return 'Tasdiqlangan'
-    else if (name === 'WAIT') return 'Kutilmoqda'
-  }
+    if (name === 'REJECTED') return 'Bekor qilingan';
+    else if (name === 'COMPLETED') return 'Tasdiqlangan';
+    else if (name === 'WAIT') return 'Kutilmoqda';
+  };
 
   const statusColor = (status: any) => {
     if (status === 'WAIT') return 'bg-yellow-300';
     else if (status === 'REJECTED') return 'bg-red-500';
     else if (status === 'COMPLETED') return 'bg-green-500';
   };
+
 
   return (
     <div>
@@ -171,6 +203,10 @@ export default function TableOrderAll() {
                             if (e.target.value === 'REJECTED') {
                               setOrderID(item.id)
                               openModalStatus()
+                            }
+                            else if (e.target.value === 'COMPLETED') {
+                              setOrderID(item.id)
+                              FeedbackModal()
                             }
                             else handleEditStatus(item.id, e.target.value)
                           }}
@@ -297,8 +333,6 @@ export default function TableOrderAll() {
           </div>
         )}
       </GlobalModal>
-
-      {/* status modal */}
       <GlobalModal isOpen={toggleStatus} onClose={closeModalStatus}>
         <div className="lg:w-[600px] w-[300px]  flex flex-col gap-2 text-xl md:w-[500px]">
           <input
@@ -318,6 +352,40 @@ export default function TableOrderAll() {
               onClick={() => handleEditStatus(orderID, 'REJECTED', rejectedInformation)}
             >
               Saqlash
+            </Button>
+          </div>
+        </div>
+      </GlobalModal>
+      <GlobalModal isOpen={toggleFeedback} onClose={closeModalFeedback}>
+        <div className="lg:w-[600px] w-[300px] flex flex-col gap-2 text-xl md:w-[500px]">
+          <h2 className="text-lg font-semibold">Submit Feedback</h2>
+          <div className="flex flex-col gap-3 mt-4">
+            <div className="flex items-center gap-2">
+              <label htmlFor="rating" className="font-medium">Rating:</label>
+              <StarRatingComponent
+                name="rate1"
+                starCount={5}
+                value={rating}
+                onStarClick={(nextValue) => setRating(nextValue)}
+              />
+            </div>
+            <textarea
+              placeholder="Enter your feedback"
+              className="rounded select-none py-3 p-2 w-full"
+              value={feedbackMessage}
+              onChange={(e) => setFeedbackMessage(e.target.value)}
+            />
+          </div>
+          <div className="flex justify-end gap-5 mt-4">
+            <Button color="red" onClick={closeModalFeedback}>
+              Cancel
+            </Button>
+            <Button
+              color="green"
+              disabled={!feedbackMessage || !rating}
+              onClick={handleSubmitFeedback}
+            >
+              Submit
             </Button>
           </div>
         </div>

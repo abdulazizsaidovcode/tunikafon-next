@@ -92,7 +92,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
 
   useEffect(() => {
     get('/detail-category/list');
-  }, [get]);
+  }, []);
 
   return (
     <div>
