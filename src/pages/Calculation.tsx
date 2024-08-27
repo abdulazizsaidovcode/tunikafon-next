@@ -761,12 +761,12 @@ const Calculation = () => {
                   onChange={(e) =>
                     setOrderData((prevState: any) => ({
                       ...prevState,
-                      clientPhoneNumber: e.target.value,
+                      clientPhoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
                     }))
                   }
                   value={
                     orderData.clientPhoneNumber
-                      ? orderData.clientPhoneNumber
+                      ? orderData.clientPhoneNumber.replace(/[^0-9+]/g, '')
                       : ''
                   }
                   label="Mijoz telifon raqami"
