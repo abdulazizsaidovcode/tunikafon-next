@@ -10,6 +10,10 @@ import {
   AccordionHeader,
   Button,
   Checkbox,
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
   Option,
   Select,
 } from '@material-tailwind/react';
@@ -19,12 +23,14 @@ import { FaRegFolderOpen } from 'react-icons/fa6';
 import { RiShareForwardFill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { FaMinus, FaPlus } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 const Calculation = () => {
   const { get, isLoading, data } = useGet();
   const { get: getProductDetail, data: productdetail } = useGet();
   const { get: getcategoryDetail, data: categorydetail } = useGet();
   const { get: getDetailCategory, data: detailCategory } = useGet();
+  const { get: getGroup, data: groups, isLoading: groupIsloading } = useGet();
   const { post, isLoading: countLoading, data: total } = usePost();
   const { post: save, isLoading: saveLoading } = usePost();
 
@@ -42,17 +48,19 @@ const Calculation = () => {
   const [select, setSelect] = useState(true);
   const [toggle, setToggle] = useState(false);
   const [open, setOpen] = useState(0);
-  const [details1, setDetails1] = useState<any[]>([]);
-  const [details2, setDetails2] = useState<any[]>([]);
-  const [details3, setDetails3] = useState<any[]>([]);
-  const [value, setValue] = useState('THE_GATE_IS_INSIDE_THE_ROOM');
+  const [gropusId, setGropusId] = useState<any>([]);
+  const [groupssName, setGroupssName] = useState<any>([]);
+  const [orderDetails, setOrderDetails] = useState([]);
+  const [orderProductStatus, setOrderProductStatus] = useState(
+    'THE_GATE_IS_INSIDE_THE_ROOM',
+  );
   const [orderProductDto, setOrderProductDto] = useState<any>([
     {
       orderDetails: [],
       width: 0,
       height: 0,
       howManySidesOfTheHouseAreMade: 0,
-      orderProductStatus: 'EXTERIOR_VIEW_OF_THE_HOUSE',
+      orderProductStatus: 'THE_GATE_IS_INSIDE_THE_ROOM',
     },
   ]);
 
@@ -63,7 +71,6 @@ const Calculation = () => {
 
   const toggleModal = () => {
     setToggle(!toggle);
-    setDetails3([]);
     resetAll();
   };
 
@@ -181,7 +188,7 @@ const Calculation = () => {
 
   const handleChange = (
     index: number,
-    field: 'width' | 'height' | 'orderProductStatus',
+    field: 'width' | 'height' | 'howManySidesOfTheHouseAreMade',
     value: number,
   ) => {
     setOrderProductDto((prev: any) => {
@@ -197,18 +204,19 @@ const Calculation = () => {
     });
   };
 
-  console.log(orderProductDto);
-
-  useEffect(() => {
-    if (productdetail) {
-      setDetails3(
-        productdetail.map((item: any) => ({
-          detailId: item.id,
-          count: 0,
-        })),
-      );
-    }
-  }, [productdetail]);
+  const handleSelectType = (index: number, value: string) => {
+    setOrderProductDto((prev: any) => {
+      return prev.map((product: any, i: number) => {
+        if (index === i) {
+          return {
+            ...product,
+            orderProductStatus: value,
+          };
+        }
+        return product;
+      });
+    });
+  };
 
   const resetAll = () => {
     setReq({ width: null, tall: null });
@@ -219,57 +227,66 @@ const Calculation = () => {
       clientFullName: null,
       clientPhoneNumber: null,
     });
-    setDetails1([]);
-    setDetails2([]);
-    setDetails3([]);
+    setGropusId([]);
+    setGroupssName([]);
+    setOrderProductDto([
+      {
+        orderDetails: [],
+        width: 0,
+        height: 0,
+        howManySidesOfTheHouseAreMade: 0,
+        orderProductStatus: 'THE_GATE_IS_INSIDE_THE_ROOM',
+      },
+    ]);
 
-    post('/order/calculation', {
-      width: 0,
-      tall: 0,
-      orderDetailDtos: [],
-    });
+    post('/order/calculation', orderProductDto);
   };
 
-  const handleClick = async () => {
-    if (!req.width || !req.tall) {
-      toast.error("Bo'yi va enini kiriting");
-    } else {
-      try {
-        await post('/order/calculation', {
-          width: +req.width,
-          tall: +req.tall,
-          orderDetailDtos: select ? details3 : details2,
-        });
-        // console.log(details2); // For debugging: see the structure of details2
-      } catch (error) {
-        toast.error('Hisoblashda xatolik yuz berdi');
-      }
+  const handleClick = async (isClose?: boolean) => {
+    const areDimensionsValid = orderProductDto.every(
+      (product: any) => product.width > 0 && product.height > 0,
+    );
+    try {
+      if (!areDimensionsValid) throw new Error('Malumotlar tuliq emas');
+      await post('/order/calculation', orderProductDto);
+      isClose && toggleModal();
+    } catch (error) {
+      toast.error('Hisoblashda xatolik yuz berdi');
     }
+  };
+
+  const validate = () => {
+    const areDimensionsValid = orderProductDto.every(
+      (product: any) => product.width > 0 && product.height > 0,
+    );
+    if (
+      !areDimensionsValid ||
+      !orderData.address ||
+      !orderData.date ||
+      !orderData.clientPhoneNumber ||
+      !orderData.clientFullName ||
+      !orderData.location ||
+      !gropusId.length
+    )
+      return true;
+    return false;
   };
 
   const handleSave = async () => {
     try {
-      if (
-        !req.width ||
-        !req.tall ||
-        !orderData.address ||
-        !orderData.date ||
-        !orderData.clientPhoneNumber ||
-        !orderData.clientFullName ||
-        !orderData.location
-      )
-        throw new Error('Barcha malumotlarni kiriting');
+      if (validate()) throw new Error('Barcha malumotlarni kiriting');
 
       await save('/order/save', {
-        width: +req.width,
-        tall: +req.tall,
+        // width: +req.width,
+        // tall: +req.tall,
         address: orderData.address,
         date: orderData.date,
         // productAttachmentId: 0,
-        orderDetails: select ? details3 : details2,
+        orderProductDto,
         clientPhoneNumber: orderData.clientPhoneNumber,
         clientFullName: orderData.clientFullName,
         location: orderData.location,
+        groupIds: gropusId,
       });
 
       // Reset the state after a successful save
@@ -282,8 +299,15 @@ const Calculation = () => {
     }
   };
 
+  const removeOrderProduct = (index: number) => {
+    setOrderProductDto(
+      orderProductDto.filter((_: any, i: number) => i !== index),
+    );
+  };
+
   useEffect(() => {
     get('/product');
+    getGroup('/group/all');
   }, []);
 
   const getDetailCategoryDetail = async (id: number) => {
@@ -292,9 +316,41 @@ const Calculation = () => {
 
   const getProductDetails = async (id: number) => {
     await getProductDetail(`product/details/${id}`);
+    const orderDetail = productdetail.map((product: any) => ({
+      detailId: product.id,
+      name: product.name,
+      attachmentId: product.attachmentId,
+      count: 0,
+      number: 0,
+      color: '',
+    }));
+
+    setOrderProductDto((prev: any) => {
+      return prev.map((product: any) => ({
+        ...product,
+        orderDetails: orderDetail,
+      }));
+    });
   };
+
+  console.log(orderProductDto);
+
   const getDetailCategorys = async () => {
     await getDetailCategory(`detail-category/all/list`);
+  };
+
+  const sortGroups = (item: any) => {
+    if (gropusId.includes(item.id)) {
+      const updatedGroupsId = gropusId.filter((id: number) => id !== item.id);
+      const updatedGroupsName = groupssName.filter(
+        (name: any) => name.id !== item.id,
+      );
+      setGroupssName(updatedGroupsName);
+      setGropusId(updatedGroupsId);
+    } else {
+      setGropusId([...gropusId, item.id]);
+      setGroupssName([...groupssName, item]);
+    }
   };
 
   return (
@@ -376,15 +432,12 @@ const Calculation = () => {
                           width: 0,
                           height: 0,
                           howManySidesOfTheHouseAreMade: 0,
-                          orderProductStatus: 'EXTERIOR_VIEW_OF_THE_HOUSE',
+                          orderProductStatus: 'THE_GATE_IS_INSIDE_THE_ROOM',
                         },
                       ])
                     }
                   >
                     <FaPlus />
-                  </button>
-                  <button>
-                    <FaMinus />
                   </button>
                 </div>
               </div>
@@ -392,18 +445,39 @@ const Calculation = () => {
             {/* orderProductDto start */}
             {orderProductDto.map((item: any, index: number) => (
               <div className="border rounded-lg p-2 my-5" key={item.id}>
-                <div className="w-72 mb-5">
-                  <Select value={value} onChange={(val: any) => setValue(val)}>
-                    <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
-                      Uyning tashqi ko'rinishi
-                    </Option>
-                    <Option value="INTERIOR_VIEW_OF_THE_HOUSE">
-                      Uyning ichki ko'rinishi
-                    </Option>
-                    <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
-                      Darvoza xona
-                    </Option>
-                  </Select>
+                <div className="flex justify-between items-center ">
+                  <div className="w-72 mb-5">
+                    <Select
+                      value={orderProductDto[index]?.orderProductStatus || ''}
+                      onChange={(val: any) => handleSelectType(index, val)}
+                    >
+                      <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
+                        Uyning tashqi ko'rinishi
+                      </Option>
+                      <Option
+                        className="my-1"
+                        value="INTERIOR_VIEW_OF_THE_HOUSE"
+                      >
+                        Uyning ichki ko'rinishi
+                      </Option>
+                      <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
+                        Darvoza xona
+                      </Option>
+                    </Select>
+                  </div>
+                  <button
+                    disabled={orderProductDto.length <= 1}
+                    onClick={() => removeOrderProduct(index)}
+                  >
+                    <MdDelete
+                      size={32}
+                      className={
+                        orderProductDto.length <= 1
+                          ? 'text-red-500/50 cursor-not-allowed'
+                          : 'text-red-500'
+                      }
+                    />
+                  </button>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-10 mb-4">
                   {detailCategory ? (
@@ -485,11 +559,6 @@ const Calculation = () => {
                                       onClick={() => addDetail(detail, index)}
                                     >
                                       <FaPlus />
-                                    </button>
-                                    <button
-                                      onClick={() => removeDetail(i, index)}
-                                    >
-                                      <FaMinus />
                                     </button>
                                   </div>
                                 </div>
@@ -593,6 +662,9 @@ const Calculation = () => {
                                 )
                               }
                             />
+                            <button onClick={() => removeDetail(i, index)}>
+                              <FaMinus className="text-red-500" />
+                            </button>
                           </div>
                         ))
                       ) : (
@@ -612,6 +684,7 @@ const Calculation = () => {
                       onChange={(e: any) =>
                         handleChange(index, 'width', e.target.value)
                       }
+                      value={orderProductDto[index]?.width || ''}
                       label="Bo'yi"
                       type="number"
                     />
@@ -620,15 +693,41 @@ const Calculation = () => {
                       onChange={(e: any) =>
                         handleChange(index, 'height', e.target.value)
                       }
+                      value={orderProductDto[index]?.height || ''}
                       label="Eni"
                       type="number"
                     />
+                    {orderProductDto[index]?.orderProductStatus ===
+                    'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                      <Input
+                        placeholder="Uyning tomonlari"
+                        onChange={(e: any) =>
+                          handleChange(
+                            index,
+                            'howManySidesOfTheHouseAreMade',
+                            e.target.value,
+                          )
+                        }
+                        label="Tomon"
+                        type="number"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
             ))}
             <div className="flex gap-10 items-center">
-              <Button onClick={handleClick} className="bg-primary">
+              <Button
+                disabled={
+                  !orderProductDto.every(
+                    (product: any) => product.width > 0 && product.height > 0,
+                  )
+                }
+                onClick={() => {
+                  handleClick(), false;
+                }}
+                className="bg-primary"
+              >
                 Hisoblash
               </Button>
               <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
@@ -688,7 +787,7 @@ const Calculation = () => {
                 />
               </div>
             </div>
-            <div className="mb-4 flex flex-col sm:flex-row sm:gap-10">
+            <div className="mb-4 flex items-center flex-col sm:flex-row sm:gap-10">
               <div className="w-full">
                 <Input
                   placeholder="Manzilni kiriting"
@@ -716,9 +815,78 @@ const Calculation = () => {
                   type="date"
                 />
               </div>
+              <div className="w-full">
+                <Menu
+                  dismiss={{
+                    itemPress: false,
+                  }}
+                >
+                  <MenuHandler>
+                    <div className="w-full cursor-pointer rounded flex gap-2 border overflow-y-auto border-black text-black p-2 mt-3 text-start font-normal">
+                      {groupssName && groupssName.length
+                        ? groupssName.map((item: any) => (
+                            <p className="border rounded line-clamp-1">
+                              {item.name}
+                            </p>
+                          ))
+                        : 'Detalni tanlang'}
+                    </div>
+                  </MenuHandler>
+                  <MenuList className="z-[1000000] bg-white border relative max-h-50 w-60 sm:w-96 text-black">
+                    {groups && !groupIsloading ? (
+                      <>
+                        {groups.map((item: any) => (
+                          <MenuItem
+                            onClick={() => sortGroups(item)}
+                            key={item.id}
+                            className="p-0 !bg-white !text-black active:bg-white/50 hover:bg-white/50 hover:text-black flex items-center w-full"
+                          >
+                            <label
+                              htmlFor={item.id}
+                              className="flex cursor-pointer items-center gap-2 p-2"
+                            >
+                              <Checkbox
+                                color="blue"
+                                ripple={false}
+                                checked={gropusId.includes(item.id)}
+                                id={item.id}
+                                containerProps={{ className: 'p-0' }}
+                                className="hover:before:content-none"
+                              />
+
+                              {item.name}
+                            </label>
+                          </MenuItem>
+                        ))}
+                      </>
+                    ) : (
+                      <MenuItem disabled>
+                        {!groups ? (
+                          <div>Malumot yuq</div>
+                        ) : (
+                          <div className="w-full flex justify-center">
+                            <div
+                              className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                              role="status"
+                            >
+                              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                                Loading....
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </MenuItem>
+                    )}
+                  </MenuList>
+                </Menu>
+              </div>
             </div>
             <div className="w-full flex justify-center">
-              <Button onClick={handleSave} className="bg-primary px-20">
+              <Button
+                disabled={validate()}
+                onClick={handleSave}
+                className="bg-primary px-20"
+              >
                 Saqlash
               </Button>
             </div>
@@ -745,33 +913,68 @@ const Calculation = () => {
               ) : productdetail && productdetail.length > 0 ? (
                 <div>
                   <h2>Detal</h2>
+                  <Select
+                    value={orderProductStatus}
+                    onChange={(val: any) => setOrderProductStatus(val)}
+                  >
+                    <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
+                      Uyning tashqi ko'rinishi
+                    </Option>
+                    <Option className="my-1" value="INTERIOR_VIEW_OF_THE_HOUSE">
+                      Uyning ichki ko'rinishi
+                    </Option>
+                    <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
+                      Darvoza xona
+                    </Option>
+                  </Select>
                   <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">
-                    {productdetail.map((item: any) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
-                      >
-                        <img
-                          className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
-                          src={
-                            item.attachmentId
-                              ? attechment + item.attachmentId
-                              : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
-                          }
-                          alt={item.name}
-                        />
-                        <div className="flex-1 px-0">
-                          <h1 className="text-sm sm:text-md text-center">
-                            {item.name}
-                          </h1>
+                    {orderProductDto[0].orderDetails.map(
+                      (item: any, i: number) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                        >
+                          <img
+                            className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                            src={
+                              item.attachmentId
+                                ? attechment + item.attachmentId
+                                : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                            }
+                            alt={item.name}
+                          />
+                          <div className="flex-1 px-0">
+                            <h1 className="text-sm sm:text-md text-center">
+                              {item.name}
+                            </h1>
+                          </div>
+                          <input
+                            onChange={(e) =>
+                              handleInputChange(i, 0, 'count', e.target.value)
+                            }
+                            type="number"
+                            placeholder="Soni"
+                            className="rounded outline-none px-1 py-0.5 w-20"
+                          />
+                          <input
+                            onChange={(e) =>
+                              handleInputChange(i, 0, 'number', e.target.value)
+                            }
+                            type="number"
+                            placeholder="Raqam"
+                            className="rounded outline-none px-1 py-0.5 w-20"
+                          />
+                          <input
+                            onChange={(e) =>
+                              handleInputChange(i, 0, 'color', e.target.value)
+                            }
+                            type="text"
+                            placeholder="Rang"
+                            className="rounded outline-none px-1 py-0.5 w-20"
+                          />
                         </div>
-                        <input
-                          type="number"
-                          placeholder="Soni"
-                          className="rounded outline-none px-1 py-0.5 w-20"
-                        />
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </div>
               ) : (
@@ -793,81 +996,55 @@ const Calculation = () => {
               <div className="flex items-center gap-5">
                 <Input
                   placeholder="Bo'yini kiriting"
-                  onChange={(e) => setReq({ ...req, tall: e.target.value })}
-                  value={req.tall}
+                  onChange={(e: any) =>
+                    handleChange(0, 'height', e.target.value)
+                  }
+                  value={orderProductDto[0]?.height || ''}
                   label="Bo'yi"
                   type="number"
                 />
                 <Input
                   placeholder="Enini kiriting"
-                  onChange={(e) => setReq({ ...req, width: e.target.value })}
-                  value={req.width}
+                  onChange={(e: any) =>
+                    handleChange(0, 'width', e.target.value)
+                  }
+                  value={orderProductDto[0]?.width || ''}
                   label="Eni"
                   type="number"
                 />
+                {orderProductStatus === 'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                  <Input
+                    placeholder="Tomon"
+                    onChange={(e: any) =>
+                      handleChange(
+                        0,
+                        'howManySidesOfTheHouseAreMade',
+                        e.target.value,
+                      )
+                    }
+                    value={
+                      orderProductDto[0]?.howManySidesOfTheHouseAreMade || ''
+                    }
+                    label="Uyning tomonlari"
+                    type="number"
+                  />
+                )}
               </div>
             </div>
-            <div className="flex w-full gap-10 justify-end items-center">
-              <h1 className="text-lg text-center">
-                {total ? formatNumberWithSpaces(total) : 0} so'm
-              </h1>
-              <Button
-                disabled={countLoading}
-                onClick={handleClick}
-                className="h-10 bg-primary"
-              >
-                {countLoading ? 'Loading...' : 'Hisoblash'}
-              </Button>
-            </div>
-            <Input
-              onChange={(e) =>
-                setOrderData({ ...orderData, date: e.target.value })
-              }
-              value={orderData.date}
-              label="Sana"
-              placeholder="Sanani kiriting"
-              type="date"
-            />
-            <Input
-              onChange={(e) =>
-                setOrderData({ ...orderData, address: e.target.value })
-              }
-              value={orderData.address}
-              label="Manzil"
-              placeholder="Manzilni kiriting"
-            />
-            <Input
-              onChange={(e) =>
-                setOrderData({ ...orderData, clientFullName: e.target.value })
-              }
-              value={orderData.clientFullName}
-              label="Mijoz F.I.O"
-              placeholder="Mijoz tuliq ism sharfini kiriting"
-            />
-            <Input
-              onChange={(e) =>
-                setOrderData({
-                  ...orderData,
-                  clientPhoneNumber: e.target.value,
-                })
-              }
-              value={orderData.clientPhoneNumber}
-              label="Mijoz telifon raqami"
-              placeholder="Mijoz telifon raqamini kiriting"
-            />
-            <Input
-              onChange={(e) =>
-                setOrderData({ ...orderData, location: e.target.value })
-              }
-              value={orderData.location}
-              label="Mijoz lokatsiyasi"
-              placeholder="Mijoz lokatsitsiyasini kiriting"
-            />
+            <h1 className="text-lg">
+              {total ? formatNumberWithSpaces(total) : '0'}
+            </h1>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
                 Yopish
               </Button>
-              <Button disabled={saveLoading} onClick={handleSave} color="green">
+              <Button
+                disabled={saveLoading}
+                onClick={() => {
+                  handleClick(), true;
+                }}
+                color="green"
+              >
                 {saveLoading ? 'Yuklanyapti...' : 'Saqlash'}
               </Button>
             </div>
