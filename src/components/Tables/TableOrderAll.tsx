@@ -68,7 +68,7 @@ export default function TableOrderAll() {
       });
   };
 
-  const handleDeletePayment = async (id: string) => {    
+  const handleDeletePayment = async (id: string) => {
     try {
       await remove(`/order-payment/`, id);
       toast.success('To\'lov uchirildi');
@@ -77,28 +77,37 @@ export default function TableOrderAll() {
       toast.error('Error deleting payment.');
     }
   };
-  const handleFeedbackSubmit = () => {
+  const handleFeedbackSubmit = async () => {
     const feedbackData = {
       orderId: orderID,
       count: rating,
       message: feedbackMessage,
     };
 
-    post('/feedback', feedbackData)
-      .then(() => {
-        toast.success('Baholash kiritildi');
-        closeModalFeedback();
-      })
-      .catch((err) => {
-        toast.error('Siz 1 marta Baholay olasiz',);
-      });
+    try {
+      // Submit feedback
+      await post('/feedback', feedbackData);
+
+      // Update order status to COMPLETED
+      await put(`/order/update-status/${orderID}?status=COMPLETED`);
+
+      // Fetch updated data
+      await get('/order/all', page, setData); // Adjust the endpoint and parameters as needed
+
+      toast.success('Baholash kiritildi va buyurtma tugatildi');
+      closeModalFeedback();
+    } catch (err) {
+      toast.error('Xato yuz berdi. Iltimos, qaytadan urinib ko\'ring.');
+    }
   };
+
+
   const handlePaymentSubmit = async () => {
     try {
       await postPay('/order-payment', {
-        orderId: orderIDPay,           
-        amount: paymentAmount, 
-        date: paymentDate,     
+        orderId: orderIDPay,
+        amount: paymentAmount,
+        date: paymentDate,
       });
       getPayment(`/order-payment/order/one/${orderIDPay}`);
       setPaymentAmount('');
@@ -141,7 +150,7 @@ export default function TableOrderAll() {
     if (name === 'REJECTED') return 'Bekor qilingan';
     else if (name === 'COMPLETED') return 'Tasdiqlangan';
     else if (name === 'WAIT') return 'Kutilmoqda';
-  }; 
+  };
 
   const statusColor = (status: any) => {
     if (status === 'WAIT') return 'bg-yellow-300';
