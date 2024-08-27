@@ -7,45 +7,45 @@ import GlobalModal from '../modal';
 import ReactPaginate from 'react-paginate';
 import { Order } from '../../types/Order';
 import usePut from '../../hooks/put';
+import usePost from '../../hooks/post';
 import FilterForm from './filterTable';
 import { dashboardStore } from '../../helpers/dashboard';
 import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
 import { toast } from 'sonner';
-import { Button } from '@material-tailwind/react';
+import { Button, Rating } from '@material-tailwind/react';
 import { clearFunction } from '../../service/clearFunction';
-// import StarRatingComponent from 'react-star-rating-component'; // Importing star rating component
-import usePost from '../../hooks/post'; // Importing your custom usePost hook
+import { MdDelete, MdPayment } from "react-icons/md";
+import useDelete from '../../hooks/delete';
 
 export default function TableOrderAll() {
   const { get, isLoading } = useGet();
-  const { page, setPage, setData, data, employeeName,
-    ORDER_STATUS,
-    address,
-    date } = dashboardStore();
+  const { page, setPage, setData, data, employeeName, ORDER_STATUS, address, date } = dashboardStore();
   const { get: getOne, data: dateOne } = useGet();
+  const { get: getPayment, data: dataPayment } = useGet(); // New payment hook
+  const { put } = usePut();
+  const { post, isLoading: loadPost } = usePost();
+  const { post: postPay, isLoading: payload } = usePost();
+
+  const { remove } = useDelete();
   const [toggle, setToggle] = useState(false);
   const [toggleStatus, setToggleStatus] = useState(false);
   const [toggleFeedback, setToggleFeedback] = useState(false);
+  const [togglePayment, setTogglePayment] = useState(false); // State for payment modal
   const [orderID, setOrderID] = useState('');
+  const [orderIDPay, setOrderIDPay] = useState('');
   const [rejectedInformation, setRejectedInformation] = useState('');
-  const { put } = usePut();
-  const { post, isLoading: loadPost, data: dataPost } = usePost(); // Destructuring usePost
-
-  const [rating, setRating] = useState(0); // State for star rating
-  const [feedbackMessage, setFeedbackMessage] = useState(''); // State for feedback message
-
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [rating, setRating] = useState(0);
+  const [paymentAmount, setPaymentAmount] = useState('');
+  const [paymentDate, setPaymentDate] = useState('');
   const formatNumberWithSpaces = (number: number | null) => {
     return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
 
   useEffect(() => {
     if (employeeName || ORDER_STATUS || address || date) {
-      fetchFilteredData(
-        { employeeName, ORDER_STATUS, address, date, page },
-        setData
-      );
-    }
-    else {
+      fetchFilteredData({ employeeName, ORDER_STATUS, address, date, page }, setData);
+    } else {
       get('/order/all', page, setData);
     }
   }, [page]);
@@ -54,40 +54,66 @@ export default function TableOrderAll() {
     put(`/order/update-status/${orderId}?status=${status}${rejectedInformation ? `&rejectedInformation=${rejectedInformation}` : ''}`, null, {})
       .then(() => {
         if (employeeName || ORDER_STATUS || address || date) {
-          fetchFilteredData(
-            { employeeName, ORDER_STATUS, address, date, page },
-            setData
-          );
-          closeModalStatus()
+          fetchFilteredData({ employeeName, ORDER_STATUS, address, date, page }, setData);
+          closeModalStatus();
         } else {
-          closeModalStatus()
+          closeModalStatus();
           get('/order/all', page, setData);
         }
       })
       .catch((err) => {
         toast.error('Error updating order status:', err);
-        closeModalStatus()
-        clearFunction()
+        closeModalStatus();
+        clearFunction();
       });
   };
 
-  const handleSubmitFeedback = () => {
+  const handleDeletePayment = async (id: string) => {    
+    try {
+      await remove(`/order-payment/`, id);
+      toast.success('To\'lov uchirildi');
+      getPayment(`/order-payment/order/one/${orderIDPay}`);
+    } catch (err) {
+      toast.error('Error deleting payment.');
+    }
+  };
+  const handleFeedbackSubmit = () => {
     const feedbackData = {
       orderId: orderID,
       count: rating,
       message: feedbackMessage,
     };
 
-    post('/feedback', feedbackData, {})
+    post('/feedback', feedbackData)
       .then(() => {
-        toast.success('Feedback submitted successfully');
+        toast.success('Baholash kiritildi');
         closeModalFeedback();
       })
       .catch((err) => {
-        toast.error('Error submitting feedback:', err);
+        toast.error('Siz 1 marta Baholay olasiz',);
       });
   };
-
+  const handlePaymentSubmit = async () => {
+    try {
+      await postPay('/order-payment', {
+        orderId: orderIDPay,           
+        amount: paymentAmount, 
+        date: paymentDate,     
+      });
+      getPayment(`/order-payment/order/one/${orderIDPay}`);
+      setPaymentAmount('');
+      setPaymentDate('');
+      toast.success('To\'lov muvaffaqiyatli qo\'shildi!');
+    } catch (err) {
+      toast.error('To\'lov amalga oshirilishida xatolik yuz berdi. Iltimos, qaytadan urinib ko\'ring.');
+    }
+  };
+  const isSubmitDisabled = !paymentAmount || !paymentDate;
+  const handlePaymentClick = async (id: string) => {
+    setOrderIDPay(id)
+    await getPayment(`/order-payment/order/one/${id}`);
+    setTogglePayment(true);
+  };
   const toggleModal = () => setToggle(!toggle);
   const openModalStatus = () => setToggleStatus(true);
   const FeedbackModal = () => setToggleFeedback(true);
@@ -98,8 +124,11 @@ export default function TableOrderAll() {
   };
   const closeModalFeedback = () => {
     setToggleFeedback(false);
-    setRating(0);
     setFeedbackMessage('');
+    setRating(0);
+  };
+  const closeModalPayment = () => {
+    setTogglePayment(false);
   };
 
   const handlePageClick = (page: any) => setPage(page.selected);
@@ -112,7 +141,7 @@ export default function TableOrderAll() {
     if (name === 'REJECTED') return 'Bekor qilingan';
     else if (name === 'COMPLETED') return 'Tasdiqlangan';
     else if (name === 'WAIT') return 'Kutilmoqda';
-  };
+  }; 
 
   const statusColor = (status: any) => {
     if (status === 'WAIT') return 'bg-yellow-300';
@@ -120,12 +149,11 @@ export default function TableOrderAll() {
     else if (status === 'COMPLETED') return 'bg-green-500';
   };
 
-
   return (
     <div>
+      <h1 className='text-2xl  text-boxdark font-semibold '>Barcha buyurtmalar </h1>
       <div className="w-full mt-6  max-w-full rounded-sm border border-stroke bg-white shadow-default ">
         <div className="w-full max-w-full rounded-sm border border-stroke bg-white ">
-          <h1 className='text-3xl ml-6 my-10 text-boxdark font-semibold'>Barcha buyurtmalar </h1>
           <FilterForm />
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
 
@@ -159,8 +187,14 @@ export default function TableOrderAll() {
                   <th scope="col" className="px-6 min-w-[200px] py-3">
                     Sana
                   </th>
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
+                    To'lov kiritish
+                  </th>
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
+                    To'lov kiritish
+                  </th>
 
-                  <th colSpan={2} scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 py-3">
                     qushimcha
                   </th>
                 </tr>
@@ -215,6 +249,14 @@ export default function TableOrderAll() {
                           <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">Tugatilgan</option>
                           <option selected={item.orderStatus == "REJECTED"} value="REJECTED">Bekor qilingan</option>
                         </select>
+                      </td>
+                      <td className="px-6">
+                        <button
+                          className="ml-5"
+                          onClick={() => handlePaymentClick(item.id)}
+                        >
+                          <MdPayment size={25} className="text-blue-500" />
+                        </button>
                       </td>
                       <td className="px-6">
                         <button
@@ -358,38 +400,97 @@ export default function TableOrderAll() {
       </GlobalModal>
       <GlobalModal isOpen={toggleFeedback} onClose={closeModalFeedback}>
         <div className="lg:w-[600px] w-[300px] flex flex-col gap-2 text-xl md:w-[500px]">
-          <h2 className="text-lg font-semibold">Submit Feedback</h2>
-          <div className="flex flex-col gap-3 mt-4">
-            <div className="flex items-center gap-2">
-              <label htmlFor="rating" className="font-medium">Rating:</label>
-              <StarRatingComponent
-                name="rate1"
-                starCount={5}
-                value={rating}
-                onStarClick={(nextValue) => setRating(nextValue)}
-              />
-            </div>
-            <textarea
-              placeholder="Enter your feedback"
-              className="rounded select-none py-3 p-2 w-full"
-              value={feedbackMessage}
-              onChange={(e) => setFeedbackMessage(e.target.value)}
-            />
+          <h2 className="text-lg font-semibold mb-4">Buyurtmani baxolang</h2>
+          <div className="mb-4">
+            <Rating value={rating} onChange={(value) => setRating(value)} />
           </div>
+          <textarea
+            placeholder="Buyurtma haqida xabar qoldirish"
+            className="rounded outline-none border select-none py-3 p-2 w-full mt-4"
+            value={feedbackMessage}
+            onChange={(e) => setFeedbackMessage(e.target.value)}
+          />
           <div className="flex justify-end gap-5 mt-4">
             <Button color="red" onClick={closeModalFeedback}>
               Cancel
             </Button>
             <Button
               color="green"
-              disabled={!feedbackMessage || !rating}
-              onClick={handleSubmitFeedback}
+              disabled={!feedbackMessage || rating === 0 || loadPost}
+              onClick={handleFeedbackSubmit}
             >
               Submit
             </Button>
           </div>
         </div>
       </GlobalModal>
+      <GlobalModal isOpen={togglePayment} onClose={closeModalPayment}>
+        {dataPayment && (
+          <div className="lg:w-[600px] w-[300px] flex flex-col gap-2 text-xl md:w-[500px]">
+            <h2 className="text-lg font-semibold">To'lov ma'lumotlari</h2>
+
+            <div className="flex h-10 gap-2 mb-4">
+              <input
+                type="number"
+                placeholder="To'lov miqdori"
+                value={paymentAmount}
+                onChange={(e) => setPaymentAmount(e.target.value)}
+                className="border px-4 py-2 rounded"
+              />
+              <input
+                type="date"
+                placeholder="Sana"
+                value={paymentDate}
+                onChange={(e) => setPaymentDate(e.target.value)}
+                className="border px-4 w-full py-2 rounded"
+              />
+              <button
+                onClick={handlePaymentSubmit}
+                disabled={isSubmitDisabled || payload}
+                className="bg-blue-500 w-full text-sm text-white  rounded hover:bg-blue-600"
+              >
+                Qushish
+              </button>
+            </div>
+            <div className='flex justify-between border'>
+              <ul className="w-full">
+                <li className="px-6 py-3 font-semibold">Jami to'langan summa</li>
+                <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.amountPaid)}</li>
+              </ul>
+              <ul className="border-l w-full">
+                <li className="px-6 py-3 font-semibold">Qolgan summa</li>
+                <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.remainingAmount)}</li>
+              </ul>
+            </div>
+            <table className="min-w-full text-sm text-left text-gray-500">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3">Sana</th>
+                  <th scope="col" className="px-6 py-3">To'langan summa</th>
+                  <th scope="col" className="px-6 py-3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataPayment.orderPaymentDtos ? dataPayment.orderPaymentDtos.map((payment: any, i: number) => (
+                  <tr key={payment.orderId} className="bg-white border-b">
+                    <td className="px-6 py-4">{payment.date}</td>
+                    <td className="px-6 py-4">{formatNumberWithSpaces(payment.amount)}</td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleDeletePayment(payment.id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <MdDelete />
+                      </button>
+                    </td>
+                  </tr>
+                )) : <FaRegFolderOpen />}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </GlobalModal>
+
     </div>
   );
 }
