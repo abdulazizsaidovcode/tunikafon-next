@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
-import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
-import useGet from "../hooks/get";
-import { attechment } from "../service/urls";
-import GlobalModal from "../components/modal";
-import Input from "../components/inputs/input";
+import { useEffect, useState } from 'react';
+import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
+import useGet from '../hooks/get';
+import { attechment } from '../service/urls';
+import GlobalModal from '../components/modal';
+import Input from '../components/inputs/input';
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
   Button,
   Checkbox,
-} from "@material-tailwind/react";
-import usePost from "../hooks/post";
-import { toast } from "sonner";
-import { FaRegFolderOpen } from "react-icons/fa6";
-import { RiShareForwardFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+} from '@material-tailwind/react';
+import usePost from '../hooks/post';
+import { toast } from 'sonner';
+import { FaRegFolderOpen } from 'react-icons/fa6';
+import { RiShareForwardFill } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 
 const Calculation = () => {
   const { get, isLoading, data } = useGet();
@@ -42,6 +43,15 @@ const Calculation = () => {
   const [details1, setDetails1] = useState<any[]>([]);
   const [details2, setDetails2] = useState<any[]>([]);
   const [details3, setDetails3] = useState<any[]>([]);
+  const [orderProductDto, setOrderProductDto] = useState<any>([
+    {
+      orderDetails: [],
+      width: 0,
+      height: 0,
+      howManySidesOfTheHouseAreMade: 0,
+      orderProductStatus: 'EXTERIOR_VIEW_OF_THE_HOUSE',
+    },
+  ]);
 
   const handleOpen = (value: any) => {
     getDetailCategoryDetail(value);
@@ -54,26 +64,88 @@ const Calculation = () => {
     resetAll();
   };
 
-  const handleCheckboxChange = (item: any) => {
-    const isSelected = details1.some((detail) => detail.id === item.id);
+  const handleCheckboxChange = (item: any, index: number) => {
+    setOrderProductDto((prevState: any) => {
+      return prevState.map((product: any, i: number) => {
+        if (index === i) {
+          const isSelected = product.orderDetails.some(
+            (detail: any) => detail.detailId === item.id,
+          );
+          if (isSelected) {
+            // If the item is already selected, remove it
+            return {
+              ...product,
+              orderDetails: product.orderDetails.filter(
+                (detail: any) => detail.detailId !== item.id,
+              ),
+            };
+          } else {
+            // If the item is not selected, add it
+            return {
+              ...product,
+              orderDetails: [
+                ...product.orderDetails,
+                {
+                  detailId: item.id,
+                  name: item.name,
+                  attachmentId: item.attachmentId,
+                  count: 0,
+                  number: 0,
+                  color: '',
+                },
+              ],
+            };
+          }
+        }
+        return product;
+      });
+    });
+  };
 
-    if (isSelected) {
-      setDetails1(details1.filter((detail) => detail.id !== item.id));
-      setDetails2(details2.filter((detail) => detail.detailId !== item.id));
-    } else {
-      setDetails1([
-        ...details1,
-        { id: item.id, name: item.name, attachmentId: item.attachmentId },
-      ]);
-      setDetails2([
-        ...details2,
-        { detailId: item.id, count: 0 }, // Initialize count as 0
-      ]);
-    }
+  const addDetail = (item: any, index: number) => {
+    setOrderProductDto((prevState: any) => {
+      return prevState.map((product: any, i: number) => {
+        // Assuming you want to add detail to the first product or all products
+        if (index === i) {
+          // or apply logic to determine the right index
+          return {
+            ...product,
+            orderDetails: [
+              ...product.orderDetails,
+              {
+                detailId: item.id,
+                name: item.name,
+                attachmentId: item.attachmentId,
+                count: 0,
+                number: 0,
+                color: '',
+              },
+            ],
+          };
+        }
+        return product;
+      });
+    });
+  };
+
+  const removeDetail = (id: number, index: number) => {
+    setOrderProductDto((prevOrderProductDto: any) => {
+      return prevOrderProductDto.map((product: any, i: number) => {
+        if (index === i) {
+          return {
+            ...product,
+            orderDetails: product.orderDetails.filter(
+              (_: any, state: number) => state !== id,
+            ),
+          };
+        }
+        return product;
+      });
+    });
   };
 
   const formatNumberWithSpaces = (number: number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
 
   const handleInputChange = (id: number, value: string) => {
@@ -81,8 +153,8 @@ const Calculation = () => {
       details2.map((detail) =>
         detail.detailId === id
           ? { ...detail, count: value ? +value : 0 }
-          : detail
-      )
+          : detail,
+      ),
     );
   };
   useEffect(() => {
@@ -91,20 +163,10 @@ const Calculation = () => {
         productdetail.map((item: any) => ({
           detailId: item.id,
           count: 0,
-        }))
+        })),
       );
     }
   }, [productdetail]);
-
-  const handleProductDetailChange = (id: number, value: string) => {
-    setDetails3(
-      details3.map((detail) =>
-        detail.detailId === id
-          ? { ...detail, count: value ? +value : 0 }
-          : detail
-      )
-    );
-  };
 
   const resetAll = () => {
     setReq({ width: null, tall: null });
@@ -118,8 +180,8 @@ const Calculation = () => {
     setDetails1([]);
     setDetails2([]);
     setDetails3([]);
-    
-    post("/order/calculation", {
+
+    post('/order/calculation', {
       width: 0,
       tall: 0,
       orderDetailDtos: [],
@@ -131,14 +193,14 @@ const Calculation = () => {
       toast.error("Bo'yi va enini kiriting");
     } else {
       try {
-        await post("/order/calculation", {
+        await post('/order/calculation', {
           width: +req.width,
           tall: +req.tall,
           orderDetailDtos: select ? details3 : details2,
         });
         // console.log(details2); // For debugging: see the structure of details2
       } catch (error) {
-        toast.error("Hisoblashda xatolik yuz berdi");
+        toast.error('Hisoblashda xatolik yuz berdi');
       }
     }
   };
@@ -154,9 +216,9 @@ const Calculation = () => {
         !orderData.clientFullName ||
         !orderData.location
       )
-        throw new Error("Barcha malumotlarni kiriting");
+        throw new Error('Barcha malumotlarni kiriting');
 
-      await save("/order/save", {
+      await save('/order/save', {
         width: +req.width,
         tall: +req.tall,
         address: orderData.address,
@@ -172,14 +234,14 @@ const Calculation = () => {
       resetAll();
       setToggle(false);
 
-      toast.success("Malumotlaringiz kiritildi!");
+      toast.success('Malumotlaringiz kiritildi!');
     } catch (error) {
-      toast.error("Malumotlaringizni yuklashda xatolik yuz berdi");
+      toast.error('Malumotlaringizni yuklashda xatolik yuz berdi');
     }
   };
 
   useEffect(() => {
-    get("/product");
+    get('/product');
   }, []);
 
   const getDetailCategoryDetail = async (id: number) => {
@@ -262,173 +324,235 @@ const Calculation = () => {
             {detailCategory && (
               <div className="flex justify-between items-center border-b border-[#64748B] pb-2 mb-4">
                 <h2 className="text-lg">Detal kategoriya</h2>
+                <div className="flex gap-5">
+                  <button
+                    onClick={() =>
+                      setOrderProductDto([
+                        ...orderProductDto,
+                        {
+                          orderDetails: [],
+                          width: 0,
+                          height: 0,
+                          howManySidesOfTheHouseAreMade: 0,
+                          orderProductStatus: 'EXTERIOR_VIEW_OF_THE_HOUSE',
+                        },
+                      ])
+                    }
+                  >
+                    <FaPlus />
+                  </button>
+                  <button>
+                    <FaMinus />
+                  </button>
+                </div>
               </div>
             )}
-            <div className="flex flex-col lg:flex-row gap-10 mb-4">
-              {detailCategory ? (
-                <div className="w-full lg:w-1/2 h-[260px] md:h-[350px] overflow-y-auto">
-                  {detailCategory.map((item: any) => (
-                    <Accordion
-                      key={item.id}
-                      open={open === item.id}
-                      className="mb-3"
-                    >
-                      <AccordionHeader
-                        className="border w-full border-[#64748B] rounded-xl flex gap-10 items-center p-1 sm:p-3"
-                        onClick={() => handleOpen(item.id)}
-                      >
-                        <div className="flex gap-10 items-center sm:px-10">
-                          <img
-                            className="sm:w-11 sm:h-11 w-10 h-10 bg-cover object-cover rounded-xl "
-                            src={
-                              item.attachmentId
-                                ? attechment + item.attachmentId
-                                : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                            }
-                            alt={item.name}
-                          />
-                          {/* <div className="w-full flex items-center rounded-lg mt-5 text-center py-2"> */}
-                          <h1 className="text-sm sm:text-lg">{item.name}</h1>
-                          {/* </div> */}
-                        </div>
-                      </AccordionHeader>
-                      <AccordionBody>
-                        {categorydetail ? (
-                          categorydetail.map((detail: any) => (
-                            <div
-                              key={detail.id}
-                              className="flex items-center gap-3 sm:gap-10 border border-[#64748B] rounded-lg p-0 sm:px-5 sm:py-1 mb-4 mx-3 sm:mx-10"
-                            >
-                              <Checkbox
-                                className="bg-blue-gray-300 sm:w-6 sm:h-6"
-                                checked={details1.some(
-                                  (d) => d.id === detail.id
-                                )}
-                                onChange={() => handleCheckboxChange(detail)}
-                              />
+            {/* orderProductDto start */}
+            {orderProductDto.map((item: any, index: number) => (
+              <div key={item.id}>
+                <div className="flex flex-col lg:flex-row gap-10 mb-4">
+                  {detailCategory ? (
+                    <div className="w-full lg:w-1/2 h-[260px] md:h-[350px] overflow-y-auto">
+                      {detailCategory.map((item: any) => (
+                        <Accordion
+                          key={item.id}
+                          open={open === item.id}
+                          className="mb-3"
+                        >
+                          <AccordionHeader
+                            className="border w-full border-[#64748B] rounded-xl flex gap-10 items-center p-1 sm:p-3"
+                            onClick={() => handleOpen(item.id)}
+                          >
+                            <div className="flex gap-10 items-center sm:px-10">
                               <img
-                                className="w-10 h-10 bg-cover object-cover rounded-xl"
+                                className="sm:w-11 sm:h-11 w-10 h-10 bg-cover object-cover rounded-xl "
                                 src={
-                                  detail.attachmentId
-                                    ? attechment + detail.attachmentId
-                                    : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                                  item.attachmentId
+                                    ? attechment + item.attachmentId
+                                    : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
                                 }
-                                alt={detail.name}
+                                alt={item.name}
                               />
-                              <h1 className=" text-sm sm:text-lg">{detail.name}</h1>
+                              {/* <div className="w-full flex items-center rounded-lg mt-5 text-center py-2"> */}
+                              <h1 className="text-sm sm:text-lg">
+                                {item.name}
+                              </h1>
+                              {/* </div> */}
                             </div>
-                          ))
-                        ) : (
-                          <div className="flex flex-col justify-center items-center">
-                            <h4 className="text-red-400 text-center">
-                              Detal topilmadi. Siz oldin detal qo'shishingiz
-                              kerak
-                            </h4>
-                            <Link
-                              to={"/detail"}
-                              className="flex gap-2 justify-center items-center"
-                            >
-                              <h4 className="text-gray-700">Detal qo'shish </h4>
-                              <RiShareForwardFill />
-                            </Link>
-                          </div>
-                        )}
-                      </AccordionBody>
-                    </Accordion>
-                  ))}
-                </div>
-              ) : (
-                <div className="w-full flex flex-col justify-center items-center">
-                  <h4 className="text-red-400 text-center">
-                    ❗Detal topilmadi. Siz oldin detal kategoriya qo'shishingiz
-                    kerak
-                  </h4>
-                  <Link
-                    to={"/categor-detail"}
-                    className="flex gap-2 justify-center items-center border-b border-blue-700"
-                  >
-                    <h4 className="text-blue-700">
-                      Detal kategoriya qo'shish{" "}
-                    </h4>
-                    <RiShareForwardFill />
-                  </Link>
-                </div>
-              )}
-              {detailCategory && (
-                <div className="w-full lg:w-1/2 h-[350px] overflow-y-auto flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
-                  {details1.length > 0 ? (
-                    details1.map((detail) => (
-                      <div
-                        key={detail.id}
-                        className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                          </AccordionHeader>
+                          <AccordionBody>
+                            {categorydetail ? (
+                              categorydetail.map((detail: any, i: number) => (
+                                <div
+                                  key={detail.id}
+                                  className="flex items-center justify-between gap-3 sm:gap-10 border border-[#64748B] rounded-lg p-0 sm:px-5 sm:py-1 mb-4 mx-3 sm:mx-10"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox
+                                      className="bg-blue-gray-300 sm:w-6 sm:h-6"
+                                      checked={
+                                        orderProductDto &&
+                                        Array.isArray(orderProductDto) &&
+                                        orderProductDto.some(
+                                          (
+                                            product: any,
+                                            productIndex: number,
+                                          ) =>
+                                            index === productIndex &&
+                                            product.orderDetails.some(
+                                              (d: any) =>
+                                                d.detailId === detail.id,
+                                            ),
+                                        )
+                                      }
+                                      onChange={() =>
+                                        handleCheckboxChange(detail, index)
+                                      }
+                                    />
+
+                                    <img
+                                      className="w-10 h-10 bg-cover object-cover rounded-xl"
+                                      src={
+                                        detail.attachmentId
+                                          ? attechment + detail.attachmentId
+                                          : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                                      }
+                                      alt={detail.name}
+                                    />
+
+                                    <h1 className="text-sm sm:text-lg">
+                                      {detail.name}
+                                    </h1>
+                                  </div>
+
+                                  <div className="cursor-pointer flex gap-2">
+                                    <button
+                                      onClick={() => addDetail(detail, index)}
+                                    >
+                                      <FaPlus />
+                                    </button>
+                                    <button
+                                      onClick={() => removeDetail(i, index)}
+                                    >
+                                      <FaMinus />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex flex-col justify-center items-center">
+                                <h4 className="text-red-400 text-center">
+                                  Detal topilmadi. Siz oldin detal qo'shishingiz
+                                  kerak
+                                </h4>
+                                <Link
+                                  to={'/detail'}
+                                  className="flex gap-2 justify-center items-center"
+                                >
+                                  <h4 className="text-gray-700">
+                                    Detal qo'shish
+                                  </h4>
+                                  <RiShareForwardFill />
+                                </Link>
+                              </div>
+                            )}
+                          </AccordionBody>
+                        </Accordion>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full flex flex-col justify-center items-center">
+                      <h4 className="text-red-400 text-center">
+                        ❗Detal topilmadi. Siz oldin detal kategoriya
+                        qo'shishingiz kerak
+                      </h4>
+                      <Link
+                        to={'/categor-detail'}
+                        className="flex gap-2 justify-center items-center border-b border-blue-700"
                       >
-                        <img
-                          className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
-                          src={
-                            detail.attachmentId
-                              ? attechment + detail.attachmentId
-                              : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                          }
-                          alt={detail.name}
-                        />
-                        <div className="flex-1 px-0">
-                          <h1 className="text-sm sm:text-md text-center">
-                            {detail.name}
+                        <h4 className="text-blue-700">
+                          Detal kategoriya qo'shish
+                        </h4>
+                        <RiShareForwardFill />
+                      </Link>
+                    </div>
+                  )}
+                  {detailCategory && (
+                    <div className="w-full lg:w-1/2 h-[350px] overflow-y-auto flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
+                      {item.orderDetails.length > 0 ? (
+                        item.orderDetails.map((detail: any) => (
+                          <div
+                            key={detail.id}
+                            className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                          >
+                            <img
+                              className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                              src={
+                                detail.attachmentId
+                                  ? attechment + detail.attachmentId
+                                  : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                              }
+                              alt={detail.name}
+                            />
+                            <div className="flex-1 px-0">
+                              <h1 className="text-sm sm:text-md text-center">
+                                {detail.name}
+                              </h1>
+                            </div>
+                            <input
+                              type="number"
+                              placeholder="Soni"
+                              onChange={(e) =>
+                                handleInputChange(detail.id, e.target.value)
+                              }
+                              className="rounded outline-none px-1 py-0.5 w-20"
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <div className="w-full flex flex-col justify-center items-center py-10">
+                          <h1 className="text-gray-600 font-semibold text-lg text-center">
+                            Bu qismda siz tanlagan detallar ko'rinadi.
                           </h1>
                         </div>
-                        <input
-                          type="number"
-                          placeholder="Soni"
-                          onChange={(e) =>
-                            handleInputChange(detail.id, e.target.value)
-                          }
-                          className="rounded outline-none px-1 py-0.5 w-20"
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <div
-                      className="w-full flex flex-col justify-center items-center"
-                      py-10
-                    >
-                      <h1 className="text-gray-600 font-semibold text-lg text-center">
-                        Bu qismda siz tanlagan detallar ko'rinadi.
-                      </h1>
+                      )}
                     </div>
                   )}
                 </div>
-              )}
-            </div>
-
-            <div className="flex flex-col md:flex-row md:gap-5 xl:gap-0 justify-between py-5 items-center">
-              <div className="flex flex-col sm:flex-row sm:gap-5 w-full justify-center items-center xl:justify-start">
-                <Input
-                  placeholder="Bo'yini kiriting"
-                  onChange={(e) => setReq({ ...req, tall: e.target.value })}
-                  value={req.tall ? req.tall : ""}
-                  label="Bo'yi"
-                  type="number"
-                />
-                <Input
-                  placeholder="Enini kiriting"
-                  onChange={(e) => setReq({ ...req, width: e.target.value })}
-                  value={req.width ? req.width : ""}
-                  label="Eni"
-                  type="number"
-                />
-              </div>
-              <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
-                <div className="flex">
-                  <h1 className="text-lg">
-                    {total ? formatNumberWithSpaces(total) : "0"}
-                  </h1>
-                  <h1 className="text-lg ms-2">{`so'm`}</h1>
+                <div className="flex flex-col md:flex-row md:gap-5 xl:gap-0 justify-between py-5 items-center">
+                  <div className="flex flex-col sm:flex-row sm:gap-5 w-full justify-center items-center xl:justify-start">
+                    <Input
+                      placeholder="Bo'yini kiriting"
+                      onChange={(e) => setReq({ ...req, tall: e.target.value })}
+                      value={req.tall ? req.tall : ''}
+                      label="Bo'yi"
+                      type="number"
+                    />
+                    <Input
+                      placeholder="Enini kiriting"
+                      onChange={(e) =>
+                        setReq({ ...req, width: e.target.value })
+                      }
+                      value={req.width ? req.width : ''}
+                      label="Eni"
+                      type="number"
+                    />
+                  </div>
+                  <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
+                    <div className="flex">
+                      <h1 className="text-lg">
+                        {total ? formatNumberWithSpaces(total) : '0'}
+                      </h1>
+                      <h1 className="text-lg ms-2">{`so'm`}</h1>
+                    </div>
+                  </div>
                 </div>
-                <Button onClick={handleClick} className="bg-primary">
-                  Hisoblash
-                </Button>
               </div>
-            </div>
+            ))}
+            <Button onClick={handleClick} className="bg-primary">
+              Hisoblash
+            </Button>
+            {/* orderProductDto end */}
             <div className="mb-4 flex flex-col md:flex-row sm:gap-10 pt-5">
               <div className="w-full">
                 <Input
@@ -439,7 +563,7 @@ const Calculation = () => {
                     }))
                   }
                   value={
-                    orderData.clientFullName ? orderData.clientFullName : ""
+                    orderData.clientFullName ? orderData.clientFullName : ''
                   }
                   label="Mijoz F.I.O"
                   placeholder="Mijoz tuliq ism sharfini kiriting"
@@ -456,7 +580,7 @@ const Calculation = () => {
                   value={
                     orderData.clientPhoneNumber
                       ? orderData.clientPhoneNumber
-                      : ""
+                      : ''
                   }
                   label="Mijoz telifon raqami"
                   placeholder="Mijoz telifon raqamini kiriting"
@@ -470,7 +594,7 @@ const Calculation = () => {
                       location: e.target.value,
                     }))
                   }
-                  value={orderData.location ? orderData.location : ""}
+                  value={orderData.location ? orderData.location : ''}
                   label="Mijoz lokatsiyasi"
                   placeholder="Mijoz lokatsitsiyasini kiriting"
                 />
@@ -486,7 +610,7 @@ const Calculation = () => {
                       address: e.target.value,
                     }))
                   }
-                  value={orderData.address ? orderData.address : ""}
+                  value={orderData.address ? orderData.address : ''}
                   label="Manzil"
                 />
               </div>
@@ -518,7 +642,6 @@ const Calculation = () => {
         onClose={toggleModal}
         children={
           <div>
-           
             <div>
               {isLoading ? (
                 <div className="w-full flex justify-center">
@@ -537,33 +660,32 @@ const Calculation = () => {
                   <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">
                     {productdetail.map((item: any) => (
                       <div
-                      key={item.id}
-                      className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
-                    >
-                      <img
-                        className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
-                        src={
-                          item.attachmentId
-                            ? attechment + item.attachmentId
-                            : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                        }
-                        alt={item.name}
-                      />
-                      <div className="flex-1 px-0">
-                        <h1 className="text-sm sm:text-md text-center">
-                          {item.name}
-                        </h1>
+                        key={item.id}
+                        className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                      >
+                        <img
+                          className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                          src={
+                            item.attachmentId
+                              ? attechment + item.attachmentId
+                              : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                          }
+                          alt={item.name}
+                        />
+                        <div className="flex-1 px-0">
+                          <h1 className="text-sm sm:text-md text-center">
+                            {item.name}
+                          </h1>
+                        </div>
+                        <input
+                          type="number"
+                          placeholder="Soni"
+                          onChange={(e) =>
+                            handleInputChange(item.id, e.target.value)
+                          }
+                          className="rounded outline-none px-1 py-0.5 w-20"
+                        />
                       </div>
-                      <input
-                        type="number"
-                        placeholder="Soni"
-                        onChange={(e) =>
-                          handleInputChange(item.id, e.target.value)
-                        }
-                        className="rounded outline-none px-1 py-0.5 w-20"
-                      />
-                    </div>
-                      
                     ))}
                   </div>
                 </div>
@@ -573,7 +695,7 @@ const Calculation = () => {
                     ❗Detal topilmadi. Siz oldin detal qo'shishingiz kerak
                   </h4>
                   <Link
-                    to={"/detail"}
+                    to={'/detail'}
                     className="flex gap-2 justify-center items-center border-b border-blue-700"
                   >
                     <h4 className="text-blue-700">Detal qo'shish </h4>
@@ -609,7 +731,7 @@ const Calculation = () => {
                 onClick={handleClick}
                 className="h-10 bg-primary"
               >
-                {countLoading ? "Loading..." : "Hisoblash"}
+                {countLoading ? 'Loading...' : 'Hisoblash'}
               </Button>
             </div>
             <Input
@@ -661,7 +783,7 @@ const Calculation = () => {
                 Yopish
               </Button>
               <Button disabled={saveLoading} onClick={handleSave} color="green">
-                {saveLoading ? "Yuklanyapti..." : "Saqlash"}
+                {saveLoading ? 'Yuklanyapti...' : 'Saqlash'}
               </Button>
             </div>
           </div>
