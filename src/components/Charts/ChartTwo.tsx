@@ -1,53 +1,85 @@
+import React, { useEffect, useState } from 'react';
+import useGet from '../../hooks/get';
+import ApexCharts from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import React, { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
-
-const options: ApexOptions = {
-  chart: {
-    width: '100%',
-    height: '100%',
-    type: 'pie',
-  },
-  labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-};
-
-interface ChartTwoState {
-  series: number[];
-}
 
 const ChartTwo: React.FC = () => {
-  const [state, setState] = useState<ChartTwoState>({
-    series: [25, 15, 44, 55, 41],
+  const date = new Date();
+  const [month, setMonth] = useState<number>(date.getMonth() + 1);
+  const [year, setYear] = useState<number>(date.getFullYear());
+
+  const { get, data, isLoading } = useGet();
+  
+  useEffect(() => {
+    get(`/dashboard/group/statistic?year=${year}&month=${month}`);
+  }, [year, month]);
+
+  // Prepare column chart options and series for each group
+  const getColumnChartOptions = (groupName: string): ApexOptions => ({
+    chart: {
+      type: 'bar',
+      height: 350,
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded',
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    xaxis: {
+      categories: ['Income', 'Completed Orders', 'Rejected Orders', 'Feedback', 'Employee Count'],
+    },
+    yaxis: {
+      title: {
+        text: 'Value',
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    tooltip: {
+      y: {
+        formatter: (val: number) => `${val}`,
+      },
+    },
   });
 
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-    }));
-  };
-  handleReset;
+  const getColumnChartSeries = (data: any) => [
+    {
+      name: data.groupName,
+      data: [
+        data.income || 0,
+        data.completedOrderCount || 0,
+        data.rejectedOrderCount || 0,
+        data.groupFeedback || 0,
+        data.employCount || 0,
+      ],
+    },
+  ];
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default  xl:col-span-4">
-      <div className="mb-4 justify-between gap-4 sm:flex">
-        <div>
-          <h4 className="text-xl font-semibold text-black ">
-            Profit this week
-          </h4>
-        </div>
-      </div>
-
-      <div>
-        <div id="chartTwo" className="-ml-5 -mb-9">
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type="pie"
-            width={350}
-            height={400}
+    <div className="">
+      <div className='col-span-12 w-full rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default  sm:px-7.5 xl:col-span-8'>
+      {data?.map((group: any) => (
+        <div key={group.groupId} className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">{group.groupName}</h2>
+          <ApexCharts
+            options={getColumnChartOptions(group.groupName)}
+            series={getColumnChartSeries(group)}
+            type="bar"
+            height={350}
           />
         </div>
-      </div>
+      ))}
+    </div>
     </div>
   );
 };
