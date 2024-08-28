@@ -1,14 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
 import { attechment } from '../../service/urls';
 import { FaEdit, FaUser } from 'react-icons/fa';
 
 const DropdownUser = ({ toggleModal, data, dropdownOpen, setDropdownOpen }: any) => {
-  const navigate = useNavigate();
 
   const logout = () => {
+    window.location.pathname = '/login';
     localStorage.clear();
-    navigate('/login');
   };
 
   return (

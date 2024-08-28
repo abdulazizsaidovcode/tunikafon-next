@@ -166,7 +166,7 @@ function App() {
                 />
               </Routes>
             </DefaultLayout>
-          ) : (
+          ) : role === 'ROLE_ADMIN' && (
             <EmployeeRoute>
               <Routes>
                 <Route
