@@ -219,7 +219,7 @@ export default function Groups() {
                   </td>
                 </tr>
               )}
-              {data && data.object && (
+              {data && !data.object.length && (
                 <div className='ml-5'>
                   <FaRegFolderOpen size={50}/>
                 </div>
