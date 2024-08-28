@@ -219,7 +219,7 @@ export default function Groups() {
 
             </select>
             <Input
-              label="Hodim ismi"
+              label="Guruh nomi"
               value={addData.name}
               onChange={(e) => setAddData({ ...addData, name: e.target.value })}
             />
@@ -265,7 +265,7 @@ export default function Groups() {
 
             </select>
             <Input
-              label="Hodim ismi"
+              label="Guruh nomi"
               value={editData.name}
               onChange={(e) => setEditData({ ...editData, name: e.target.value })}
             />
