@@ -14,12 +14,20 @@ const ChartOne: React.FC = () => {
   const { get, data } = useGet();
   const [year, setYear] = useState<string>('2024');
   const [isValidYear, setIsValidYear] = useState<boolean>(true);
-  const formatNumberWithSpaces = (number: number | null) => {
-    return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  };
+
   const defaultCategories = [
-    'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
-    'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr',
+    'Yanvar',
+    'Fevral',
+    'Mart',
+    'Aprel',
+    'May',
+    'Iyun',
+    'Iyul',
+    'Avgust',
+    'Sentyabr',
+    'Oktyabr',
+    'Noyabr',
+    'Dekabr',
   ];
   useEffect(() => {
     if (isValidYear && year !== '') {
@@ -45,9 +53,8 @@ const ChartOne: React.FC = () => {
     }
   }, [data]);
 
-
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    const newValue = e.target.value.replace(/[^0-9+]/g, '');
     setYear(newValue);
 
     const isYearValid = /^\d{4}$/.test(newValue);
@@ -143,7 +150,6 @@ const ChartOne: React.FC = () => {
         },
       },
       min: 0,
-      max: 100000000, 
     },
   };
 
@@ -151,10 +157,12 @@ const ChartOne: React.FC = () => {
     series: [
       {
         name: 'Foyda',
-        data: [1000,10000,10000, 30000, 50000, 70000, 90000, 110000, 130000, 150000, 170000, 190000, 210000, 230000],
+        data: [
+          1000, 10000, 10000, 30000, 50000, 70000, 90000, 110000, 130000,
+          150000, 170000, 190000, 210000, 230000,
+        ],
       },
     ],
-
   });
 
   return (
@@ -165,19 +173,19 @@ const ChartOne: React.FC = () => {
         type="text"
         placeholder="2024"
         className={`rounded ml-3 select-none py-3 p-2 w-full ${!isValidYear ? 'border-red-500' : ''}`}
-        value={year}
+        value={year.replace(/[^0-9+]/g, '')}
         onChange={handleYearChange}
       />
       {!isValidYear && (
-        <p className="text-red-500 mt-2">Iltimos, to'g'ri yil kiriting (4 xonali raqam).</p>
+        <p className="text-red-500 mt-2">
+          Iltimos, to'g'ri yil kiriting (4 xonali raqam).
+        </p>
       )}
       <div className="w-full mt-4">
         <ReactApexChart
           options={options}
           series={state.series}
-          type="area" 
-
-          
+          type="area"
           height={350}
         />
       </div>
