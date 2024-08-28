@@ -10,7 +10,7 @@ interface ChartThreeState {
   }[];
 }
 
-const ChartThree: React.FC = ({ month, year }) => {
+const ChartThree: React.FC = ({ month, year }: any) => {
   const { get, data } = useGet();
 
   const options: ApexOptions = {
@@ -44,7 +44,7 @@ const ChartThree: React.FC = ({ month, year }) => {
     },
     stroke: {
       show: true,
-      width: 10,
+      width: 1,
       colors: ['transparent'],
     },
     xaxis: {
@@ -70,27 +70,43 @@ const ChartThree: React.FC = ({ month, year }) => {
     series: [
       {
         name: 'Iconma',
-        data: (data && data.map((item: any) => item.income)) || [0],
+        data: data
+          ? data.map((item: any) => (item.income === null ? 0 : item.income))
+          : [],
       },
       {
         name: 'Rejected Income',
-        data: (data && data.map((item: any) => item.rejectedIncome)) || [0],
+        data: data ? data.map((item: any) => item.rejectedIncome) : [],
       },
     ],
   });
 
+  useEffect(() => {
+    setState({
+      series: [
+        {
+          name: 'Iconma',
+          data: data
+            ? data.map((item: any) => (item.income === null ? 0 : item.income))
+            : [],
+        },
+        {
+          name: 'Rejected Income',
+          data: data ? data.map((item: any) => item.rejectedIncome) : [0],
+        },
+      ],
+    });
+  }, [data]);
+
   return (
-    <div className="sm:px-7.5 col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default xl:col-span-5">
-      <div className="mb-2">
-        <div id="chartThree" className="mx-auto flex justify-center">
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type="bar"
-            width={700}
-            height={350}
-          />
-        </div>
+    <div className="sm:px-7.5 w-full col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default xl:col-span-5">
+      <div className="w-full">
+        <ReactApexChart
+          options={options}
+          series={state.series}
+          type="bar"
+          height={350}
+        />
       </div>
     </div>
   );

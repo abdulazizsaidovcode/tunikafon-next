@@ -17,6 +17,7 @@ const useGet = () => {
       } else {
         setDatas ? setDatas(null) : setData(null)
       }
+      return data.body
     } catch (err: any) {
       setError(err);
       if (err.response && err.response.status === 404) setDatas ? setDatas(null) : setData(null)

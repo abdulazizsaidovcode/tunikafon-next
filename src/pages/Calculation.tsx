@@ -50,7 +50,7 @@ const Calculation = () => {
   const [open, setOpen] = useState(0);
   const [gropusId, setGropusId] = useState<any>([]);
   const [groupssName, setGroupssName] = useState<any>([]);
-  const [orderDetails, setOrderDetails] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(total);
   const [orderProductStatus, setOrderProductStatus] = useState(
     'THE_GATE_IS_INSIDE_THE_ROOM',
   );
@@ -238,8 +238,7 @@ const Calculation = () => {
         orderProductStatus: 'THE_GATE_IS_INSIDE_THE_ROOM',
       },
     ]);
-
-    post('/order/calculation', orderProductDto);
+    setTotalPrice(0);
   };
 
   const handleClick = async (isClose?: boolean) => {
@@ -249,6 +248,7 @@ const Calculation = () => {
     try {
       if (!areDimensionsValid) throw new Error('Malumotlar tuliq emas');
       await post('/order/calculation', orderProductDto);
+      setTotalPrice(total);
       isClose && toggleModal();
     } catch (error) {
       toast.error('Hisoblashda xatolik yuz berdi');
@@ -315,8 +315,8 @@ const Calculation = () => {
   };
 
   const getProductDetails = async (id: number) => {
-    await getProductDetail(`product/details/${id}`);
-    const orderDetail = productdetail.map((product: any) => ({
+     const data = await getProductDetail(`product/details/${id}`);
+    const orderDetail = data.map((product: any) => ({
       detailId: product.id,
       name: product.name,
       attachmentId: product.attachmentId,
@@ -733,7 +733,7 @@ const Calculation = () => {
               <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
                 <div className="flex">
                   <h1 className="text-lg">
-                    {total ? formatNumberWithSpaces(total) : '0'}
+                    {totalPrice ? formatNumberWithSpaces(totalPrice) : '0'}
                   </h1>
                   <h1 className="text-lg ms-2">{`so'm`}</h1>
                 </div>
@@ -815,21 +815,22 @@ const Calculation = () => {
                   type="date"
                 />
               </div>
-              <div className="w-full">
+              <div className="w-full mb-2">
+                <h1 className='mb-2'>Guruh</h1>
                 <Menu
                   dismiss={{
                     itemPress: false,
                   }}
                 >
                   <MenuHandler>
-                    <div className="w-full cursor-pointer rounded flex gap-2 border overflow-y-auto border-black text-black p-2 mt-3 text-start font-normal">
+                    <div className="w-full cursor-pointer rounded flex gap-2 border overflow-y-auto border-black text-black p-2 text-start font-normal">
                       {groupssName && groupssName.length
                         ? groupssName.map((item: any) => (
                             <p className="border rounded line-clamp-1">
                               {item.name}
                             </p>
                           ))
-                        : 'Detalni tanlang'}
+                        : 'Gruhni tanlang'}
                     </div>
                   </MenuHandler>
                   <MenuList className="z-[1000000] bg-white border relative max-h-50 w-60 sm:w-96 text-black">
@@ -1032,7 +1033,7 @@ const Calculation = () => {
               </div>
             </div>
             <h1 className="text-lg">
-              {total ? formatNumberWithSpaces(total) : '0'}
+              {totalPrice ? formatNumberWithSpaces(totalPrice) : '0'} sum
             </h1>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
@@ -1045,7 +1046,7 @@ const Calculation = () => {
                 }}
                 color="green"
               >
-                {saveLoading ? 'Yuklanyapti...' : 'Saqlash'}
+                {saveLoading ? 'Yuklanyapti...' : 'Hisoblash'}
               </Button>
             </div>
           </div>
