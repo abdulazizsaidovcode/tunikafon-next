@@ -108,7 +108,7 @@ const ChartTwo: React.FC<{ month: number; year: number }> = ({
             colors: getSeries('completedOrderCount').every(
               (v: number) => v === 0.1,
             )
-              ? ['#000']
+              ? ['#d3d3d3']
               : undefined,
             tooltip: {
               enabled: !getSeries('completedOrderCount').every(
