@@ -69,16 +69,13 @@ const EditModal: React.FC<EditModalProps> = ({
     if (!formData.name) {
       toast.error('Name is required');
       return;
-    }
-    else if (!formData.attachmentId) {
+    } else if (!formData.attachmentId) {
       toast.error(' Attachment ID is required');
       return;
-    }
-    else if (!formData.price) {
+    } else if (!formData.price) {
       toast.error('Price is required');
       return;
-    }
-    else if (!formData.price) {
+    } else if (!formData.price) {
       toast.error('Price is required');
       return;
     }
@@ -146,7 +143,9 @@ const EditModal: React.FC<EditModalProps> = ({
             className="w-full rounded bg-transparent px-1 mb-3 py-2 outline-none"
             onChange={handleChange}
           >
-            <option selected disabled className=''>Detal bo'limini tanlash </option>
+            <option selected disabled className="">
+              Detal bo'limini tanlash{' '}
+            </option>
             {detailCategory &&
               detailCategory.map((item) => (
                 <option value={item.id}>{item.name}</option>
@@ -163,7 +162,9 @@ const EditModal: React.FC<EditModalProps> = ({
               >
                 <option value="METER">METER</option>
                 <option value="SM">SM</option>
-                <option value="DONA" selected>DONA</option>
+                <option value="DONA" selected>
+                  DONA
+                </option>
               </select>
             </div>
           </div>
@@ -184,7 +185,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onChange={handleChange}
             className="w-full p-2 mb-4 border rounded"
           />
-          
+
           <label className="block mb-2">Buyi</label>
           <input
             type="number"
@@ -231,7 +232,7 @@ const EditModal: React.FC<EditModalProps> = ({
               Chiqish
             </Button>
             <Button disabled={isLoading} onClick={handleSave} color="green">
-              {isLoading ? 'Loading...' : 'O\'zgartirish  '}
+              {isLoading ? 'Loading...' : "O'zgartirish  "}
             </Button>
           </div>
         </div>

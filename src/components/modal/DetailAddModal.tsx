@@ -52,7 +52,10 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
       const formData = new FormData();
       formData.append('file', file!);
 
-      const { data: attachmentData } = await axios.post(`/attachment/upload`, formData);
+      const { data: attachmentData } = await axios.post(
+        `/attachment/upload`,
+        formData,
+      );
 
       await post('/detail', {
         ...addData,
@@ -121,7 +124,9 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailCategoryId}
         >
-          <option disabled selected>Bo'lim tanlash</option>
+          <option selected>
+            Bo'lim tanlash
+          </option>
           {getIsLoading ? (
             <option disabled>Loading...</option>
           ) : data ? (
@@ -147,7 +152,9 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           }
           value={addData.detailTypeStatus}
         >
-          <option disabled selected>Turini tanlash</option>
+          <option selected>
+            Turini tanlash
+          </option>
           {detailTypeStatus.map((item: any) => (
             <option key={item.id} value={item.value}>
               {item.name}
@@ -162,7 +169,9 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           onChange={(e) => setAddData({ ...addData, measure: e.target.value })}
           value={addData.measure}
         >
-          <option disabled selected>O'lchov belgilash</option>
+          <option selected>
+            O'lchov belgilash
+          </option>
           <option value="DONA">Dona</option>
           <option value="METER">Meter</option>
           <option value="SM">Sm</option>
@@ -171,60 +180,86 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         {/* Dimension Inputs */}
         <label className="block mb-2">Eni</label>
         <input
-          type="number"
+          type="text"
           name="width"
-          onChange={(e) => setAddData({ ...addData, width: +e.target.value })}
-          value={addData.width || ""}
+          onChange={(e) =>
+            setAddData({
+              ...addData,
+              width: e.target.value.replace(/[^0-9.]/g, ''),
+            })
+          }
+          value={addData.width || ''}
           className="w-full p-2 mb-4 border rounded"
         />
 
         <label className="block mb-2">Buyi</label>
         <input
-          type="number"
+          type="text"
           name="height"
-          onChange={(e) => setAddData({ ...addData, height: +e.target.value })}
-          value={addData.height || ""}
+          onChange={(e) =>
+            setAddData({
+              ...addData,
+              height: e.target.value.replace(/[^0-9.]/g, ''),
+            })
+          }
+          value={addData.height || ''}
           className="w-full p-2 mb-4 border rounded"
         />
 
         <label className="block mb-2">Katta Diagonal</label>
         <input
-          type="number"
+          type="text"
           name="largeDiagonal"
           onChange={(e) =>
-            setAddData({ ...addData, largeDiagonal: +e.target.value })
+            setAddData({
+              ...addData,
+              largeDiagonal: e.target.value.replace(/[^0-9.]/g, ''),
+            })
           }
-          value={addData.largeDiagonal || ""}
+          value={addData.largeDiagonal || ''}
           className="w-full p-2 mb-4 border rounded"
         />
 
         <label className="block mb-2">Kichik Diagonal</label>
         <input
-          type="number"
+          type="text"
           name="smallDiagonal"
           onChange={(e) =>
-            setAddData({ ...addData, smallDiagonal: +e.target.value })
+            setAddData({
+              ...addData,
+              smallDiagonal: e.target.value.replace(/[^0-9.]/g, ''),
+            })
           }
-          value={addData.smallDiagonal || ""}
+          value={addData.smallDiagonal || ''}
           className="w-full p-2 mb-4 border rounded"
         />
 
-        <label className="block mb-2">Tetal Eni</label>
+        <label className="block mb-2">Detal Eni</label>
         <input
-          type="number"
+          type="text"
           name="detailWidth"
           step="any"
-          onChange={(e) => setAddData({ ...addData, detailWidth: +e.target.value })}
-          value={addData.detailWidth || ""}
+          onChange={(e) =>
+            setAddData({
+              ...addData,
+              detailWidth: e.target.value.replace(/[^0-9.]/g, ''),
+            })
+          }
+          value={addData.detailWidth || ''}
           className="w-full p-2 mb-4 border rounded"
         />
 
         <label className="block mb-2">Narxi</label>
         <input
-          type="number"
+          type="text"
           name="price"
-          onChange={(e) => setAddData({ ...addData, price: +e.target.value })}
-          value={addData.price || ""}
+          onChange={(e) =>
+            setAddData({
+              ...addData,
+              price: e.target.value.replace(/[^0-9.]/g, ''),
+            })
+          }
+          value={addData.price || ''}
           className="w-full p-2 mb-4 border rounded"
         />
 
@@ -233,7 +268,9 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         <input
           type="text"
           name="description"
-          onChange={(e) => setAddData({ ...addData, description: e.target.value })}
+          onChange={(e) =>
+            setAddData({ ...addData, description: e.target.value })
+          }
           value={addData.description}
           className="w-full p-2 mb-4 border rounded"
         />
@@ -244,12 +281,14 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
           type="file"
           onChange={handleImageChange}
           className="w-full p-2 mb-4 border rounded"
-          accept='.png, .jpg'
+          accept=".png, .jpg"
         />
 
         {/* Buttons */}
         <div className="flex justify-end gap-5">
-          <Button color="red" onClick={onClose}>Chiqish</Button>
+          <Button color="red" onClick={onClose}>
+            Chiqish
+          </Button>
           <Button
             disabled={isLoading || !isFormValid}
             onClick={handleClick}
