@@ -82,7 +82,7 @@ const FilterForm: React.FC = () => {
                         className="w-full shadow-2 bg-black md:w-auto mt-9"
                         style={{ opacity: 1, visibility: 'visible', display: 'inline-block' }}
                     >
-                        Reset
+                        Tozalash
                     </Button>
                 </div>
             </div>

@@ -56,6 +56,7 @@ export default function TableOrderAll() {
         if (employeeName || ORDER_STATUS || address || date) {
           fetchFilteredData({ employeeName, ORDER_STATUS, address, date, page }, setData);
           closeModalStatus();
+          toast.success('Bekor qilindi')
         } else {
           closeModalStatus();
           get('/order/all', page, setData);
@@ -68,7 +69,7 @@ export default function TableOrderAll() {
       });
   };
 
-  const handleDeletePayment = async (id: string) => {    
+  const handleDeletePayment = async (id: string) => {
     try {
       await remove(`/order-payment/`, id);
       toast.success('To\'lov uchirildi');
@@ -77,28 +78,31 @@ export default function TableOrderAll() {
       toast.error('Error deleting payment.');
     }
   };
-  const handleFeedbackSubmit = () => {
+  const handleFeedbackSubmit = async () => {
     const feedbackData = {
       orderId: orderID,
       count: rating,
       message: feedbackMessage,
     };
+    try {
+      await post('/feedback', feedbackData);
+      await put(`/order/update-status/${orderID}?status=COMPLETED`);
+      await get('/order/all', page, setData); // Adjust the endpoint and parameters as needed
 
-    post('/feedback', feedbackData)
-      .then(() => {
-        toast.success('Baholash kiritildi');
-        closeModalFeedback();
-      })
-      .catch((err) => {
-        toast.error('Siz 1 marta Baholay olasiz',);
-      });
+      toast.success('Baholash kiritildi va buyurtma tugatildi');
+      closeModalFeedback();
+    } catch (err) {
+      toast.error('Xato yuz berdi. Iltimos, qaytadan urinib ko\'ring.');
+    }
   };
+
+
   const handlePaymentSubmit = async () => {
     try {
       await postPay('/order-payment', {
-        orderId: orderIDPay,           
-        amount: paymentAmount, 
-        date: paymentDate,     
+        orderId: orderIDPay,
+        amount: paymentAmount,
+        date: paymentDate,
       });
       getPayment(`/order-payment/order/one/${orderIDPay}`);
       setPaymentAmount('');
@@ -141,7 +145,7 @@ export default function TableOrderAll() {
     if (name === 'REJECTED') return 'Bekor qilingan';
     else if (name === 'COMPLETED') return 'Tasdiqlangan';
     else if (name === 'WAIT') return 'Kutilmoqda';
-  }; 
+  };
 
   const statusColor = (status: any) => {
     if (status === 'WAIT') return 'bg-yellow-300';
@@ -300,7 +304,7 @@ export default function TableOrderAll() {
             <h2 className="text-lg font-semibold">Buyurtma ma'lumotlari</h2>
             {/* <p className='flex justify-between'>Employee Name: <span>{dateOne.employeeName || "not included"}</span></p> */}
             <p className="flex justify-between">
-              Mijoz ismi: <span>{dateOne.clientFullName}</span>
+              Mijoz ismi: <span>{dateOne.clientFullName || "-"}</span>
             </p>
             <p className="flex justify-between">
               Mijoz telefon raqami: <span>{dateOne.clientPhoneNumber}</span>
@@ -309,17 +313,13 @@ export default function TableOrderAll() {
               Mijoz lokatsiyasi: <span>{dateOne.location}</span>
             </p>
             <p className="flex justify-between">
-              Eni: <span>{dateOne.width || "Ma'lumot kiritilmagan!"}</span>
+              Guruh nomi: <span>{dateOne.groupNames || "-"}</span>
             </p>
             <p className="flex justify-between">
-              Bo'yi: <span>{dateOne.tall || "Ma'lumot kiritilmagan!"}</span>
+              Narxi: <span>{dateOne.price || "0"}</span>
             </p>
             <p className="flex justify-between">
-              Narxi: <span>{dateOne.price || "Ma'lumot kiritilmagan!"}</span>
-            </p>
-            <p className="flex justify-between">
-              Buyurtma Holati:{' '}
-              <span>{dateOne.orderStatus || "Ma'lumot kiritilmagan!"}</span>
+              Buyurtma Holati:<span>{dateOne.orderStatus || "-"}</span>
             </p>
             <p className="flex justify-between">
               Manzil: <span>{dateOne.address || "Ma'lumot kiritilmagan!"}</span>
@@ -327,50 +327,62 @@ export default function TableOrderAll() {
             <p className="flex justify-between">
               Sana: <span>{dateOne.date || "Ma'lumot kiritilmagan!"}</span>
             </p>
-            <div className="">
-              <div className="flex items-center gap-2">
-                <h3 className="text-md font-medium">Buyurtma Detallari:</h3>
-                <FaArrowDownLong />
-              </div>
-              <div className="flex flex-col text-lg gap-3 mt-3">
-                {dateOne.orderDetailsRes &&
-                  dateOne.orderDetailsRes.length > 0 ? (
-                  dateOne.orderDetailsRes.map((detail: any, index: number) =>
-                    detail ? (
-                      <div
-                        key={index}
-                        className="p-4 ml-3 flex items-start gap-3 border rounded"
-                      >
-                        <div>
-                          <img
-                            src={attechment + detail.detailAttachmentId}
-                            alt={detail.detailName}
-                            className="w-20 h-20 rounded-full object-cover"
-                          />
-                        </div>
-                        <div className="w-[85%] flex flex-col gap-2 justify-start">
-                          <p className="flex justify-between border-b">
-                            Detal nomi:{' '}
-                            <span>
-                              {detail.detailName || "Ma'lumot kiritilmagan !"}
-                            </span>
-                          </p>
-                          <p className="flex justify-between border-b">
-                            Miqdori: <span>{detail.amount}</span>
-                          </p>
-                          {detail.residual && (
-                            <p>Qolgan atxod: {detail.residual}</p>
-                          )}
-                        </div>
-                      </div>
-                    ) : null,
-                  )
-                ) : (
-                  <p className="pl-4 flex items-center gap-2 text-blue-gray-300">
-                    Detal ma'lumotlari topilmadi!!
-                  </p>
-                )}
-              </div>
+            <h1 className="text-xl flex items-center gap-2 font-bold">Zakazlar:
+              <FaArrowDownLong />
+            </h1>
+            <div className="pl-3">
+              {dateOne.orderProductDto && dateOne.orderProductDto.map((item: any) => (
+                <div key={item.id} className="p-4 border rounded mb-4">
+                  <p className="flex justify-between">Eni: <span>{item.width}</span></p>
+                  <p className="flex justify-between">Buyi: <span>{item.height}</span></p>
+                  {item.orderProductStatus !== "THE_GATE_IS_INSIDE_THE_ROOM" && (
+                    <p className="flex justify-between">Sides of House Made: <span>{item.howManySidesOfTheHouseAreMade}</span></p>
+                  )}
+                  <p className="flex justify-between">Holat: <span>{item.orderProductStatus}</span></p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-md font-medium">Buyurtma Detallari:</h3>
+                    <FaArrowDownLong />
+                  </div>
+                  <div className="flex flex-col text-lg gap-3 mt-3">
+                    {item.orderDetailsRes && item.orderDetailsRes.length > 0 ? (
+                      item.orderDetailsRes.map((detail: any, index: number) => (
+                        detail ? (
+                          <div
+                            key={index}
+                            className="p-4 ml-3 flex items-start gap-3 border rounded"
+                          >
+                            <div>
+                              <img
+                                src={`${attechment}${detail.detailAttachmentId}`}
+                                alt={detail.detailName}
+                                className="w-20 h-20 rounded-full object-cover"
+                              />
+                            </div>
+                            <div className="w-[85%] flex flex-col gap-2 justify-start">
+                              <p className="flex justify-between border-b">
+                                Detal nomi <span>{detail.detailName || "-"}</span>
+                              </p>
+                              <p className="flex justify-between border-b">
+                                Miqdori: <span>{detail.amount || '-'}</span>
+                              </p>
+                              {detail.residual && (
+                                <p>Qolgan atxod: {detail.residual || "-"}</p>
+                              )}
+                            </div>
+                          </div>
+                        ) : null
+                      ))
+                    ) : (
+                      <p className="pl-4 flex items-center gap-2 text-blue-gray-300">
+                        Detal ma'lumotlari topilmadi!!
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+
+
             </div>
           </div>
         )}
@@ -416,7 +428,7 @@ export default function TableOrderAll() {
             </Button>
             <Button
               color="green"
-              disabled={!feedbackMessage || rating === 0 || loadPost}
+              disabled={rating === 0 || loadPost}
               onClick={handleFeedbackSubmit}
             >
               Submit
@@ -453,8 +465,12 @@ export default function TableOrderAll() {
               </button>
             </div>
             <div className='flex justify-between border'>
-              <ul className="w-full">
-                <li className="px-6 py-3 font-semibold">Jami to'langan summa</li>
+              <ul className=" w-full">
+                <li className="px-6 py-3 font-semibold">Umumiy summa</li>
+                <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.totalAmount)}</li>
+              </ul>
+              <ul className="w-full border-l">
+                <li className="px-6 py-3 font-semibold"> To'langan summa</li>
                 <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.amountPaid)}</li>
               </ul>
               <ul className="border-l w-full">
