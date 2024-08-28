@@ -1,4 +1,4 @@
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaRegFolderOpen, FaStar } from "react-icons/fa";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
 import useGet from "../../hooks/get";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { toast } from "sonner";
 import DeleteModal from "../../components/modal/deleteModal";
 import useDelete from "../../hooks/delete";
-import { Button } from "@material-tailwind/react";
+import { Button, Rating } from "@material-tailwind/react";
 // import AddModal from "../../components/modal/add-modal";
 import GlobalModal from "../../components/modal";
 import usePost from "../../hooks/post";
@@ -50,6 +50,11 @@ export default function Groups() {
     name: '',
     employCount: 0
   });
+  const [ratingModal, setRatingModal] = useState(false);
+  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+  const { get: getStars, data: dataStars, isLoading: ratingIsLoading } = useGet();
+
+  const ratingToggleModal = () => setRatingModal(!ratingModal);
 
   const { put, isLoading: editIsLoading } = usePut();
 
@@ -62,6 +67,16 @@ export default function Groups() {
   });
 
   const editToggleModal = () => setEditModal(!editModal);
+  const handleRatingClick = async (groupId: number) => {
+    try {
+      setSelectedGroupId(groupId);
+      await getStars(`/feedback/${groupId}`);
+      ratingToggleModal();
+    } catch (error) {
+      console.error("Error fetching ratings:", error);
+      toast.error("Failed to fetch ratings");
+    }
+  };
 
   const handleEditClick = async () => {
     try {
@@ -137,6 +152,7 @@ export default function Groups() {
                 <th scope="col" className="px-6 min-w-[200px] py-3">Hodim(Sardor) ismi</th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">Guruh Nomi</th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">Ishchilar soni</th>
+                <th scope="col" className="px-6 min-w-[200px] py-3">Baholarni kurish</th>
                 <th colSpan={2} scope="col" className="px-6 py-3">Qushimcha</th>
               </tr>
             </thead>
@@ -148,6 +164,11 @@ export default function Groups() {
                     <td className="px-6 py-3">{item.userName}</td>
                     <td className="px-6 py-3">{item.name}</td>
                     <td className="px-6 py-3">{item.userId}</td>
+                    <td className="px-6 py-3">
+                      <button onClick={() => handleRatingClick(item.id)}>
+                        <FaStar />
+                      </button>
+                    </td>
                     <td className="px-6 py-3">
                       <button
                         onClick={() => {
@@ -194,7 +215,6 @@ export default function Groups() {
         isLoading={deleteIsLoading}
         onConfirm={handleDelete}
       />
-
       <GlobalModal
         isOpen={addModal}
         onClose={addToggleModal}
@@ -240,7 +260,6 @@ export default function Groups() {
           </div>
         </div>
       </GlobalModal>
-
       <GlobalModal
         isOpen={editModal}
         onClose={editToggleModal}
@@ -286,6 +305,38 @@ export default function Groups() {
           </div>
         </div>
       </GlobalModal>
+      <GlobalModal
+        isOpen={ratingModal}
+        onClose={ratingToggleModal}
+      >
+        <div className="lg:min-w-[600px] min-w-[300px] ">
+          <h2 className="text-lg font-semibold mb-4">Group Ratings</h2>
+          {ratingIsLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="flex flex-col gap-3"> 
+              {dataStars && dataStars.length ? (
+                dataStars.map((rating: any, index: number) => (
+                  <div key={index} className=" border px-3 py-1 flex flex-col gap-3 mb-3">
+                    <h1 className="font-semibold">{rating.orderDate}</h1>
+                    <p className="mr-3 flex justify-between ">Izoh: <span>{rating.message || '-'}</span></p>
+                    <p className="mr-3 flex justify-between ">Baho <span><Rating value={rating.count} readonly/></span></p>
+
+                  </div>
+                ))
+              ) : (
+                <FaRegFolderOpen size={50}/>
+              )}
+            </div>
+          )}
+          <div className="mt-5 flex justify-end">
+            <Button onClick={ratingToggleModal} className="bg-graydark">
+              Close
+            </Button>
+          </div>
+        </div>
+      </GlobalModal>
+
     </div>
   );
 }
