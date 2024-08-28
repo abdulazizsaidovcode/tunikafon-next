@@ -2,6 +2,7 @@ import { ApexOptions } from 'apexcharts';
 import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import useGet from '../../hooks/get';
+import { FaRegFolderOpen } from 'react-icons/fa6';
 
 interface ChartThreeState {
   series: {
@@ -99,16 +100,24 @@ const ChartThree: React.FC = ({ month, year }: any) => {
   }, [data]);
 
   return (
-    <div className="sm:px-7.5 w-full col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default xl:col-span-5">
-      <div className="w-full">
-        <ReactApexChart
-          options={options}
-          series={state.series}
-          type="bar"
-          height={350}
-        />
-      </div>
-    </div>
+    <>
+      {data ? (
+        <div className="sm:px-7.5 w-full col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default xl:col-span-5">
+          <div className="w-full">
+            <ReactApexChart
+              options={options}
+              series={state.series}
+              type="bar"
+              height={350}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="w-full flex flex-wrap gap-10 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default sm:px-7.5 my-5 xl:col-span-8">
+          <FaRegFolderOpen size={50} />
+        </div>
+      )}
+    </>
   );
 };
 

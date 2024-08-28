@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import useGet from '../../hooks/get';
 import ApexCharts from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
+import { FaRegFolderOpen } from 'react-icons/fa6';
 
 interface GroupData {
   groupId: number;
@@ -79,72 +80,82 @@ const ChartTwo: React.FC<{ month: number; year: number }> = ({
   };
 
   return (
-    <div className="w-full flex flex-wrap justify-center gap-10 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default sm:px-7.5 xl:col-span-8">
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Bildirilgan fikrlar</h2>
-        <ApexCharts
-          options={{
-            ...chartOptions,
-            colors: getSeries('groupFeedback').every((v: number) => v === 0.1)
-              ? ['#d3d3d3']
-              : undefined,
-            tooltip: {
-              enabled: !getSeries('groupFeedback').every(
-                (v: number) => v === 0.1,
-              ),
-            },
-          }}
-          series={getSeries('groupFeedback')}
-          type="pie"
-          height={350}
-          width={400}
-        />
-      </div>
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Bajarildi</h2>
-        <ApexCharts
-          options={{
-            ...chartOptions,
-            colors: getSeries('completedOrderCount').every(
-              (v: number) => v === 0.1,
-            )
-              ? ['#d3d3d3']
-              : undefined,
-            tooltip: {
-              enabled: !getSeries('completedOrderCount').every(
-                (v: number) => v === 0.1,
-              ),
-            },
-          }}
-          series={getSeries('completedOrderCount')}
-          type="pie"
-          height={350}
-          width={400}
-        />
-      </div>
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Rad etilgan</h2>
-        <ApexCharts
-          options={{
-            ...chartOptions,
-            colors: getSeries('rejectedOrderCount').every(
-              (v: number) => v === 0.1,
-            )
-              ? ['#d3d3d3']
-              : undefined,
-            tooltip: {
-              enabled: !getSeries('rejectedOrderCount').every(
-                (v: number) => v === 0.1,
-              ),
-            },
-          }}
-          series={getSeries('rejectedOrderCount')}
-          type="pie"
-          height={350}
-          width={400}
-        />
-      </div>
-    </div>
+    <>
+      {data ? (
+        <div className="w-full flex flex-wrap justify-center gap-10 rounded-sm border border-stroke bg-white px-5 pt-7.5 my-5 pb-5 shadow-default sm:px-7.5 xl:col-span-8">
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Bildirilgan fikrlar</h2>
+            <ApexCharts
+              options={{
+                ...chartOptions,
+                colors: getSeries('groupFeedback').every(
+                  (v: number) => v === 0.1,
+                )
+                  ? ['#d3d3d3']
+                  : undefined,
+                tooltip: {
+                  enabled: !getSeries('groupFeedback').every(
+                    (v: number) => v === 0.1,
+                  ),
+                },
+              }}
+              series={getSeries('groupFeedback')}
+              type="pie"
+              height={350}
+              width={400}
+            />
+          </div>
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Bajarildi</h2>
+            <ApexCharts
+              options={{
+                ...chartOptions,
+                colors: getSeries('completedOrderCount').every(
+                  (v: number) => v === 0.1,
+                )
+                  ? ['#d3d3d3']
+                  : undefined,
+                tooltip: {
+                  enabled: !getSeries('completedOrderCount').every(
+                    (v: number) => v === 0.1,
+                  ),
+                },
+              }}
+              series={getSeries('completedOrderCount')}
+              type="pie"
+              height={350}
+              width={400}
+            />
+          </div>
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Rad etilgan</h2>
+            <ApexCharts
+              options={{
+                ...chartOptions,
+                colors: getSeries('rejectedOrderCount').every(
+                  (v: number) => v === 0.1,
+                )
+                  ? ['#d3d3d3']
+                  : undefined,
+                tooltip: {
+                  enabled: !getSeries('rejectedOrderCount').every(
+                    (v: number) => v === 0.1,
+                  ),
+                },
+              }}
+              series={getSeries('rejectedOrderCount')}
+              type="pie"
+              height={350}
+              width={400}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="w-full flex flex-wrap  gap-10 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default sm:px-7.5 my-5 xl:col-span-8">
+          <FaRegFolderOpen size={50} />
+        </div>
+      )}
+    </>
   );
 };
 

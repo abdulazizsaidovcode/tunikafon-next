@@ -95,18 +95,19 @@ const Employees = () => {
         throw new Error('Raqam mos kelmadi');
       }
 
-      if (!file) {
-        throw new Error('Rasm quyish shart');
+      let attachmentId = 0;
+
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const { data } = await axios.post(`/attachment/upload`, formData);
+        attachmentId = data.data.body;
       }
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const { data } = await axios.post('/attachment/upload', formData);
 
       await post('/auth/register', {
         ...all,
-        attachmentId: data ? data.body : 0,
+        attachmentId,
       });
 
       toast.success("Mufaqiyatli qo'shildi");
