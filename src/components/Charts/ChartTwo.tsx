@@ -106,7 +106,7 @@ const ChartTwo: React.FC<{ month: number; year: number }> = ({
             />
           </div>
           <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Bajarildi</h2>
+            <h2 className="text-xl font-semibold mb-4">Tugatilgan zakaslar</h2>
             <ApexCharts
               options={{
                 ...chartOptions,
