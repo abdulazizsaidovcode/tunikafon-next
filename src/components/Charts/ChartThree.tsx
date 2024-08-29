@@ -104,6 +104,7 @@ const ChartThree: React.FC = ({ month, year }: any) => {
       {data ? (
         <div className="sm:px-7.5 w-full col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default xl:col-span-5">
           <div className="w-full">
+            <h1 className='font-semibold'>Guruhlar tomonidan olib kelingan foyda va Yuqotilgan summalar</h1>
             <ReactApexChart
               options={options}
               series={state.series}

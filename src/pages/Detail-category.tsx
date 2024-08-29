@@ -65,7 +65,7 @@ const DetailCategory = () => {
       setName('');
       setVal(''); // Edit modal uchun input qiymatini tozalash
       setFile(null);
-      
+
       toast.success("Muvaffaqiyatli qo'shildi");
     } catch (error: any) {
       toast.error(error.message);
@@ -74,7 +74,7 @@ const DetailCategory = () => {
 
   const validateInput = (value: string) => {
     const invalidChars = /[<>"?><|\/*]/;
-    if (!value.trim() || invalidChars.test(value)) {
+    if (!value.trim() || invalidChars.test(value) || !file) {
       setIsValid(false);
     } else {
       setIsValid(true);
@@ -236,7 +236,7 @@ const DetailCategory = () => {
             </Button>
             <Button
               color="green"
-              disabled={putIsLoading || !isValid}
+              disabled={putIsLoading || !name.trim()}
               onClick={handleEdit}
             >
               {putIsLoading ? 'Kuting...' : "O'zgartirish"}
