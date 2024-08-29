@@ -14,8 +14,7 @@ import '../../css/style.css';
 import ReactPaginate from 'react-paginate';
 import DetailAddModal from '../../components/modal/DetailAddModal';
 import { Button } from '@material-tailwind/react';
-import { CiImageOn } from "react-icons/ci";
-
+import { CiImageOn } from 'react-icons/ci';
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
@@ -44,7 +43,10 @@ const Detail = () => {
     }
   };
 
+  const [currentPage, setCurrentPage] = useState(0); // Store the current page number
+
   const handlePageClick = (page: any) => {
+    setCurrentPage(page.selected); // Update the current page number
     get('/detail', page.selected);
   };
 
@@ -85,7 +87,7 @@ const Detail = () => {
       item.name
         .trimStart()
         .toLowerCase()
-        .includes(debouncedQuery.trimStart().toLowerCase())
+        .includes(debouncedQuery.trimStart().toLowerCase()),
     )
     .sort((a: any, b: any) => {
       const aName = a.name.trimStart().toLowerCase();
@@ -101,7 +103,7 @@ const Detail = () => {
     });
 
   return (
-    <div className='select-none'>
+    <div className="select-none">
       <Breadcrumb pageName="Detallar" />
 
       <div className="w-full flex justify-between items-center">
@@ -118,7 +120,6 @@ const Detail = () => {
           value={searchQuery}
           onChange={handleSearch}
         />
-
       </div>
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default ">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
@@ -175,27 +176,32 @@ const Detail = () => {
                   >
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                      {i + 1}
+                      {i + 1 + currentPage * 10}{' '}
+                      {/* Adjust this multiplier if items per page differ */}
                     </th>
                     <td className="px-6 py-4">
-                      {<img
-                        className="w-15 h-15 rounded-full object-cover"
-                        src={`${attechment}${item.attachmentId}`}
-                        alt=""
-                      /> || <CiImageOn />}
+                      {(
+                        <img
+                          className="w-15 h-15 rounded-full object-cover"
+                          src={`${attechment}${item.attachmentId}`}
+                          alt=""
+                        />
+                      ) || <CiImageOn />}
                     </td>
                     <td className="px-6 py-4">{item.name}</td>
                     <td className="px-6 py-4">{item.width || '-'}</td>
                     <td className="px-6 py-4">{item.height || '-'}</td>
-                    <td className="px-6 py-4">{item.detailTypeStatus || '-'}</td>
+                    <td className="px-6 py-4">
+                      {item.detailTypeStatus || '-'}
+                    </td>
                     <td className="px-6 py-4">{item.largeDiagonal || '-'}</td>
                     <td className="px-6 py-4">{item.smallDiagonal || '-'}</td>
                     <td className="px-6 py-4">{item.description || '-'}</td>
-                    <td className="px-6 py-4">{item.price || "-"}</td>
+                    <td className="px-6 py-4">{item.price || '-'}</td>
                     <td className="px-6 py-4">{item.detailWidth || '-'}</td>
-                    <td className="px-6 py-4">{item.measure || "-"}</td>
+                    <td className="px-6 py-4">{item.measure || '-'}</td>
                     <td className="px-6">
                       <button onClick={() => openEditModal(item)}>
                         <FaRegEdit size={25} className="text-green-500" />

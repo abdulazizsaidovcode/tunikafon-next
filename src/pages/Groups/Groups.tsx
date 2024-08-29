@@ -84,7 +84,7 @@ export default function Groups() {
   const handleEditClick = async () => {
     try {
       await put('/group', editId, editData);
-      toast.success('Successfully updated');
+      toast.success('muofaqiyatli uzgartirildi');
       setEditData({ userId: '', name: '', employCount: 0 });
       editToggleModal();
       get('/group/all/list');
@@ -104,31 +104,31 @@ export default function Groups() {
     try {
       if (deleteId !== null) {
         await remove(`/group/`, deleteId);
-        toast.success('Successfully deleted');
+        toast.success('Uchirildi');
         deleteToggleModal();
         get('/group/all/list');
       }
     } catch (error) {
-      toast.error('Failed to delete');
+      toast.error('Uchirishda xatolik yuz berdi!');
     }
   };
 
   const handleAddClick = async () => {
     try {
       await post('/group', addData);
-      toast.success('Successfully created');
+      toast.success('Guruh kiritildi ');
       setAddData({ userId: '', name: '', employCount: 0 });
       addToggleModal();
+      getUser('/user/employees/group-not');
       get('/group/all/list');
     } catch (error) {
-      console.error('Error creating detail:', error);
+      console.error('Guruh qushishda xatolik bor');
       toast.error('');
     }
   };
 
   useEffect(() => {
     get('/group/all/list');
-    getUser('/user/employees/group-not');
   }, []);
 
   return (
@@ -151,7 +151,7 @@ export default function Groups() {
                   #
                 </th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">
-                  Hodim(Sardor) ismi
+                  Hodim ismi (Sardor)
                 </th>
                 <th scope="col" className="px-6 min-w-[200px] py-3">
                   Guruh Nomi
@@ -174,7 +174,7 @@ export default function Groups() {
                     <td className="px-6 py-3">{i + 1}</td>
                     <td className="px-6 py-3">{item.userName}</td>
                     <td className="px-6 py-3">{item.name}</td>
-                    <td className="px-6 py-3">{item.userId}</td>
+                    <td className="px-6 py-3">{item.employCount}</td>
                     <td className="px-6 py-3">
                       <button onClick={() => handleRatingClick(item.id)}>
                         <FaStar />
