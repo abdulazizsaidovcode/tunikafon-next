@@ -315,7 +315,7 @@ const Calculation = () => {
   };
 
   const getProductDetails = async (id: number) => {
-     const data = await getProductDetail(`product/details/${id}`);
+    const data = await getProductDetail(`product/details/${id}`);
     const orderDetail = data.map((product: any) => ({
       detailId: product.id,
       name: product.name,
@@ -698,7 +698,7 @@ const Calculation = () => {
                       type="number"
                     />
                     {orderProductDto[index]?.orderProductStatus ===
-                    'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                      'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
                       <Input
                         placeholder="Uyning tomonlari"
                         onChange={(e: any) =>
@@ -826,10 +826,10 @@ const Calculation = () => {
                     <div className="w-full cursor-pointer rounded flex gap-2 border overflow-y-auto border-black text-black p-2 text-start font-normal">
                       {groupssName && groupssName.length
                         ? groupssName.map((item: any) => (
-                            <p className="border rounded line-clamp-1">
-                              {item.name}
-                            </p>
-                          ))
+                          <p className="border rounded line-clamp-1">
+                            {item.name}
+                          </p>
+                        ))
                         : 'Gruhni tanlang'}
                     </div>
                   </MenuHandler>
@@ -920,12 +920,12 @@ const Calculation = () => {
                   >
                     <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
                       Uyning tashqi ko'rinishi
-                    </Option>
+                    </Option>  
                     <Option className="my-1" value="INTERIOR_VIEW_OF_THE_HOUSE">
                       Uyning ichki ko'rinishi
                     </Option>
                     <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
-                      Darvoza xona
+                      Darvoza xona 
                     </Option>
                   </Select>
                   <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">

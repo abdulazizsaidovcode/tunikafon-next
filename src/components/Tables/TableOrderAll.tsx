@@ -145,12 +145,16 @@ export default function TableOrderAll() {
     if (name === 'REJECTED') return 'Bekor qilingan';
     else if (name === 'COMPLETED') return 'Tasdiqlangan';
     else if (name === 'WAIT') return 'Kutilmoqda';
+    else if (name === 'DETAILS_BEING_DELIVERED') return 'Detallar oborilmoqda';
+    else if (name === 'IN_PROGRESS') return 'Ish jarayonida';
+    else if (name === 'CONFIRMED') return 'Tasdiqlangan';
   };
 
   const statusColor = (status: any) => {
     if (status === 'WAIT') return 'bg-yellow-300';
     else if (status === 'REJECTED') return 'bg-red-500';
     else if (status === 'COMPLETED') return 'bg-green-500';
+    else if (status === 'DETAILS_BEING_DELIVERED' || status === "IN_PROGRESS" || status === "CONFIRMED" )  return 'bg-blue-500';
   };
 
   return (
@@ -250,6 +254,9 @@ export default function TableOrderAll() {
                           }}
                         >
                           <option selected={item.orderStatus == "WAIT"} disabled>Kutilmoqda</option>
+                          <option selected={item.orderStatus == "CONFIRMED"} value="CONFIRMED">Tasdiqlangan</option>
+                          <option selected={item.orderStatus == "DETAILS_BEING_DELIVERED"} value="DETAILS_BEING_DELIVERED">Detallar oborilmoqda</option>
+                          <option selected={item.orderStatus == "IN_PROGRESS"} value="IN_PROGRESS">Ish jarayonida</option>
                           <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">Tugatilgan</option>
                           <option selected={item.orderStatus == "REJECTED"} value="REJECTED">Bekor qilingan</option>
                         </select>

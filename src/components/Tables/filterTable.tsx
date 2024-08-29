@@ -74,6 +74,9 @@ const FilterForm: React.FC = () => {
                         <option value="COMPLETED">Tugallangan</option>
                         <option value="REJECTED">Bekor qilingan</option>
                         <option value="WAIT">Kutilayotgan</option>
+                        <option value="CONFIRMED">Tasdiqlangan</option>
+                        <option value="IN_PROGRESS">Ish jarayonida</option>
+                        <option value="DETAILS_BEING_DELIVERED">Detallar oborilmoqda</option>
                     </select>
                 </div>
                 <div className="w-full mb-5">
