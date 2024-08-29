@@ -356,7 +356,7 @@ export default function TableOrderAll() {
                         detail ? (
                           <div
                             key={index}
-                            className="p-4 ml-3 flex items-start gap-3 border rounded"
+                            className="p-4 ml-3 flex flex-col lg:flex-row items-start gap-3 border rounded"
                           >
                             <div>
                               <img
@@ -379,7 +379,7 @@ export default function TableOrderAll() {
                                 Detal kvadarati: <span>{detail.detailKv || '-'}</span>
                               </p>
                               {detail.residual && (
-                                <p>Qolgan atxod: {detail.residual || "-"}</p>
+                                <p className='hidden lg:block'>Qolgan atxod: {detail.residual || "-"}</p>
                               )}
                             </div>
                           </div>
@@ -454,7 +454,7 @@ export default function TableOrderAll() {
           <div className="lg:w-[600px] w-[300px] flex flex-col gap-2 text-xl md:w-[500px]">
             <h2 className="text-lg font-semibold">To'lov ma'lumotlari</h2>
 
-            <div className="flex h-10 gap-2 mb-4">
+            <div className="flex flex-col lg:flex-row  h-10 gap-2 mb-4">
               <input
                 type="number"
                 placeholder="To'lov miqdori"
@@ -472,12 +472,12 @@ export default function TableOrderAll() {
               <button
                 onClick={handlePaymentSubmit}
                 disabled={isSubmitDisabled || payload}
-                className="bg-blue-500 w-full text-sm text-white  rounded hover:bg-blue-600"
+                className="bg-blue-500 w-full py-2 text-sm text-white  rounded hover:bg-blue-600"
               >
                 Qushish
               </button>
             </div>
-            <div className='flex justify-between border'>
+            <div className='flex flex-col lg:mt-0 mt-22 lg:flex-row justify-between border'>
               <ul className=" w-full">
                 <li className="px-6 py-3 font-semibold">Umumiy summa</li>
                 <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.totalAmount)}</li>
