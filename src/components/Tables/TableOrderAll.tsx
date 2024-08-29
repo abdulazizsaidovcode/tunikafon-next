@@ -12,7 +12,7 @@ import FilterForm from './filterTable';
 import { dashboardStore } from '../../helpers/dashboard';
 import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
 import { toast } from 'sonner';
-import { Button, Rating } from '@material-tailwind/react';
+import { Button, ListItem, Rating } from '@material-tailwind/react';
 import { clearFunction } from '../../service/clearFunction';
 import { MdDelete, MdPayment } from "react-icons/md";
 import useDelete from '../../hooks/delete';
@@ -313,7 +313,7 @@ export default function TableOrderAll() {
               Mijoz lokatsiyasi: <span>{dateOne.location}</span>
             </p>
             <p className="flex justify-between">
-              Guruh nomi: <span>{dateOne.groupNames || "-"}</span>
+              Guruh nomlari: <span>{dateOne.groupNames.join(", ") || "-"}</span>
             </p>
             <p className="flex justify-between">
               Narxi: <span>{dateOne.price || "0"}</span>
@@ -336,7 +336,7 @@ export default function TableOrderAll() {
                   <p className="flex justify-between">Eni: <span>{item.width}</span></p>
                   <p className="flex justify-between">Buyi: <span>{item.height}</span></p>
                   {item.orderProductStatus !== "THE_GATE_IS_INSIDE_THE_ROOM" && (
-                    <p className="flex justify-between">Sides of House Made: <span>{item.howManySidesOfTheHouseAreMade}</span></p>
+                    <p className="flex justify-between">Sides of House Made: <span>{item.howManySidesOfTheHouseAreMade},</span></p>
                   )}
                   <p className="flex justify-between">Holat: <span>{item.orderProductStatus}</span></p>
                   <div className="flex items-center gap-2">
@@ -364,6 +364,12 @@ export default function TableOrderAll() {
                               </p>
                               <p className="flex justify-between border-b">
                                 Miqdori: <span>{detail.amount || '-'}</span>
+                              </p>
+                              <p className="flex justify-between border-b">
+                                Rangi: <span>{detail.color || '-'}</span>
+                              </p>
+                              <p className="flex justify-between border-b">
+                                Detal kvadarati: <span>{detail.detailKv || '-'}</span>
                               </p>
                               {detail.residual && (
                                 <p>Qolgan atxod: {detail.residual || "-"}</p>
