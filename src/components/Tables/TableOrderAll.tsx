@@ -14,12 +14,21 @@ import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
 import { toast } from 'sonner';
 import { Button, ListItem, Rating } from '@material-tailwind/react';
 import { clearFunction } from '../../service/clearFunction';
-import { MdDelete, MdPayment } from "react-icons/md";
+import { MdDelete, MdPayment } from 'react-icons/md';
 import useDelete from '../../hooks/delete';
 
 export default function TableOrderAll() {
   const { get, isLoading } = useGet();
-  const { page, setPage, setData, data, employeeName, ORDER_STATUS, address, date } = dashboardStore();
+  const {
+    page,
+    setPage,
+    setData,
+    data,
+    employeeName,
+    ORDER_STATUS,
+    address,
+    date,
+  } = dashboardStore();
   const { get: getOne, data: dateOne } = useGet();
   const { get: getPayment, data: dataPayment } = useGet(); // New payment hook
   const { put } = usePut();
@@ -38,25 +47,40 @@ export default function TableOrderAll() {
   const [rating, setRating] = useState(0);
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paymentDate, setPaymentDate] = useState('');
+
   const formatNumberWithSpaces = (number: number | null) => {
     return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
 
   useEffect(() => {
     if (employeeName || ORDER_STATUS || address || date) {
-      fetchFilteredData({ employeeName, ORDER_STATUS, address, date, page }, setData);
+      fetchFilteredData(
+        { employeeName, ORDER_STATUS, address, date, page },
+        setData,
+      );
     } else {
       get('/order/all', page, setData);
     }
   }, [page]);
 
-  const handleEditStatus = (orderId: string, status: string, rejectedInformation?: string) => {
-    put(`/order/update-status/${orderId}?status=${status}${rejectedInformation ? `&rejectedInformation=${rejectedInformation}` : ''}`, null, {})
+  const handleEditStatus = (
+    orderId: string,
+    status: string,
+    rejectedInformation?: string,
+  ) => {
+    put(
+      `/order/update-status/${orderId}?status=${status}${rejectedInformation ? `&rejectedInformation=${rejectedInformation}` : ''}`,
+      null,
+      {},
+    )
       .then(() => {
         if (employeeName || ORDER_STATUS || address || date) {
-          fetchFilteredData({ employeeName, ORDER_STATUS, address, date, page }, setData);
+          fetchFilteredData(
+            { employeeName, ORDER_STATUS, address, date, page },
+            setData,
+          );
           closeModalStatus();
-          toast.success('Bekor qilindi')
+          toast.success('Bekor qilindi');
         } else {
           closeModalStatus();
           get('/order/all', page, setData);
@@ -72,7 +96,7 @@ export default function TableOrderAll() {
   const handleDeletePayment = async (id: string) => {
     try {
       await remove(`/order-payment/`, id);
-      toast.success('To\'lov uchirildi');
+      toast.success("To'lov uchirildi");
       getPayment(`/order-payment/order/one/${orderIDPay}`);
     } catch (err) {
       toast.error('Error deleting payment.');
@@ -92,10 +116,9 @@ export default function TableOrderAll() {
       toast.success('Baholash kiritildi va buyurtma tugatildi');
       closeModalFeedback();
     } catch (err) {
-      toast.error('Xato yuz berdi. Iltimos, qaytadan urinib ko\'ring.');
+      toast.error("Xato yuz berdi. Iltimos, qaytadan urinib ko'ring.");
     }
   };
-
 
   const handlePaymentSubmit = async () => {
     try {
@@ -107,14 +130,16 @@ export default function TableOrderAll() {
       getPayment(`/order-payment/order/one/${orderIDPay}`);
       setPaymentAmount('');
       setPaymentDate('');
-      toast.success('To\'lov muvaffaqiyatli qo\'shildi!');
+      toast.success("To'lov muvaffaqiyatli qo'shildi!");
     } catch (err) {
-      toast.error('To\'lov amalga oshirilishida xatolik yuz berdi. Iltimos, qaytadan urinib ko\'ring.');
+      toast.error(
+        "To'lov amalga oshirilishida xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.",
+      );
     }
   };
   const isSubmitDisabled = !paymentAmount || !paymentDate;
   const handlePaymentClick = async (id: string) => {
-    setOrderIDPay(id)
+    setOrderIDPay(id);
     await getPayment(`/order-payment/order/one/${id}`);
     setTogglePayment(true);
   };
@@ -155,12 +180,13 @@ export default function TableOrderAll() {
 
   return (
     <div>
-      <h1 className='text-2xl  text-boxdark font-semibold '>Barcha buyurtmalar </h1>
+      <h1 className="text-2xl  text-boxdark font-semibold ">
+        Barcha buyurtmalar{' '}
+      </h1>
       <div className="w-full mt-6  max-w-full rounded-sm border border-stroke bg-white shadow-default ">
         <div className="w-full max-w-full rounded-sm border border-stroke bg-white ">
           <FilterForm />
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-
             <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 ">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                 <tr>
@@ -206,79 +232,96 @@ export default function TableOrderAll() {
               <tbody>
                 {data && data.object && data.object.length > 0
                   ? data.object.map((item: Order | any, i: number) => (
-                    <tr
-                      key={item.id}
-                      className="bg-gray-600 border-b   hover:bg-gray-50 "
-                    >
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      <tr
+                        key={item.id}
+                        className="bg-gray-600 border-b   hover:bg-gray-50 "
                       >
-                        {(page * 10) + i + 1}
-                      </th>
-                      <td className="px-6 py-4">{item.employeeName}</td>
-                      <td className="px-6 py-4">{item.clientFullName}</td>
-                      <td className="px-6 py-4">{item.clientPhoneNumber}</td>
-                      <td className="px-6 py-4">
-                        <a href={item.location} target='_blank'>{item.location ? 'Manzilni ko\'rish' : ''}</a>
-                      </td>
-                      <td className="px-6 py-4">
-                        {formatNumberWithSpaces(item.price)}
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className={`${statusColor(item.orderStatus)} ${item.orderStatus === 'WAIT' ? 'text-black' : 'text-white'} rounded-md text-center py-2`}>
-                          {statusOrder(item.orderStatus)}
-                        </p>
-                      </td>
-                      <td className="px-6 py-4">{item.address}</td>
-                      <td className="px-6 py-4">{item.date}</td>
-                      <td className="px-6">
-                        <select
-                          className='w-40'
-                          name="editStatus"
-                          id="editStatus"
-                          onChange={(e) => {
-                            if (e.target.value === 'REJECTED') {
-                              setOrderID(item.id)
-                              openModalStatus()
-                            }
-                            else if (e.target.value === 'COMPLETED') {
-                              setOrderID(item.id)
-                              FeedbackModal()
-                            }
-                            else handleEditStatus(item.id, e.target.value)
-                          }}
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          <option selected={item.orderStatus == "WAIT"} disabled>Kutilmoqda</option>
-                          <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">Tugatilgan</option>
-                          <option selected={item.orderStatus == "REJECTED"} value="REJECTED">Bekor qilingan</option>
-                        </select>
-                      </td>
-                      <td className="px-6">
-                        <button
-                          className="ml-5"
-                          onClick={() => handlePaymentClick(item.id)}
-                        >
-                          <MdPayment size={25} className="text-blue-500" />
-                        </button>
-                      </td>
-                      <td className="px-6">
-                        <button
-                          onClick={() => handleViewClick(item.id)}
-                          className="ml-5"
-                        >
-                          <FaEye size={25} className="text-red-500" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                          {page * 10 + i + 1}
+                        </th>
+                        <td className="px-6 py-4">{item.employeeName}</td>
+                        <td className="px-6 py-4">{item.clientFullName}</td>
+                        <td className="px-6 py-4">{item.clientPhoneNumber}</td>
+                        <td className="px-6 py-4">
+                          <a href={item.location} target="_blank">
+                            {item.location ? "Manzilni ko'rish" : ''}
+                          </a>
+                        </td>
+                        <td className="px-6 py-4">
+                          {formatNumberWithSpaces(item.price.toFixed())}
+                        </td>
+                        <td className="px-6 py-4">
+                          <p
+                            className={`${statusColor(item.orderStatus)} ${item.orderStatus === 'WAIT' ? 'text-black' : 'text-white'} rounded-md text-center py-2`}
+                          >
+                            {statusOrder(item.orderStatus)}
+                          </p>
+                        </td>
+                        <td className="px-6 py-4">{item.address}</td>
+                        <td className="px-6 py-4">{item.date}</td>
+                        <td className="px-6">
+                          <select
+                            className="w-40"
+                            name="editStatus"
+                            id="editStatus"
+                            onChange={(e) => {
+                              if (e.target.value === 'REJECTED') {
+                                setOrderID(item.id);
+                                openModalStatus();
+                              } else if (e.target.value === 'COMPLETED') {
+                                setOrderID(item.id);
+                                FeedbackModal();
+                              } else handleEditStatus(item.id, e.target.value);
+                            }}
+                          >
+                            <option
+                              selected={item.orderStatus == 'WAIT'}
+                              disabled
+                            >
+                              Kutilmoqda
+                            </option>
+                            <option
+                              selected={item.orderStatus == 'COMPLETED'}
+                              value="COMPLETED"
+                            >
+                              Tugatilgan
+                            </option>
+                            <option
+                              selected={item.orderStatus == 'REJECTED'}
+                              value="REJECTED"
+                            >
+                              Bekor qilingan
+                            </option>
+                          </select>
+                        </td>
+                        <td className="px-6">
+                          <button
+                            className="ml-5"
+                            onClick={() => handlePaymentClick(item.id)}
+                          >
+                            <MdPayment size={25} className="text-blue-500" />
+                          </button>
+                        </td>
+                        <td className="px-6">
+                          <button
+                            onClick={() => handleViewClick(item.id)}
+                            className="ml-5"
+                          >
+                            <FaEye size={25} className="text-red-500" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                   : !isLoading && (
-                    <tr className="bg-gray-600 border-b  hover:bg-gray-50 ">
-                      <td className="px-6 py-4 text-center" colSpan={9}>
-                        <FaRegFolderOpen size={50} />
-                      </td>
-                    </tr>
-                  )}
+                      <tr className="bg-gray-600 border-b  hover:bg-gray-50 ">
+                        <td className="px-6 py-4 text-center" colSpan={9}>
+                          <FaRegFolderOpen size={50} />
+                        </td>
+                      </tr>
+                    )}
               </tbody>
             </table>
           </div>
@@ -303,8 +346,14 @@ export default function TableOrderAll() {
           <div className="lg:w-[600px] w-[300px]  flex flex-col gap-2 text-xl md:w-[500px]">
             <h2 className="text-lg font-semibold">Buyurtma ma'lumotlari</h2>
             {/* <p className='flex justify-between'>Employee Name: <span>{dateOne.employeeName || "not included"}</span></p> */}
+            {dateOne.orderStatus === 'REJECTED' && (
+              <p className="flex justify-between">
+                Bekor qilinganligi haqida:{' '}
+                <span>{dateOne.rejectedOrderInformation || '-'}</span>
+              </p>
+            )}
             <p className="flex justify-between">
-              Mijoz ismi: <span>{dateOne.clientFullName || "-"}</span>
+              Mijoz ismi: <span>{dateOne.clientFullName || '-'}</span>
             </p>
             <p className="flex justify-between">
               Mijoz telefon raqami: <span>{dateOne.clientPhoneNumber}</span>
@@ -313,13 +362,13 @@ export default function TableOrderAll() {
               Mijoz lokatsiyasi: <span>{dateOne.location}</span>
             </p>
             <p className="flex justify-between">
-              Guruh nomlari: <span>{dateOne.groupNames.join(", ") || "-"}</span>
+              Guruh nomlari: <span>{dateOne.groupNames.join(', ') || '-'}</span>
             </p>
             <p className="flex justify-between">
-              Narxi: <span>{dateOne.price || "0"}</span>
-            </p>
-            <p className="flex justify-between">
-              Buyurtma Holati:<span>{dateOne.orderStatus || "-"}</span>
+              Narxi:{' '}
+              <span>
+                {formatNumberWithSpaces(dateOne.price.toFixed()) || '0'}
+              </span>
             </p>
             <p className="flex justify-between">
               Manzil: <span>{dateOne.address || "Ma'lumot kiritilmagan!"}</span>
@@ -327,68 +376,85 @@ export default function TableOrderAll() {
             <p className="flex justify-between">
               Sana: <span>{dateOne.date || "Ma'lumot kiritilmagan!"}</span>
             </p>
-            <h1 className="text-xl flex items-center gap-2 font-bold">Zakazlar:
+            <h1 className="text-xl flex items-center gap-2 font-bold">
+              Zakazlar:
               <FaArrowDownLong />
             </h1>
             <div className="pl-3">
-              {dateOne.orderProductDto && dateOne.orderProductDto.map((item: any) => (
-                <div key={item.id} className="p-4 border rounded mb-4">
-                  <p className="flex justify-between">Eni: <span>{item.width}</span></p>
-                  <p className="flex justify-between">Buyi: <span>{item.height}</span></p>
-                  {item.orderProductStatus !== "THE_GATE_IS_INSIDE_THE_ROOM" && (
-                    <p className="flex justify-between">Sides of House Made: <span>{item.howManySidesOfTheHouseAreMade},</span></p>
-                  )}
-                  <p className="flex justify-between">Holat: <span>{item.orderProductStatus}</span></p>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-md font-medium">Buyurtma Detallari:</h3>
-                    <FaArrowDownLong />
-                  </div>
-                  <div className="flex flex-col text-lg gap-3 mt-3">
-                    {item.orderDetailsRes && item.orderDetailsRes.length > 0 ? (
-                      item.orderDetailsRes.map((detail: any, index: number) => (
-                        detail ? (
-                          <div
-                            key={index}
-                            className="p-4 ml-3 flex items-start gap-3 border rounded"
-                          >
-                            <div>
-                              <img
-                                src={`${attechment}${detail.detailAttachmentId}`}
-                                alt={detail.detailName}
-                                className="w-20 h-20 rounded-full object-cover"
-                              />
-                            </div>
-                            <div className="w-[85%] flex flex-col gap-2 justify-start">
-                              <p className="flex justify-between border-b">
-                                Detal nomi <span>{detail.detailName || "-"}</span>
-                              </p>
-                              <p className="flex justify-between border-b">
-                                Miqdori: <span>{detail.amount || '-'}</span>
-                              </p>
-                              <p className="flex justify-between border-b">
-                                Rangi: <span>{detail.color || '-'}</span>
-                              </p>
-                              <p className="flex justify-between border-b">
-                                Detal kvadarati: <span>{detail.detailKv || '-'}</span>
-                              </p>
-                              {detail.residual && (
-                                <p>Qolgan atxod: {detail.residual || "-"}</p>
-                              )}
-                            </div>
-                          </div>
-                        ) : null
-                      ))
-                    ) : (
-                      <p className="pl-4 flex items-center gap-2 text-blue-gray-300">
-                        Detal ma'lumotlari topilmadi!!
+              {dateOne.orderProductDto &&
+                dateOne.orderProductDto.map((item: any) => (
+                  <div key={item.id} className="p-4 border rounded mb-4">
+                    <p className="flex justify-between">
+                      Eni: <span>{item.width}</span>
+                    </p>
+                    <p className="flex justify-between">
+                      Buyi: <span>{item.height}</span>
+                    </p>
+                    {item.orderProductStatus !==
+                      'THE_GATE_IS_INSIDE_THE_ROOM' && (
+                      <p className="flex justify-between">
+                        Sides of House Made:{' '}
+                        <span>{item.howManySidesOfTheHouseAreMade},</span>
                       </p>
                     )}
+                    <p className="flex justify-between">
+                      Holat: <span>{item.orderProductStatus}</span>
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-md font-medium">
+                        Buyurtma Detallari:
+                      </h3>
+                      <FaArrowDownLong />
+                    </div>
+                    <div className="flex flex-col text-lg gap-3 mt-3">
+                      {item.orderDetailsRes &&
+                      item.orderDetailsRes.length > 0 ? (
+                        item.orderDetailsRes.map(
+                          (detail: any, index: number) =>
+                            detail ? (
+                              <div
+                                key={index}
+                                className="p-4 ml-3 flex items-start gap-3 border rounded"
+                              >
+                                <div>
+                                  <img
+                                    src={`${attechment}${detail.detailAttachmentId}`}
+                                    alt={detail.detailName}
+                                    className="w-20 h-20 rounded-full object-cover"
+                                  />
+                                </div>
+                                <div className="w-[85%] flex flex-col gap-2 justify-start">
+                                  <p className="flex justify-between border-b">
+                                    Detal nomi{' '}
+                                    <span>{detail.detailName || '-'}</span>
+                                  </p>
+                                  <p className="flex justify-between border-b">
+                                    Miqdori: <span>{detail.amount || '-'}</span>
+                                  </p>
+                                  <p className="flex justify-between border-b">
+                                    Rangi: <span>{detail.color || '-'}</span>
+                                  </p>
+                                  <p className="flex justify-between border-b">
+                                    Detal kvadarati:{' '}
+                                    <span>{detail.detailKv || '-'}</span>
+                                  </p>
+                                  {detail.residual && (
+                                    <p>
+                                      Qolgan atxod: {detail.residual || '-'}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            ) : null,
+                        )
+                      ) : (
+                        <p className="pl-4 flex items-center gap-2 text-blue-gray-300">
+                          Detal ma'lumotlari topilmadi!!
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-
-
-
+                ))}
             </div>
           </div>
         )}
@@ -409,7 +475,9 @@ export default function TableOrderAll() {
             <Button
               color="green"
               disabled={!rejectedInformation}
-              onClick={() => handleEditStatus(orderID, 'REJECTED', rejectedInformation)}
+              onClick={() =>
+                handleEditStatus(orderID, 'REJECTED', rejectedInformation)
+              }
             >
               Saqlash
             </Button>
@@ -470,49 +538,68 @@ export default function TableOrderAll() {
                 Qushish
               </button>
             </div>
-            <div className='flex justify-between border'>
+            <div className="flex justify-between border">
               <ul className=" w-full">
                 <li className="px-6 py-3 font-semibold">Umumiy summa</li>
-                <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.totalAmount)}</li>
+                <li className="px-6 py-3">
+                  {formatNumberWithSpaces(dataPayment.totalAmount)}
+                </li>
               </ul>
               <ul className="w-full border-l">
                 <li className="px-6 py-3 font-semibold"> To'langan summa</li>
-                <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.amountPaid)}</li>
+                <li className="px-6 py-3">
+                  {formatNumberWithSpaces(dataPayment.amountPaid)}
+                </li>
               </ul>
               <ul className="border-l w-full">
                 <li className="px-6 py-3 font-semibold">Qolgan summa</li>
-                <li className="px-6 py-3">{formatNumberWithSpaces(dataPayment.remainingAmount)}</li>
+                <li className="px-6 py-3">
+                  {formatNumberWithSpaces(dataPayment.remainingAmount)}
+                </li>
               </ul>
             </div>
             <table className="min-w-full text-sm text-left text-gray-500">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-6 py-3">Sana</th>
-                  <th scope="col" className="px-6 py-3">To'langan summa</th>
-                  <th scope="col" className="px-6 py-3">Action</th>
+                  <th scope="col" className="px-6 py-3">
+                    Sana
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    To'langan summa
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {dataPayment.orderPaymentDtos ? dataPayment.orderPaymentDtos.map((payment: any, i: number) => (
-                  <tr key={payment.orderId} className="bg-white border-b">
-                    <td className="px-6 py-4">{payment.date}</td>
-                    <td className="px-6 py-4">{formatNumberWithSpaces(payment.amount)}</td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleDeletePayment(payment.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <MdDelete />
-                      </button>
-                    </td>
-                  </tr>
-                )) : <FaRegFolderOpen />}
+                {dataPayment.orderPaymentDtos ? (
+                  dataPayment.orderPaymentDtos.map(
+                    (payment: any, i: number) => (
+                      <tr key={payment.orderId} className="bg-white border-b">
+                        <td className="px-6 py-4">{payment.date}</td>
+                        <td className="px-6 py-4">
+                          {formatNumberWithSpaces(payment.amount)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => handleDeletePayment(payment.id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <MdDelete />
+                          </button>
+                        </td>
+                      </tr>
+                    ),
+                  )
+                ) : (
+                  <FaRegFolderOpen />
+                )}
               </tbody>
             </table>
           </div>
         )}
       </GlobalModal>
-
     </div>
   );
 }

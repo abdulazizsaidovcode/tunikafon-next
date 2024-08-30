@@ -14,6 +14,12 @@ interface ChartThreeState {
 const ChartThree: React.FC = ({ month, year }: any) => {
   const { get, data } = useGet();
 
+  const formatNumberWithSpaces = (number: number | null) => {
+    return number !== null
+      ? number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+      : '0';
+  };
+
   const options: ApexOptions = {
     series: [
       {
@@ -88,12 +94,19 @@ const ChartThree: React.FC = ({ month, year }: any) => {
         {
           name: 'Iconma',
           data: data
-            ? data.map((item: any) => (item.income === null ? 0 : item.income))
+            ? data.map((item: any) =>
+                item.income === null ? 0 : item.income && item.income.toFixed(),
+              )
             : [],
         },
         {
           name: 'Rejected Income',
-          data: data ? data.map((item: any) => item.rejectedIncome) : [0],
+          data: data
+            ? data.map(
+                (item: any) =>
+                  item.rejectedIncome && item.rejectedIncome.toFixed(),
+              )
+            : [0],
         },
       ],
     });
@@ -104,7 +117,9 @@ const ChartThree: React.FC = ({ month, year }: any) => {
       {data ? (
         <div className="sm:px-7.5 w-full col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default xl:col-span-5">
           <div className="w-full">
-            <h1 className='font-semibold'>Guruhlar tomonidan olib kelingan foyda va Yuqotilgan summalar</h1>
+            <h1 className="font-semibold">
+              Guruhlar tomonidan olib kelingan foyda va Yuqotilgan summalar
+            </h1>
             <ReactApexChart
               options={options}
               series={state.series}

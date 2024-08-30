@@ -15,6 +15,10 @@ const ChartOne: React.FC = () => {
   const [year, setYear] = useState<string>('2024');
   const [isValidYear, setIsValidYear] = useState<boolean>(true);
 
+  const formatNumberWithSpaces = (number: number | null) => {
+    return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
+
   const defaultCategories = [
     'Yanvar',
     'Fevral',
@@ -39,14 +43,19 @@ const ChartOne: React.FC = () => {
     if (data) {
       const incomeMapping: { [key: string]: number } = {};
       data.map((item: any) => {
-        incomeMapping[item.monthName] = item.income || 0;
+        incomeMapping[item.monthName] =
+          (item.income && item.income.toFixed()) || 0;
       });
 
       setState({
         series: [
           {
             name: 'Foyda',
-            data: data && data.map((item: any) => item.income || 0),
+            data:
+              data &&
+              data.map(
+                (item: any) => (item.income && item.income.toFixed()) || 0,
+              ),
           },
         ],
       });
@@ -157,10 +166,7 @@ const ChartOne: React.FC = () => {
     series: [
       {
         name: 'Foyda',
-        data: [
-          0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0,
-        ],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     ],
   });

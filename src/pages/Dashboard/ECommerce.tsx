@@ -94,15 +94,21 @@ const ECommerce: React.FC = () => {
             <div className="md:flex md:flex-row flex-col justify-between gap-5">
               <CardDataStats
                 title="Tugallangan daromad"
-                total={formatNumberWithSpaces(data?.completedIncome) ?? 0}
+                total={
+                  formatNumberWithSpaces(data?.completedIncome.toFixed()) ?? 0
+                }
               />
               <CardDataStats
                 title="Kutilayotgan daromad"
-                total={formatNumberWithSpaces(data?.waitingIncome) ?? 0}
+                total={
+                  formatNumberWithSpaces(data?.waitingIncome.toFixed()) ?? 0
+                }
               />
               <CardDataStats
                 title="Rad etilgan daromad"
-                total={formatNumberWithSpaces(data?.rejectedIncome) ?? 0}
+                total={
+                  formatNumberWithSpaces(data?.rejectedIncome.toFixed()) ?? 0
+                }
               />
             </div>
           ) : (
@@ -118,8 +124,8 @@ const ECommerce: React.FC = () => {
       <div className="w-full mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <div className="col-span-12">
           <ChartOne />
-          <ChartTwo month={month} year={year}/>
-          <ChartThree month={month} year={year}/>
+          <ChartTwo month={month} year={year} />
+          <ChartThree month={month} year={year} />
         </div>
       </div>
     </>

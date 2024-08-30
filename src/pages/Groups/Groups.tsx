@@ -220,8 +220,8 @@ export default function Groups() {
                 </tr>
               )}
               {data && !data.object.length && (
-                <div className='ml-5'>
-                  <FaRegFolderOpen size={50}/>
+                <div className="ml-5">
+                  <FaRegFolderOpen size={50} />
                 </div>
               )}
             </tbody>
@@ -271,14 +271,14 @@ export default function Groups() {
           </div>
           <div className="w-full flex justify-between gap-5 mt-5">
             <Button onClick={addToggleModal} className="bg-graydark">
-              Close
+              Yopish
             </Button>
             <Button
               onClick={handleAddClick}
               disabled={!isFormValid || postIsLoading}
               color="green"
             >
-              {postIsLoading ? 'Loading...' : 'Add Group'}
+              {postIsLoading ? 'Loading...' : "Guruh qo'shish"}
             </Button>
           </div>
         </div>
@@ -321,17 +321,17 @@ export default function Groups() {
           </div>
           <div className="w-full flex justify-between gap-5 mt-5">
             <Button onClick={editToggleModal} className="bg-graydark">
-              Close
+              Yopish
             </Button>
             <Button onClick={handleEditClick} color="green">
-              {editIsLoading ? 'Loading...' : 'Save Changes'}
+              {editIsLoading ? 'Loading...' : 'Saqlash'}
             </Button>
           </div>
         </div>
       </GlobalModal>
       <GlobalModal isOpen={ratingModal} onClose={ratingToggleModal}>
         <div className="lg:min-w-[600px] min-w-[300px] ">
-          <h2 className="text-lg font-semibold mb-4">Group Ratings</h2>
+          <h2 className="text-lg font-semibold mb-4">Guruh uchun izohlar</h2>
           {ratingIsLoading ? (
             <div>Loading...</div>
           ) : (
@@ -361,7 +361,7 @@ export default function Groups() {
           )}
           <div className="mt-5 flex justify-end">
             <Button onClick={ratingToggleModal} className="bg-graydark">
-              Close
+              Yopish
             </Button>
           </div>
         </div>
