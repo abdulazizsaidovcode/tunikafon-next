@@ -12,7 +12,7 @@ import FilterForm from './filterTable';
 import { dashboardStore } from '../../helpers/dashboard';
 import { fetchFilteredData } from '../../helpers/apiFunctions/filter';
 import { toast } from 'sonner';
-import { Button, ListItem, Rating } from '@material-tailwind/react';
+import { Button, ListItem, Rating, select } from '@material-tailwind/react';
 import { clearFunction } from '../../service/clearFunction';
 import { MdDelete, MdPayment } from 'react-icons/md';
 import useDelete from '../../hooks/delete';
@@ -179,7 +179,12 @@ export default function TableOrderAll() {
     if (status === 'WAIT') return 'bg-yellow-300';
     else if (status === 'REJECTED') return 'bg-red-500';
     else if (status === 'COMPLETED') return 'bg-green-500';
-    else if (status === 'DETAILS_BEING_DELIVERED' || status === "IN_PROGRESS" || status === "CONFIRMED" )  return 'bg-blue-500';
+    else if (
+      status === 'DETAILS_BEING_DELIVERED' ||
+      status === 'IN_PROGRESS' ||
+      status === 'CONFIRMED'
+    )
+      return 'bg-blue-500';
   };
 
   return (
@@ -191,8 +196,8 @@ export default function TableOrderAll() {
         <div className="w-full max-w-full rounded-sm border border-stroke bg-white ">
           <FilterForm />
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-            <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500 ">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <table className="lg:w-[1145px] w-[992px] text-sm text-left rtl:text-right text-gray-500">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     #
@@ -215,7 +220,7 @@ export default function TableOrderAll() {
                   <th scope="col" className="px-6 min-w-[200px] py-3">
                     Buyurtma holati
                   </th>
-                  <th scope="col" className="px-6 min-w-[200px]  py-3">
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
                     Manzil
                   </th>
                   <th scope="col" className="px-6 min-w-[200px] py-3">
@@ -224,12 +229,8 @@ export default function TableOrderAll() {
                   <th scope="col" className="px-6 min-w-[200px] py-3">
                     To'lov kiritish
                   </th>
-                  <th scope="col" className="px-6 min-w-[200px] py-3">
-                    To'lov kiritish
-                  </th>
-
                   <th scope="col" className="px-6 py-3">
-                    qushimcha
+                    Qushimcha
                   </th>
                 </tr>
               </thead>
@@ -238,11 +239,11 @@ export default function TableOrderAll() {
                   ? data.object.map((item: Order | any, i: number) => (
                       <tr
                         key={item.id}
-                        className="bg-gray-600 border-b   hover:bg-gray-50 "
+                        className="bg-gray-600 border-b hover:bg-gray-50"
                       >
                         <th
                           scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
                           {page * 10 + i + 1}
                         </th>
@@ -250,7 +251,11 @@ export default function TableOrderAll() {
                         <td className="px-6 py-4">{item.clientFullName}</td>
                         <td className="px-6 py-4">{item.clientPhoneNumber}</td>
                         <td className="px-6 py-4">
-                          <a href={item.location} target="_blank">
+                          <a
+                            href={item.location}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             {item.location ? "Manzilni ko'rish" : ''}
                           </a>
                         </td>
@@ -271,34 +276,30 @@ export default function TableOrderAll() {
                             className="w-40"
                             name="editStatus"
                             id="editStatus"
+                            value={item.orderStatus}
                             onChange={(e) => {
-                              if (e.target.value === 'REJECTED') {
+                              const status = e.target.value;
+                              if (status === 'REJECTED') {
                                 setOrderID(item.id);
                                 openModalStatus();
-                              } else if (e.target.value === 'COMPLETED') {
+                              } else if (status === 'COMPLETED') {
                                 setOrderID(item.id);
                                 FeedbackModal();
-                              } else handleEditStatus(item.id, e.target.value);
+                              } else {
+                                handleEditStatus(item.id, status);
+                              }
                             }}
                           >
-                            <option
-                              selected={item.orderStatus == 'WAIT'}
-                              disabled
-                            >
+                            <option value="WAIT" disabled>
                               Kutilmoqda
                             </option>
-                            <option
-                              selected={item.orderStatus == 'COMPLETED'}
-                              value="COMPLETED"
-                            >
-                              Tugatilgan
+                            <option value="CONFIRMED">Tasdiqlangan</option>
+                            <option value="DETAILS_BEING_DELIVERED">
+                              Detallar oborilmoqda
                             </option>
-                            <option
-                              selected={item.orderStatus == 'REJECTED'}
-                              value="REJECTED"
-                            >
-                              Bekor qilingan
-                            </option>
+                            <option value="IN_PROGRESS">Ish jarayonida</option>
+                            <option value="COMPLETED">Tugatilgan</option>
+                            <option value="REJECTED">Bekor qilingan</option>
                           </select>
                         </td>
                         <td className="px-6">
@@ -319,36 +320,9 @@ export default function TableOrderAll() {
                         </td>
                       </tr>
                     ))
-
-                          <option selected={item.orderStatus == "WAIT"} disabled>Kutilmoqda</option>
-                          <option selected={item.orderStatus == "CONFIRMED"} value="CONFIRMED">Tasdiqlangan</option>
-                          <option selected={item.orderStatus == "DETAILS_BEING_DELIVERED"} value="DETAILS_BEING_DELIVERED">Detallar oborilmoqda</option>
-                          <option selected={item.orderStatus == "IN_PROGRESS"} value="IN_PROGRESS">Ish jarayonida</option>
-                          <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">Tugatilgan</option>
-                          <option selected={item.orderStatus == "REJECTED"} value="REJECTED">Bekor qilingan</option>
-                        </select>
-                      </td>
-                      <td className="px-6">
-                        <button
-                          className="ml-5"
-                          onClick={() => handlePaymentClick(item.id)}
-                        >
-                          <MdPayment size={25} className="text-blue-500" />
-                        </button>
-                      </td>
-                      <td className="px-6">
-                        <button
-                          onClick={() => handleViewClick(item.id)}
-                          className="ml-5"
-                        >
-                          <FaEye size={25} className="text-red-500" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
                   : !isLoading && (
-                      <tr className="bg-gray-600 border-b  hover:bg-gray-50 ">
-                        <td className="px-6 py-4 text-center" colSpan={9}>
+                      <tr className="bg-gray-600 border-b hover:bg-gray-50">
+                        <td className="px-6 py-4 text-center" colSpan={11}>
                           <FaRegFolderOpen size={50} />
                         </td>
                       </tr>
@@ -374,9 +348,8 @@ export default function TableOrderAll() {
 
       <GlobalModal isOpen={toggle} onClose={toggleModal}>
         {dateOne && (
-          <div className="lg:w-[600px] w-[300px]  flex flex-col gap-2 text-xl md:w-[500px]">
+          <div className="lg:w-[600px] w-[300px] flex flex-col gap-2 text-xl md:w-[500px]">
             <h2 className="text-lg font-semibold">Buyurtma ma'lumotlari</h2>
-            {/* <p className='flex justify-between'>Employee Name: <span>{dateOne.employeeName || "not included"}</span></p> */}
             {dateOne.orderStatus === 'REJECTED' && (
               <p className="flex justify-between">
                 Bekor qilinganligi haqida:{' '}
@@ -408,8 +381,7 @@ export default function TableOrderAll() {
               Sana: <span>{dateOne.date || "Ma'lumot kiritilmagan!"}</span>
             </p>
             <h1 className="text-xl flex items-center gap-2 font-bold">
-              Zakazlar:
-              <FaArrowDownLong />
+              Zakazlar: <FaArrowDownLong />
             </h1>
             <div className="pl-3">
               {dateOne.orderProductDto &&
@@ -425,58 +397,7 @@ export default function TableOrderAll() {
                       'THE_GATE_IS_INSIDE_THE_ROOM' && (
                       <p className="flex justify-between">
                         Sides of House Made:{' '}
-                        <span>{item.howManySidesOfTheHouseAreMade},</span>
-
-              {dateOne.orderProductDto && dateOne.orderProductDto.map((item: any) => (
-                <div key={item.id} className="p-4 border rounded mb-4">
-                  <p className="flex justify-between">Eni: <span>{item.width}</span></p>
-                  <p className="flex justify-between">Buyi: <span>{item.height}</span></p>
-                  {item.orderProductStatus !== "THE_GATE_IS_INSIDE_THE_ROOM" && (
-                    <p className="flex justify-between">Sides of House Made: <span>{item.howManySidesOfTheHouseAreMade},</span></p>
-                  )}
-                  <p className="flex justify-between">Holat: <span>{item.orderProductStatus}</span></p>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-md font-medium">Buyurtma Detallari:</h3>
-                    <FaArrowDownLong />
-                  </div>
-                  <div className="flex flex-col text-lg gap-3 mt-3">
-                    {item.orderDetailsRes && item.orderDetailsRes.length > 0 ? (
-                      item.orderDetailsRes.map((detail: any, index: number) => (
-                        detail ? (
-                          <div
-                            key={index}
-                            className="p-4 ml-3 flex flex-col lg:flex-row items-start gap-3 border rounded"
-                          >
-                            <div>
-                              <img
-                                src={`${attechment}${detail.detailAttachmentId}`}
-                                alt={detail.detailName}
-                                className="w-20 h-20 rounded-full object-cover"
-                              />
-                            </div>
-                            <div className="w-[85%] flex flex-col gap-2 justify-start">
-                              <p className="flex justify-between border-b">
-                                Detal nomi <span>{detail.detailName || "-"}</span>
-                              </p>
-                              <p className="flex justify-between border-b">
-                                Miqdori: <span>{detail.amount || '-'}</span>
-                              </p>
-                              <p className="flex justify-between border-b">
-                                Rangi: <span>{detail.color || '-'}</span>
-                              </p>
-                              <p className="flex justify-between border-b">
-                                Detal kvadarati: <span>{detail.detailKv || '-'}</span>
-                              </p>
-                              {detail.residual && (
-                                <p className='hidden lg:block'>Qolgan atxod: {detail.residual || "-"}</p>
-                              )}
-                            </div>
-                          </div>
-                        ) : null
-                      ))
-                    ) : (
-                      <p className="pl-4 flex items-center gap-2 text-blue-gray-300">
-                        Detal ma'lumotlari topilmadi!!
+                        <span>{item.howManySidesOfTheHouseAreMade || '-'}</span>
                       </p>
                     )}
                     <p className="flex justify-between">
@@ -496,7 +417,7 @@ export default function TableOrderAll() {
                             detail ? (
                               <div
                                 key={index}
-                                className="p-4 ml-3 flex items-start gap-3 border rounded"
+                                className="p-4 ml-3 flex flex-col lg:flex-row items-start gap-3 border rounded"
                               >
                                 <div>
                                   <img
@@ -521,7 +442,7 @@ export default function TableOrderAll() {
                                     <span>{detail.detailKv || '-'}</span>
                                   </p>
                                   {detail.residual && (
-                                    <p>
+                                    <p className="hidden lg:block">
                                       Qolgan atxod: {detail.residual || '-'}
                                     </p>
                                   )}
@@ -597,7 +518,7 @@ export default function TableOrderAll() {
           <div className="lg:w-[600px] w-[300px] flex flex-col gap-2 text-xl md:w-[500px]">
             <h2 className="text-lg font-semibold">To'lov ma'lumotlari</h2>
 
-            <div className="flex flex-col lg:flex-row  h-10 gap-2 mb-4">
+            <div className="flex flex-col lg:flex-row h-10 gap-2 mb-4">
               <input
                 type="number"
                 placeholder="To'lov miqdori"
@@ -615,33 +536,33 @@ export default function TableOrderAll() {
               <button
                 onClick={handlePaymentSubmit}
                 disabled={isSubmitDisabled || payload}
-                className="bg-blue-500 w-full py-2 text-sm text-white  rounded hover:bg-blue-600"
+                className="bg-blue-500 w-full py-2 text-sm text-white rounded hover:bg-blue-600"
               >
                 Qushish
               </button>
             </div>
 
-            <div className="flex justify-between border">
-            <div className='flex flex-col lg:mt-0 mt-22 lg:flex-row justify-between border'>
-              <ul className=" w-full">
+            <div className="flex flex-col lg:flex-row gap-2 mb-4 border p-4">
+              <ul className="w-full">
                 <li className="px-6 py-3 font-semibold">Umumiy summa</li>
                 <li className="px-6 py-3">
                   {formatNumberWithSpaces(dataPayment.totalAmount)}
                 </li>
               </ul>
               <ul className="w-full border-l">
-                <li className="px-6 py-3 font-semibold"> To'langan summa</li>
+                <li className="px-6 py-3 font-semibold">To'langan summa</li>
                 <li className="px-6 py-3">
                   {formatNumberWithSpaces(dataPayment.amountPaid)}
                 </li>
               </ul>
-              <ul className="border-l w-full">
+              <ul className="w-full border-l">
                 <li className="px-6 py-3 font-semibold">Qolgan summa</li>
                 <li className="px-6 py-3">
                   {formatNumberWithSpaces(dataPayment.remainingAmount)}
                 </li>
               </ul>
             </div>
+
             <table className="min-w-full text-sm text-left text-gray-500">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -657,27 +578,30 @@ export default function TableOrderAll() {
                 </tr>
               </thead>
               <tbody>
-                {dataPayment.orderPaymentDtos ? (
-                  dataPayment.orderPaymentDtos.map(
-                    (payment: any, i: number) => (
-                      <tr key={payment.orderId} className="bg-white border-b">
-                        <td className="px-6 py-4">{payment.date}</td>
-                        <td className="px-6 py-4">
-                          {formatNumberWithSpaces(payment.amount)}
-                        </td>
-                        <td className="px-6 py-4">
-                          <button
-                            onClick={() => handleDeletePayment(payment.id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <MdDelete />
-                          </button>
-                        </td>
-                      </tr>
-                    ),
-                  )
+                {dataPayment.orderPaymentDtos &&
+                dataPayment.orderPaymentDtos.length > 0 ? (
+                  dataPayment.orderPaymentDtos.map((payment: any) => (
+                    <tr key={payment.orderId} className="bg-white border-b">
+                      <td className="px-6 py-4">{payment.date}</td>
+                      <td className="px-6 py-4">
+                        {formatNumberWithSpaces(payment.amount)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => handleDeletePayment(payment.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <MdDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 ) : (
-                  <FaRegFolderOpen />
+                  <tr>
+                    <td colSpan={3} className="px-6 py-4 text-center">
+                      <FaRegFolderOpen /> Ma'lumotlar mavjud emas
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>
