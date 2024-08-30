@@ -315,7 +315,7 @@ const Calculation = () => {
   };
 
   const getProductDetails = async (id: number) => {
-     const data = await getProductDetail(`product/details/${id}`);
+    const data = await getProductDetail(`product/details/${id}`);
     const orderDetail = data.map((product: any) => ({
       detailId: product.id,
       name: product.name,
@@ -607,21 +607,23 @@ const Calculation = () => {
                         item.orderDetails.map((detail: any, i: number) => (
                           <div
                             key={detail.id}
-                            className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                            className="flex flex-col lg:flex-row lg:items-center lg:justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
                           >
-                            <img
-                              className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
-                              src={
-                                detail.attachmentId
-                                  ? attechment + detail.attachmentId
-                                  : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
-                              }
-                              alt={detail.name}
-                            />
-                            <div className="flex-1 px-0">
-                              <h1 className="text-sm sm:text-md text-center">
-                                {detail.name}
-                              </h1>
+                            <div className="flex gap-2 items-center justify-start">
+                              <img
+                                className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                                src={
+                                  detail.attachmentId
+                                    ? attechment + detail.attachmentId
+                                    : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                                }
+                                alt={detail.name}
+                              />
+                              <div className="flex-1 px-0">
+                                <h1 className="text-sm sm:text-md text-center">
+                                  {detail.name}
+                                </h1>
+                              </div>
                             </div>
                             <input
                               type="number"
@@ -634,12 +636,12 @@ const Calculation = () => {
                                   e.target.value,
                                 )
                               }
-                              className="rounded outline-none px-1 py-0.5 w-20"
+                              className="rounded outline-none px-1 py-0.5 lg:w-20"
                             />
                             <input
                               type="number"
                               placeholder="Raqam"
-                              className="rounded outline-none px-1 py-0.5 w-20"
+                              className="rounded outline-none px-1 py-0.5 lg:w-20"
                               onChange={(e) =>
                                 handleInputChange(
                                   i,
@@ -652,7 +654,7 @@ const Calculation = () => {
                             <input
                               type="text"
                               placeholder="Rang"
-                              className="rounded outline-none px-1 py-0.5 w-20"
+                              className="rounded outline-none px-1 py-0.50 lg:w-20"
                               onChange={(e) =>
                                 handleInputChange(
                                   i,
@@ -698,7 +700,7 @@ const Calculation = () => {
                       type="number"
                     />
                     {orderProductDto[index]?.orderProductStatus ===
-                    'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                      'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
                       <Input
                         placeholder="Uyning tomonlari"
                         onChange={(e: any) =>
@@ -826,10 +828,10 @@ const Calculation = () => {
                     <div className="w-full cursor-pointer rounded flex gap-2 border overflow-y-auto border-black text-black p-2 text-start font-normal">
                       {groupssName && groupssName.length
                         ? groupssName.map((item: any) => (
-                            <p className="border rounded line-clamp-1">
-                              {item.name}
-                            </p>
-                          ))
+                          <p className="border rounded line-clamp-1">
+                            {item.name}
+                          </p>
+                        ))
                         : 'Gruhni tanlang'}
                     </div>
                   </MenuHandler>
@@ -933,7 +935,7 @@ const Calculation = () => {
                       (item: any, i: number) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                          className="flex flex-col lg:flex-row items-start lg:items-center justify-between  border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
                         >
                           <img
                             className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
@@ -955,7 +957,7 @@ const Calculation = () => {
                             }
                             type="number"
                             placeholder="Soni"
-                            className="rounded outline-none px-1 py-0.5 w-20"
+                            className="rounded outline-none px-1 py-0.5 lg:w-20"
                           />
                           <input
                             onChange={(e) =>
@@ -963,7 +965,7 @@ const Calculation = () => {
                             }
                             type="number"
                             placeholder="Raqam"
-                            className="rounded outline-none px-1 py-0.5 w-20"
+                            className="rounded outline-none px-1 py-0.5 lg:w-20"
                           />
                           <input
                             onChange={(e) =>
@@ -971,7 +973,7 @@ const Calculation = () => {
                             }
                             type="text"
                             placeholder="Rang"
-                            className="rounded outline-none px-1 py-0.5 w-20"
+                            className="rounded outline-none px-1 py-0.5 lg:w-20"
                           />
                         </div>
                       ),

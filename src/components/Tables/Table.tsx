@@ -62,7 +62,7 @@ const Table = ({
                     <th scope="col" className="px-6 py-3">
                       #
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 min-w-[130px] py-3">
                       Rasm
                     </th>
                     <th scope="col" className="px-6 py-3">
@@ -94,7 +94,7 @@ const Table = ({
                           />
                         </td>
                         <td className="px-6 py-4">{item.name}</td>
-                        <td className="px-6">
+                        <td className="px-6 flex pt-10">
                           <button onClick={() => handleEdit(item)}>
                             <FaRegEdit size={25} className="text-green-500" />
                           </button>

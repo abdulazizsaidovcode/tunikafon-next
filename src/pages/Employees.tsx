@@ -213,13 +213,13 @@ const Employees = () => {
                     <th scope="col" className="px-6 py-3">
                       #
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 min-w-[200px] py-3">
                       ISm
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 min-w-[220px] py-3">
                       Telefon raqam
                     </th>
-                    <th colSpan={2} scope="col" className="px-6 py-3">
+                    <th colSpan={2} scope="col" className="px-6 min-w-[220px] py-3">
                       Tahrirlash va uchirish
                     </th>
                   </tr>
