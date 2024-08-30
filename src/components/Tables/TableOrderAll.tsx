@@ -170,12 +170,16 @@ export default function TableOrderAll() {
     if (name === 'REJECTED') return 'Bekor qilingan';
     else if (name === 'COMPLETED') return 'Tasdiqlangan';
     else if (name === 'WAIT') return 'Kutilmoqda';
+    else if (name === 'DETAILS_BEING_DELIVERED') return 'Detallar oborilmoqda';
+    else if (name === 'IN_PROGRESS') return 'Ish jarayonida';
+    else if (name === 'CONFIRMED') return 'Tasdiqlangan';
   };
 
   const statusColor = (status: any) => {
     if (status === 'WAIT') return 'bg-yellow-300';
     else if (status === 'REJECTED') return 'bg-red-500';
     else if (status === 'COMPLETED') return 'bg-green-500';
+    else if (status === 'DETAILS_BEING_DELIVERED' || status === "IN_PROGRESS" || status === "CONFIRMED" )  return 'bg-blue-500';
   };
 
   return (
@@ -315,6 +319,33 @@ export default function TableOrderAll() {
                         </td>
                       </tr>
                     ))
+
+                          <option selected={item.orderStatus == "WAIT"} disabled>Kutilmoqda</option>
+                          <option selected={item.orderStatus == "CONFIRMED"} value="CONFIRMED">Tasdiqlangan</option>
+                          <option selected={item.orderStatus == "DETAILS_BEING_DELIVERED"} value="DETAILS_BEING_DELIVERED">Detallar oborilmoqda</option>
+                          <option selected={item.orderStatus == "IN_PROGRESS"} value="IN_PROGRESS">Ish jarayonida</option>
+                          <option selected={item.orderStatus == "COMPLETED"} value="COMPLETED">Tugatilgan</option>
+                          <option selected={item.orderStatus == "REJECTED"} value="REJECTED">Bekor qilingan</option>
+                        </select>
+                      </td>
+                      <td className="px-6">
+                        <button
+                          className="ml-5"
+                          onClick={() => handlePaymentClick(item.id)}
+                        >
+                          <MdPayment size={25} className="text-blue-500" />
+                        </button>
+                      </td>
+                      <td className="px-6">
+                        <button
+                          onClick={() => handleViewClick(item.id)}
+                          className="ml-5"
+                        >
+                          <FaEye size={25} className="text-red-500" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                   : !isLoading && (
                       <tr className="bg-gray-600 border-b  hover:bg-gray-50 ">
                         <td className="px-6 py-4 text-center" colSpan={9}>
@@ -395,6 +426,57 @@ export default function TableOrderAll() {
                       <p className="flex justify-between">
                         Sides of House Made:{' '}
                         <span>{item.howManySidesOfTheHouseAreMade},</span>
+
+              {dateOne.orderProductDto && dateOne.orderProductDto.map((item: any) => (
+                <div key={item.id} className="p-4 border rounded mb-4">
+                  <p className="flex justify-between">Eni: <span>{item.width}</span></p>
+                  <p className="flex justify-between">Buyi: <span>{item.height}</span></p>
+                  {item.orderProductStatus !== "THE_GATE_IS_INSIDE_THE_ROOM" && (
+                    <p className="flex justify-between">Sides of House Made: <span>{item.howManySidesOfTheHouseAreMade},</span></p>
+                  )}
+                  <p className="flex justify-between">Holat: <span>{item.orderProductStatus}</span></p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-md font-medium">Buyurtma Detallari:</h3>
+                    <FaArrowDownLong />
+                  </div>
+                  <div className="flex flex-col text-lg gap-3 mt-3">
+                    {item.orderDetailsRes && item.orderDetailsRes.length > 0 ? (
+                      item.orderDetailsRes.map((detail: any, index: number) => (
+                        detail ? (
+                          <div
+                            key={index}
+                            className="p-4 ml-3 flex flex-col lg:flex-row items-start gap-3 border rounded"
+                          >
+                            <div>
+                              <img
+                                src={`${attechment}${detail.detailAttachmentId}`}
+                                alt={detail.detailName}
+                                className="w-20 h-20 rounded-full object-cover"
+                              />
+                            </div>
+                            <div className="w-[85%] flex flex-col gap-2 justify-start">
+                              <p className="flex justify-between border-b">
+                                Detal nomi <span>{detail.detailName || "-"}</span>
+                              </p>
+                              <p className="flex justify-between border-b">
+                                Miqdori: <span>{detail.amount || '-'}</span>
+                              </p>
+                              <p className="flex justify-between border-b">
+                                Rangi: <span>{detail.color || '-'}</span>
+                              </p>
+                              <p className="flex justify-between border-b">
+                                Detal kvadarati: <span>{detail.detailKv || '-'}</span>
+                              </p>
+                              {detail.residual && (
+                                <p className='hidden lg:block'>Qolgan atxod: {detail.residual || "-"}</p>
+                              )}
+                            </div>
+                          </div>
+                        ) : null
+                      ))
+                    ) : (
+                      <p className="pl-4 flex items-center gap-2 text-blue-gray-300">
+                        Detal ma'lumotlari topilmadi!!
                       </p>
                     )}
                     <p className="flex justify-between">
@@ -515,7 +597,7 @@ export default function TableOrderAll() {
           <div className="lg:w-[600px] w-[300px] flex flex-col gap-2 text-xl md:w-[500px]">
             <h2 className="text-lg font-semibold">To'lov ma'lumotlari</h2>
 
-            <div className="flex h-10 gap-2 mb-4">
+            <div className="flex flex-col lg:flex-row  h-10 gap-2 mb-4">
               <input
                 type="number"
                 placeholder="To'lov miqdori"
@@ -533,12 +615,14 @@ export default function TableOrderAll() {
               <button
                 onClick={handlePaymentSubmit}
                 disabled={isSubmitDisabled || payload}
-                className="bg-blue-500 w-full text-sm text-white  rounded hover:bg-blue-600"
+                className="bg-blue-500 w-full py-2 text-sm text-white  rounded hover:bg-blue-600"
               >
                 Qushish
               </button>
             </div>
+
             <div className="flex justify-between border">
+            <div className='flex flex-col lg:mt-0 mt-22 lg:flex-row justify-between border'>
               <ul className=" w-full">
                 <li className="px-6 py-3 font-semibold">Umumiy summa</li>
                 <li className="px-6 py-3">
