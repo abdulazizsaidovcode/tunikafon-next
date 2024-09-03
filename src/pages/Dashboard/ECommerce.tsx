@@ -95,7 +95,7 @@ const ECommerce: React.FC = () => {
               <CardDataStats
                 title="Tugallangan daromad"
                 total={
-                  formatNumberWithSpaces(data?.completedIncome) ?? 0
+                  formatNumberWithSpaces(data?.completedIncome?.toFixed()) ?? 0
                 }
               />
               <CardDataStats
