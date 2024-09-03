@@ -95,19 +95,19 @@ const ECommerce: React.FC = () => {
               <CardDataStats
                 title="Tugallangan daromad"
                 total={
-                  formatNumberWithSpaces(data?.completedIncome.toFixed()) ?? 0
+                  formatNumberWithSpaces(data?.completedIncome) ?? 0
                 }
               />
               <CardDataStats
                 title="Kutilayotgan daromad"
                 total={
-                  formatNumberWithSpaces(data?.waitingIncome.toFixed()) ?? 0
+                  formatNumberWithSpaces(data?.waitingIncome?.toFixed()) ?? 0
                 }
               />
               <CardDataStats
                 title="Rad etilgan daromad"
                 total={
-                  formatNumberWithSpaces(data?.rejectedIncome.toFixed()) ?? 0
+                  formatNumberWithSpaces(data?.rejectedIncome?.toFixed()) ?? 0
                 }
               />
             </div>

@@ -17,7 +17,7 @@ interface GroupData {
   rejectedIncome: number | null;
 }
 
-const ChartTwo: React.FC<{ month: number; year: number }> = ({
+const ChartTwo: React.FC<{ month: number | string; year: number | string }> = ({
   month,
   year,
 }) => {

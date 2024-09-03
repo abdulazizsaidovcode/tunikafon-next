@@ -6,7 +6,7 @@ import { FaRegFolderOpen } from 'react-icons/fa6';
 
 interface ChartThreeState {
   series: {
-    name: string;
+    name: string | number;
     data: number[];
   }[];
 }
