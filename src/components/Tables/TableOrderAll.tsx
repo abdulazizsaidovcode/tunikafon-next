@@ -551,20 +551,20 @@ export default function TableOrderAll() {
               </button>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-2 mb-4 border p-4">
+            <div className="flex flex-col lg:flex-row gap-2 mt-22 lg:mt-0 border p-4">
               <ul className="w-full">
                 <li className="px-6 py-3 font-semibold">Umumiy summa</li>
                 <li className="px-6 py-3">
                   {formatNumberWithSpaces(Math.round(dataPayment.totalAmount))}
                 </li>
               </ul>
-              <ul className="w-full border-l">
+              <ul className="w-full border-t border-b lg:border-l">
                 <li className="px-6 py-3 font-semibold">To'langan summa</li>
                 <li className="px-6 py-3">
                   {formatNumberWithSpaces(Math.round(dataPayment.amountPaid))}
                 </li>
               </ul>
-              <ul className="w-full border-l">
+              <ul className="w-full lg:border-l">
                 <li className="px-6 py-3 font-semibold">Qolgan summa</li>
                 <li className="px-6 py-3">
                   {formatNumberWithSpaces(Math.round(dataPayment.remainingAmount))}
@@ -573,48 +573,50 @@ export default function TableOrderAll() {
 
             </div>
 
-            <table className="min-w-full text-sm text-left text-gray-500">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Sana
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    To'langan summa
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataPayment.orderPaymentDtos &&
-                  dataPayment.orderPaymentDtos.length > 0 ? (
-                  dataPayment.orderPaymentDtos.map((payment: any) => (
-                    <tr key={payment.orderId} className="bg-white border-b">
-                      <td className="px-6 py-4">{payment.date}</td>
-                      <td className="px-6 py-4">
-                        {formatNumberWithSpaces(payment.amount)}
-                      </td>
-                      <td className="px-6 py-4">
-                        <button
-                          onClick={() => handleDeletePayment(payment.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <MdDelete />
-                        </button>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm text-left text-gray-500">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 min-w-[150px] py-3">
+                      Sana
+                    </th>
+                    <th scope="col" className="px-6 min-w-[180px] py-3">
+                      To'langan summa
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataPayment.orderPaymentDtos && dataPayment.orderPaymentDtos.length > 0 ? (
+                    dataPayment.orderPaymentDtos.map((payment: any) => (
+                      <tr key={payment.orderId} className="bg-white border-b">
+                        <td className="px-6 py-4">{payment.date}</td>
+                        <td className="px-6 py-4">
+                          {formatNumberWithSpaces(payment.amount)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => handleDeletePayment(payment.id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <MdDelete />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-4 text-center">
+                        To'lov kiritilmagan
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="px-6 py-4 text-center">
-                      <FaRegFolderOpen /> Ma'lumotlar mavjud emas
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
           </div>
         )}
       </GlobalModal>
