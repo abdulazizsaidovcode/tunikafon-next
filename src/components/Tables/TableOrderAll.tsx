@@ -441,7 +441,7 @@ export default function TableOrderAll() {
                                     <span>{detail.detailName || '-'}</span>
                                   </p>
                                   <p className="flex justify-between border-b">
-                                    Miqdori: <span>{detail.amount || '-'}{detail.amountType || ''}</span>
+                                    Miqdori: <span>{detail.amount || '-'}{detail.amountType || ' '}</span>
                                   </p>
                                   <p className="flex justify-between border-b">
                                     Rangi: <span>{detail.color || '-'}</span>

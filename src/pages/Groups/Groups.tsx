@@ -123,13 +123,15 @@ export default function Groups() {
       get('/group/all/list');
     } catch (error) {
       console.error('Guruh qushishda xatolik bor');
-      toast.error('');
+      toast.error(' ');
     }
   };
 
   useEffect(() => {
     get('/group/all/list');
+    getUser('/user/employees/group-not');
   }, []);
+console.log(Users);
 
   return (
     <div>
@@ -248,8 +250,7 @@ export default function Groups() {
               <option value="" disabled>
                 Hodim tanlang
               </option>
-              {Users &&
-                Users.map((item: number | any) => (
+              {Users && Users.map((item: number | any) => (
                   <option key={item.id} value={item.id}>
                     {item.fullName || 'user topilmadi'}
                   </option>
