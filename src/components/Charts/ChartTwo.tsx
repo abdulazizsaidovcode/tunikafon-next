@@ -51,7 +51,7 @@ const ChartTwo: React.FC<{ month: number | string; year: number | string }> = ({
       width: 480,
     },
     labels: data && data.map((item: GroupData) => item.groupName),
-    colors: undefined,
+    colors: ['#ffff'],
     responsive: [
       {
         breakpoint: 480,
@@ -68,16 +68,47 @@ const ChartTwo: React.FC<{ month: number | string; year: number | string }> = ({
     states: {
       hover: {
         filter: {
-          type: 'none', // Disables hover effect
+          type: 'none', 
         },
       },
       active: {
         filter: {
-          type: 'none', // Disables active effect
+          type: 'none',
         },
       },
     },
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: '18px',
+        colors: ['white'], 
+        
+      },
+      dropShadow: {
+        enabled: true,
+        top: 1,
+        left: 1,
+        blur: 1,
+        color: '#fff',
+        opacity: 1,
+        
+      },
+      
+      // background: {
+      //   enabled: true,
+      //   foreColor: '#000000', 
+        
+      // },
+    },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontSize: '24px',
+      },
+    },
   };
+  
+  
 
   return (
     <>
