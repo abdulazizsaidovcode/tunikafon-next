@@ -131,7 +131,6 @@ export default function Groups() {
     get('/group/all/list');
     getUser('/user/employees/group-not');
   }, []);
-console.log(Users);
 
   return (
     <div>
