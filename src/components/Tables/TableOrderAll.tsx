@@ -256,8 +256,7 @@ export default function TableOrderAll() {
                       <td className="px-6 py-4">{item.clientPhoneNumber}</td>
                       <td className="px-6 py-4 ">
                         <a
-                          // href={`${item.location}`}
-                          href='https://www.google.com/maps/place/Qarshi+State+University/@38.8592169,65.8061554,15.78z/data=!4m15!1m8!3m7!1s0x3f4ea63944a8e4c1:0x694369ac2037509d!2sQarshi,+Qashqadaryo+Region,+Uzbekistan!3b1!8m2!3d38.8611918!4d65.7847269!16zL20vMGNiMG0!3m5!1s0x3f4ea7d2e979e065:0xa87087180a2b55c!8m2!3d38.855233!4d65.8102961!16s%2Fg%2F11g7kfm8c1?entry=ttu&g_ep=EgoyMDI0MDgyOC4wIKXMDSoASAFQAw%3D%3D'
+                          href={`${item.location}`}
                           target="blank"
                           className='text-blue-500'
                           rel="blue" 
