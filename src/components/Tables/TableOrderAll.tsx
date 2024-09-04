@@ -16,6 +16,7 @@ import { Button, ListItem, Rating, select } from '@material-tailwind/react';
 import { clearFunction } from '../../service/clearFunction';
 import { MdDelete, MdPayment } from 'react-icons/md';
 import useDelete from '../../hooks/delete';
+import ImagePreview from '../imgView/Imgview';
 
 export default function TableOrderAll() {
   const { get, isLoading } = useGet();
@@ -227,6 +228,9 @@ export default function TableOrderAll() {
                     Sana
                   </th>
                   <th scope="col" className="px-6 min-w-[200px] py-3">
+                    Holat kiritish
+                  </th>
+                  <th scope="col" className="px-6 min-w-[200px] py-3">
                     To'lov kiritish
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -237,96 +241,96 @@ export default function TableOrderAll() {
               <tbody>
                 {data && data.object && data.object.length > 0
                   ? data.object.map((item: Order | any, i: number) => (
-                      <tr
-                        key={item.id}
-                        className="bg-gray-600 border-b hover:bg-gray-50"
+                    <tr
+                      key={item.id}
+                      className="bg-gray-600 border-b hover:bg-gray-50"
+                    >
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                       >
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        {page * 10 + i + 1}
+                      </th>
+                      <td className="px-6 py-4">{item.employeeName}</td>
+                      <td className="px-6 py-4">{item.clientFullName}</td>
+                      <td className="px-6 py-4">{item.clientPhoneNumber}</td>
+                      <td className="px-6 py-4">
+                        <a
+                          href={item.location}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          {page * 10 + i + 1}
-                        </th>
-                        <td className="px-6 py-4">{item.employeeName}</td>
-                        <td className="px-6 py-4">{item.clientFullName}</td>
-                        <td className="px-6 py-4">{item.clientPhoneNumber}</td>
-                        <td className="px-6 py-4">
-                          <a
-                            href={item.location}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {item.location ? "Manzilni ko'rish" : ''}
-                          </a>
-                        </td>
-                        <td className="px-6 py-4">
-                          {formatNumberWithSpaces(item.price.toFixed())}
-                        </td>
-                        <td className="px-6 py-4">
-                          <p
-                            className={`${statusColor(item.orderStatus)} ${item.orderStatus === 'WAIT' ? 'text-black' : 'text-white'} rounded-md text-center py-2`}
-                          >
-                            {statusOrder(item.orderStatus)}
-                          </p>
-                        </td>
-                        <td className="px-6 py-4">{item.address}</td>
-                        <td className="px-6 py-4">{item.date}</td>
-                        <td className="px-6">
-                          <select
-                            className="w-40"
-                            name="editStatus"
-                            id="editStatus"
-                            value={item.orderStatus}
-                            onChange={(e) => {
-                              const status = e.target.value;
-                              if (status === 'REJECTED') {
-                                setOrderID(item.id);
-                                openModalStatus();
-                              } else if (status === 'COMPLETED') {
-                                setOrderID(item.id);
-                                FeedbackModal();
-                              } else {
-                                handleEditStatus(item.id, status);
-                              }
-                            }}
-                          >
-                            <option value="WAIT" disabled>
-                              Kutilmoqda
-                            </option>
-                            <option value="CONFIRMED">Tasdiqlangan</option>
-                            <option value="DETAILS_BEING_DELIVERED">
-                              Detallar oborilmoqda
-                            </option>
-                            <option value="IN_PROGRESS">Ish jarayonida</option>
-                            <option value="COMPLETED">Tugatilgan</option>
-                            <option value="REJECTED">Bekor qilingan</option>
-                          </select>
-                        </td>
-                        <td className="px-6">
-                          <button
-                            className="ml-5"
-                            onClick={() => handlePaymentClick(item.id)}
-                          >
-                            <MdPayment size={25} className="text-blue-500" />
-                          </button>
-                        </td>
-                        <td className="px-6">
-                          <button
-                            onClick={() => handleViewClick(item.id)}
-                            className="ml-5"
-                          >
-                            <FaEye size={25} className="text-red-500" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                          {item.location ? "Manzilni ko'rish" : ''}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4">
+                        {formatNumberWithSpaces(item.price.toFixed())}
+                      </td>
+                      <td className="px-6 py-4">
+                        <p
+                          className={`${statusColor(item.orderStatus)} ${item.orderStatus === 'WAIT' ? 'text-black' : 'text-white'} rounded-md text-center py-2`}
+                        >
+                          {statusOrder(item.orderStatus)}
+                        </p>
+                      </td>
+                      <td className="px-6 py-4">{item.address}</td>
+                      <td className="px-6 py-4">{item.date}</td>
+                      <td className="px-6">
+                        <select
+                          className="w-40"
+                          name="editStatus"
+                          id="editStatus"
+                          value={item.orderStatus}
+                          onChange={(e) => {
+                            const status = e.target.value;
+                            if (status === 'REJECTED') {
+                              setOrderID(item.id);
+                              openModalStatus();
+                            } else if (status === 'COMPLETED') {
+                              setOrderID(item.id);
+                              FeedbackModal();
+                            } else {
+                              handleEditStatus(item.id, status);
+                            }
+                          }}
+                        >
+                          <option value="WAIT" disabled>
+                            Kutilmoqda
+                          </option>
+                          <option value="CONFIRMED">Tasdiqlangan</option>
+                          <option value="DETAILS_BEING_DELIVERED">
+                            Detallar oborilmoqda
+                          </option>
+                          <option value="IN_PROGRESS">Ish jarayonida</option>
+                          <option value="COMPLETED">Tugatilgan</option>
+                          <option value="REJECTED">Bekor qilingan</option>
+                        </select>
+                      </td>
+                      <td className="px-6">
+                        <button
+                          className="ml-5"
+                          onClick={() => handlePaymentClick(item.id)}
+                        >
+                          <MdPayment size={25} className="text-blue-500" />
+                        </button>
+                      </td>
+                      <td className="px-6">
+                        <button
+                          onClick={() => handleViewClick(item.id)}
+                          className="ml-5"
+                        >
+                          <FaEye size={25} className="text-red-500" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                   : !isLoading && (
-                      <tr className="bg-gray-600 border-b hover:bg-gray-50">
-                        <td className="px-6 py-4 text-center" colSpan={11}>
-                          <FaRegFolderOpen size={50} />
-                        </td>
-                      </tr>
-                    )}
+                    <tr className="bg-gray-600 border-b hover:bg-gray-50">
+                      <td className="px-6 py-4 text-center" colSpan={11}>
+                        <FaRegFolderOpen size={50} />
+                      </td>
+                    </tr>
+                  )}
               </tbody>
             </table>
           </div>
@@ -395,11 +399,11 @@ export default function TableOrderAll() {
                     </p>
                     {item.orderProductStatus !==
                       'THE_GATE_IS_INSIDE_THE_ROOM' && (
-                      <p className="flex justify-between">
-                        Sides of House Made:{' '}
-                        <span>{item.howManySidesOfTheHouseAreMade || '-'}</span>
-                      </p>
-                    )}
+                        <p className="flex justify-between">
+                          Sides of House Made:{' '}
+                          <span>{item.howManySidesOfTheHouseAreMade || '-'}</span>
+                        </p>
+                      )}
                     <p className="flex justify-between">
                       Holat: <span>{item.orderProductStatus}</span>
                     </p>
@@ -411,7 +415,7 @@ export default function TableOrderAll() {
                     </div>
                     <div className="flex flex-col text-lg gap-3 mt-3">
                       {item.orderDetailsRes &&
-                      item.orderDetailsRes.length > 0 ? (
+                        item.orderDetailsRes.length > 0 ? (
                         item.orderDetailsRes.map(
                           (detail: any, index: number) =>
                             detail ? (
@@ -420,10 +424,9 @@ export default function TableOrderAll() {
                                 className="p-4 ml-3 flex flex-col lg:flex-row items-start gap-3 border rounded"
                               >
                                 <div>
-                                  <img
-                                    src={`${attechment}${detail.detailAttachmentId}`}
-                                    alt={detail.detailName}
-                                    className="w-20 h-20 rounded-full object-cover"
+                                  <ImagePreview
+                                    imageUrl={`${attechment}${detail.detailAttachmentId}`}
+                                    altText={item.name}
                                   />
                                 </div>
                                 <div className="w-[85%] flex flex-col gap-2 justify-start">
@@ -546,21 +549,22 @@ export default function TableOrderAll() {
               <ul className="w-full">
                 <li className="px-6 py-3 font-semibold">Umumiy summa</li>
                 <li className="px-6 py-3">
-                  {formatNumberWithSpaces(dataPayment.totalAmount)}
+                  {formatNumberWithSpaces(Math.round(dataPayment.totalAmount))}
                 </li>
               </ul>
               <ul className="w-full border-l">
                 <li className="px-6 py-3 font-semibold">To'langan summa</li>
                 <li className="px-6 py-3">
-                  {formatNumberWithSpaces(dataPayment.amountPaid)}
+                  {formatNumberWithSpaces(Math.round(dataPayment.amountPaid))}
                 </li>
               </ul>
               <ul className="w-full border-l">
                 <li className="px-6 py-3 font-semibold">Qolgan summa</li>
                 <li className="px-6 py-3">
-                  {formatNumberWithSpaces(dataPayment.remainingAmount)}
+                  {formatNumberWithSpaces(Math.round(dataPayment.remainingAmount))}
                 </li>
               </ul>
+
             </div>
 
             <table className="min-w-full text-sm text-left text-gray-500">
@@ -579,7 +583,7 @@ export default function TableOrderAll() {
               </thead>
               <tbody>
                 {dataPayment.orderPaymentDtos &&
-                dataPayment.orderPaymentDtos.length > 0 ? (
+                  dataPayment.orderPaymentDtos.length > 0 ? (
                   dataPayment.orderPaymentDtos.map((payment: any) => (
                     <tr key={payment.orderId} className="bg-white border-b">
                       <td className="px-6 py-4">{payment.date}</td>

@@ -1,6 +1,7 @@
 import { FaRegEdit, FaRegFolderOpen } from 'react-icons/fa';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { attechment } from '../../service/urls';
+import ImagePreview from '../imgView/Imgview';
 
 interface DataType {
   id: number;
@@ -26,7 +27,7 @@ const Table = ({
   deleteModal,
   setDeleteId,
   setUpdate,
-  page=0
+  page = 0
 }: TableType) => {
   const handleDelete = (id: number) => {
     deleteModal();
@@ -87,10 +88,9 @@ const Table = ({
                           {(page && page * 10) + i + 1}
                         </th>
                         <td className="px-6 py-4">
-                          <img
-                            className="w-20 h-20 rounded-full object-cover"
-                            src={attechment + item.attachmentId}
-                            alt="(404)"
+                          <ImagePreview
+                            imageUrl={`${attechment}${item.attachmentId}`}
+                            altText={item.name}
                           />
                         </td>
                         <td className="px-6 py-4">{item.name}</td>

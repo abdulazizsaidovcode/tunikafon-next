@@ -15,6 +15,7 @@ import ReactPaginate from 'react-paginate';
 import DetailAddModal from '../../components/modal/DetailAddModal';
 import { Button } from '@material-tailwind/react';
 import { CiImageOn } from 'react-icons/ci';
+import ImagePreview from '../../components/imgView/Imgview';
 
 const Detail = () => {
   const { data, error, isLoading, get } = useGet();
@@ -183,10 +184,9 @@ const Detail = () => {
                     </th>
                     <td className="px-6 py-4">
                       {(
-                        <img
-                          className="w-15 h-15 rounded-full object-cover"
-                          src={`${attechment}${item.attachmentId}`}
-                          alt=""
+                        <ImagePreview
+                          imageUrl={`${attechment}${item.attachmentId}`}
+                          altText={item.name}
                         />
                       ) || <CiImageOn />}
                     </td>
