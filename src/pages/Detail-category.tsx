@@ -236,7 +236,7 @@ const DetailCategory = () => {
             </Button>
             <Button
               color="green"
-              disabled={putIsLoading || !name.trim()}
+              disabled={putIsLoading}
               onClick={handleEdit}
             >
               {putIsLoading ? 'Kuting...' : "O'zgartirish"}

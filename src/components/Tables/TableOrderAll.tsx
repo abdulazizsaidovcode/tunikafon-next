@@ -258,7 +258,7 @@ export default function TableOrderAll() {
                         <a
                           href={`${item.location}`}
                           target="blank"
-                          className='text-blue-500'
+                          className='text-blue-500 underline'
                           rel="blue" 
                         >
                           {item.location ? "Manzilni ko'rish" : ''}

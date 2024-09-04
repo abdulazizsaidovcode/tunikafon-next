@@ -760,20 +760,24 @@ const Calculation = () => {
               </div>
               <div className="w-full">
                 <Input
-                  onChange={(e) =>
-                    setOrderData((prevState: any) => ({
-                      ...prevState,
-                      clientPhoneNumber: e.target.value.replace(/[^0-9+]/g, ''),
-                    }))
-                  }
+                  onChange={(e) => {
+                    const formattedPhoneNumber = e.target.value.replace(/[^0-9+]/g, '');
+                    if (formattedPhoneNumber.length <= 13) {
+                      setOrderData((prevState: any) => ({
+                        ...prevState,
+                        clientPhoneNumber: formattedPhoneNumber,
+                      }));
+                    }
+                  }}
                   value={
                     orderData.clientPhoneNumber
                       ? orderData.clientPhoneNumber.replace(/[^0-9+]/g, '')
-                      : ''
+                      : '+998'
                   }
                   label="Mijoz telifon raqami"
                   placeholder="Mijoz telifon raqamini kiriting"
                 />
+
               </div>
               <div className="w-full">
                 <Input
