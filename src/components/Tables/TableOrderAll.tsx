@@ -405,8 +405,14 @@ export default function TableOrderAll() {
                         </p>
                       )}
                     <p className="flex justify-between">
-                      Holat: <span>{item.orderProductStatus}</span>
+                      Uyning Qayeri ? :
+                      <span>
+                        {item.orderProductStatus === "INTERIOR_VIEW_OF_THE_HOUSE" && " ichki kurinishi"}
+                        {item.orderProductStatus === "EXTERIOR_VIEW_OF_THE_HOUSE" && "Uyning tashqari qismi"}
+                        {item.orderProductStatus === "THE_GATE_IS_INSIDE_THE_ROOM" && "Darvoza honaning ichi"}
+                      </span>
                     </p>
+
                     <div className="flex items-center gap-2">
                       <h3 className="text-md font-medium">
                         Buyurtma Detallari:

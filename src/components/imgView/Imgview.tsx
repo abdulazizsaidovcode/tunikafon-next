@@ -36,7 +36,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, altText }) => {
         <>
             <div className="relative">
                 {loading && (
-                    <div className="absolute inset-0 flex justify-center items-center">
+                    <div className="absolute inset-0 flex justify-start items-center">
                         <FaSpinner className="animate-spin text-gray-500" size={24} />
                     </div>
                 )}
@@ -59,7 +59,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, altText }) => {
                 <div className="bg-white p-5 rounded-lg">
                     <div className="relative">
                         {modalLoading && (
-                            <div className="absolute inset-0 flex justify-center items-center">
+                            <div className="absolute inset-0 flex justify-start items-start">
                                 <FaSpinner className="animate-spin text-gray-500" size={30} />
                             </div>
                         )}
