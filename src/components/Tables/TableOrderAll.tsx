@@ -259,7 +259,7 @@ export default function TableOrderAll() {
                           href={`${item.location}`}
                           target="blank"
                           className='text-blue-500 underline'
-                          rel="blue" 
+                          rel="blue"
                         >
                           {item.location ? "Manzilni ko'rish" : ''}
                         </a>
@@ -439,7 +439,7 @@ export default function TableOrderAll() {
                                     <span>{detail.detailName || '-'}</span>
                                   </p>
                                   <p className="flex justify-between border-b">
-                                    Miqdori: <span>{detail.amount || '-'}{detail.amountType || ' '}</span>
+                                    Miqdori: <span className=' lowercase'>{detail.amount || '-'} {detail.amountType || ' '}</span>
                                   </p>
                                   <p className="flex justify-between border-b">
                                     Rangi: <span>{detail.color || '-'}</span>

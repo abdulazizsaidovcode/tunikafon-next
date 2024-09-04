@@ -92,7 +92,7 @@ const ChartThree: React.FC = ({ month, year }: any) => {
     setState({
       series: [
         {
-          name: 'Iconma',
+          name: 'Foyda',
           data: data
             ? data.map((item: any) =>
                 item.income === null ? 0 : item.income && item.income.toFixed(),
@@ -100,7 +100,7 @@ const ChartThree: React.FC = ({ month, year }: any) => {
             : [],
         },
         {
-          name: 'Rejected Income',
+          name: 'Yuqotilgan summa',
           data: data
             ? data.map(
                 (item: any) =>
