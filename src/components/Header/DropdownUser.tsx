@@ -14,7 +14,7 @@ const DropdownUser = ({ toggleModal, data, dropdownOpen, setDropdownOpen }: any)
       <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
         <div
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="flex items-center gap-4"
+          className="flex items-center gap-2 lg:gap-4"
         >
           <span className="text-right lg:block">
             <span className="block text-sm font-medium text-black ">
@@ -23,7 +23,7 @@ const DropdownUser = ({ toggleModal, data, dropdownOpen, setDropdownOpen }: any)
             <span className="block text-xs">{data?.phoneNumber}</span>
           </span>
 
-          <span className="h-12 w-12 rounded-full overflow-hidden">
+          <span className="h-14 w-14 rounded-full overflow-hidden">
             {data?.attachmentId ? (
               <img
                 className="rounded-full w-full h-full object-cover"
