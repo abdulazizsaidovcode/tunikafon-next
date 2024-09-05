@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GlobalModal from '../modal';
 import { FaSpinner } from 'react-icons/fa'; // Optional: A spinner icon for loading
+import ViewImgModal from '../modal/viewImgModal';
 
 interface ImagePreviewProps {
     imageUrl: string;
@@ -49,18 +50,18 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, altText }) => {
                     className={`cursor-pointer w-15 h-15 rounded-full object-cover ${loading ? 'invisible' : 'visible'}`}
                 />
             </div>
-            <GlobalModal
+            <ViewImgModal
                 isOpen={isOpen}
                 onClose={closeModal}
                 contentLabel="Image Preview"
                 className="flex justify-center items-center w-full h-full"
                 overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
             >
-                <div className="bg-white p-5 rounded-lg">
+                <div className=" rounded-lg">
                     <div className="relative">
                         {modalLoading && (
-                            <div className="absolute inset-0 flex justify-start items-start">
-                                <FaSpinner className="animate-spin text-gray-500" size={30} />
+                            <div className="absolute inset-0 flex justify-center items-center">
+                                <FaSpinner className="animate-spin text-gray-500" size={200} />
                             </div>
                         )}
                         <img
@@ -68,11 +69,11 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, altText }) => {
                             alt={altText}
                             onLoad={handleModalImageLoad}
                             onError={handleImageError}
-                            className={`w-full h-auto ${modalLoading ? 'invisible' : 'visible'}`}
+                            className={`max-w-[100vw] max-h-[800px] ${modalLoading ? 'invisible' : 'visible'}`}
                         />
                     </div>
                 </div>
-            </GlobalModal>
+            </ViewImgModal>
         </>
     );
 };

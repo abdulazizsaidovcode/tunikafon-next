@@ -315,7 +315,7 @@ const Employees = () => {
         children={
           <div className="sm:w-96 w-full">
             <div className="w-80 sm:w-full">
-              <Input type="file" label="Rasm" onChange={handleImageChange} />
+              {/* <Input type="file" label="Rasm" onChange={handleImageChange} /> */}
               <Input
                 label="To'liq F I"
                 onChange={(e) => setAll({ ...all, fullName: e.target.value })}

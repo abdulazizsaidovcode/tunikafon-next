@@ -142,7 +142,7 @@ const Detail = () => {
                 <th scope="col" className="px-6 py-3">
                   buyi
                 </th>
-                <th scope="col" className="px-6 w-40 py-3">
+                <th scope="col" className="px-6 min-w-[150px] py-3">
                   Detal turi
                 </th>
                 <th scope="col" className="px-6 min-w-[170px] py-3">
