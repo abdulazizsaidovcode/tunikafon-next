@@ -66,7 +66,7 @@ const Table = ({
                     <th scope="col" className="px-6 min-w-[130px] py-3">
                       Rasm
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 min-w-[130px] py-3">
                       {name ? name : 'Nomi'}
                     </th>
                     <th scope="col" className="px-6 py-3">

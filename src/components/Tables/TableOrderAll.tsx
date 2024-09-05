@@ -433,7 +433,7 @@ export default function TableOrderAll() {
                                     altText={item.name}
                                   />
                                 </div>
-                                <div className="w-[85%] flex flex-col gap-2 justify-start">
+                                <div className="lg:w-[85%] w-full flex flex-col gap-2 justify-start">
                                   <p className="flex justify-between border-b">
                                     Detal nomi{' '}
                                     <span>{detail.detailName || '-'}</span>
@@ -446,7 +446,7 @@ export default function TableOrderAll() {
                                   </p>
                                   <p className="flex justify-between border-b">
                                     Detal kvadarati:{' '}
-                                    <span>{detail.detailKv || '-'}</span>
+                                    <span className='truncate'>{detail.detailKv || '-'}</span>
                                   </p>
                                   {detail.residual && (
                                     <p className="hidden lg:block">
