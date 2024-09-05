@@ -1050,7 +1050,7 @@ const Calculation = () => {
                 }}
                 color="green"
               >
-                {saveLoading ? 'Yuklanyapti...' : 'Hisoblash'}
+                {saveLoading ? 'Yuklanmoqda...' : 'Hisoblash'}
               </Button>
             </div>
           </div>
