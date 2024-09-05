@@ -42,10 +42,9 @@ const viewImgModal: React.FC<ModalProps> = ({
         >
             <div
                 className={`bg-transparent  animate-[animate_0.2s_ease-in-out] z-999 relative rounded-lg shadow-lg ${mt}`}
-                style={{ maxHeight: '90vh', overflow: 'hidden', padding: 0 }} // Remove padding and overflow
-                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+                style={{ maxHeight: '90vh', overflow: 'hidden', padding: 0 }} 
+                onClick={(e) => e.stopPropagation()} 
             >
-                {/* Ensure the image stretches within the modal */}
                 <div className="flex items-center justify-center">
                     {children}
                 </div>
