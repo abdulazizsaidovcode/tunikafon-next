@@ -63,7 +63,7 @@ const Employees = () => {
   };
 
   function formatPhoneNumber(phoneNumber: any) {
-    const cleaned = phoneNumber.replace(/\D/g, ''); // Faqat raqamlarni qoldirish
+    const cleaned = phoneNumber.replace(/\D/g, '');
     const match = cleaned.match(/^(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/);
 
     if (match) {
