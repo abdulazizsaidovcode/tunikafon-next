@@ -69,7 +69,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
         detailTypeStatus: addData.detailTypeStatus,
       });
 
-      toast.success('Successfully created');
+      toast.success('Detal kiritildi');
       setIsLoading(false);
       setAddData({
         name: '',
@@ -88,7 +88,7 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
       onClose();
     } catch (error) {
       console.error(error);
-      toast.error('Error creating detail');
+      toast.error('Detal kiritishda xatolik');
       setIsLoading(false);
     }
   };

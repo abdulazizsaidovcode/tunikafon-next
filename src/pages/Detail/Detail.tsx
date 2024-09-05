@@ -38,17 +38,17 @@ const Detail = () => {
       await remove('/detail/', deleteId);
       toast.success('Successfully deleted');
       deleteToggleModal();
-      get('/detail');
+      get(`/detail?page=${currentPage}`); // Fetch current page after delete
     } catch (error) {
       toast.error('Error');
     }
   };
 
-  const [currentPage, setCurrentPage] = useState(0); // Store the current page number
+  const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageClick = (page: any) => {
-    setCurrentPage(page.selected); // Update the current page number
-    get('/detail', page.selected);
+    setCurrentPage(page.selected);
+    get(`/detail?page=${page.selected}`); // Fetch data for the selected page
   };
 
   const openEditModal = (item: any) => {
@@ -57,7 +57,7 @@ const Detail = () => {
   };
 
   useEffect(() => {
-    get('/detail');
+    get(`/detail?page=${currentPage}`); // Fetch data for the current page
   }, [editModal, addModal]);
 
   useEffect(() => {
@@ -242,7 +242,7 @@ const Detail = () => {
         renderOnZeroPageCount={null}
       />
       <EditModal
-        getting={() => get('/category/list')}
+        getting={() => get(`/detail?page=${currentPage}`)} // Fetch the current page after edit
         isModal={editModal}
         onClose={handleCloseEditModal}
         item={selectedItem}

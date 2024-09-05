@@ -16,7 +16,7 @@ const DropdownUser = ({ toggleModal, data, dropdownOpen, setDropdownOpen }: any)
           onClick={() => setDropdownOpen(!dropdownOpen)}
           className="flex items-center gap-4"
         >
-          <span className="hidden text-right lg:block">
+          <span className="text-right lg:block">
             <span className="block text-sm font-medium text-black ">
               {data?.fullName}
             </span>

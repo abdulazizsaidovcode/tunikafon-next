@@ -13,6 +13,10 @@ import usePut from '../hooks/put';
 import axios from '../service/api';
 import ReactPaginate from 'react-paginate';
 import { Button } from '@material-tailwind/react';
+import ImagePreview from '../components/imgView/Imgview';
+import { attechment } from '../service/urls';
+import { BsImage } from 'react-icons/bs';
+import { FaUser } from 'react-icons/fa6';
 
 interface Type {
   fullName: string;
@@ -227,53 +231,64 @@ const Employees = () => {
                 <tbody>
                   {data && data.object.length
                     ? data.object.map((item: any, i: number) => (
-                        <tr
-                          key={item.id}
-                          className="bg-gray-600 border-b hover:bg-gray-50 "
+                      <tr
+                        key={item.id}
+                        className="bg-gray-600 border-b hover:bg-gray-50 "
+                      >
+                        <th
+                          scope="row"
+                          className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-5 font-medium text-gray-900 whitespace-nowrap "
-                          >
-                            {page * 10 + i + 1}
-                          </th>
-                          <td className="px-6 py-5">{item.fullName}</td>
-                          <td className="px-6 py-5">
-                            {formatPhoneNumber(item.phoneNumber)}
-                          </td>
-                          <td className="px-6 py-5">
-                            <button
-                              onClick={() => {
-                                editToggleModal();
-                                setEdit(item);
-                              }}
-                            >
-                              <FaRegEdit size={25} className="text-green-500" />
-                            </button>
-                          </td>
-                          <td className="px-6 py-5">
-                            <button
-                              onClick={() => {
-                                deleteToggleModal();
-                                setDeleteId(item.id);
-                              }}
-                              className="ml-5"
-                            >
-                              <RiDeleteBinLine
-                                size={25}
-                                className="text-red-500"
+                          {page * 10 + i + 1}
+                        </th>
+                        <td className='px-6 py-5'>
+                          {
+                            item.attachmentId ?
+                              <ImagePreview
+                                imageUrl={`${attechment}${item.attachmentId}`}
+                                altText={item.name}
                               />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
+                              :
+                              <FaUser size={50} />
+                          }
+                        </td>
+                        <td className="px-6 py-5">{item.fullName}</td>
+                        <td className="px-6 py-5">
+                          {formatPhoneNumber(item.phoneNumber)}
+                        </td>
+                        <td className="px-6 py-5">
+                          <button
+                            onClick={() => {
+                              editToggleModal();
+                              setEdit(item);
+                            }}
+                          >
+                            <FaRegEdit size={25} className="text-green-500" />
+                          </button>
+                        </td>
+                        <td className="px-6 py-5">
+                          <button
+                            onClick={() => {
+                              deleteToggleModal();
+                              setDeleteId(item.id);
+                            }}
+                            className="ml-5"
+                          >
+                            <RiDeleteBinLine
+                              size={25}
+                              className="text-red-500"
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                     : !isLoading && (
-                        <tr className="bg-gray-600 border-b hover:bg-gray-50 ">
-                          <td className="px-6">
-                            <FaRegFolderOpen size={50} />
-                          </td>
-                        </tr>
-                      )}
+                      <tr className="bg-gray-600 border-b hover:bg-gray-50 ">
+                        <td className="px-6">
+                          <FaRegFolderOpen size={50} />
+                        </td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>

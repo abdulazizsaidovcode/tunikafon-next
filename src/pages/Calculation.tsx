@@ -333,8 +333,6 @@ const Calculation = () => {
     });
   };
 
-  console.log(orderProductDto);
-
   const getDetailCategorys = async () => {
     await getDetailCategory(`detail-category/all/list`);
   };
@@ -684,18 +682,18 @@ const Calculation = () => {
                     <Input
                       placeholder="Bo'yini kiriting"
                       onChange={(e: any) =>
-                        handleChange(index, 'width', e.target.value)
-                      }
-                      value={orderProductDto[index]?.width || ''}
+                        handleChange(index, 'height', e.target.value) 
+                      } 
+                      value={orderProductDto[index]?.height || ''} 
                       label="Bo'yi"
                       type="number"
                     />
                     <Input
                       placeholder="Enini kiriting"
-                      onChange={(e: any) =>
-                        handleChange(index, 'height', e.target.value)
+                      onChange={(e: any) => 
+                        handleChange(index, 'width', e.target.value)
                       }
-                      value={orderProductDto[index]?.height || ''}
+                      value={orderProductDto[index]?.width || ''}
                       label="Eni"
                       type="number"
                     />
