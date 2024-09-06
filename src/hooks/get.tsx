@@ -22,15 +22,9 @@ const useGet = () => {
     } catch (err: any) {
       setError(err);
       if (err.response && err.response.status === 404) setDatas ? setDatas(null) : setData(null)
-      throw new Error(
-        err.response.data.message
-          ? err.response.data.message
-          : err.response.data.error,
-      );console.clear();
     } finally {
       setIsLoading(false);
     }
-    console.clear();
   };
 
   return { data, isLoading, error, get };

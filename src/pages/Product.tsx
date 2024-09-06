@@ -145,7 +145,7 @@ const Product = () => {
   };
 
   useEffect(() => {
-    get('/product', page);
+    get('/product', page);  
     getDetail('/detail');
   }, []);
 
