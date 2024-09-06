@@ -350,7 +350,7 @@ const Calculation = () => {
       setGroupssName([...groupssName, item]);
     }
   };
-
+  console.clear();
   return (
     <>
       <Breadcrumb pageName="Hisoblash" />

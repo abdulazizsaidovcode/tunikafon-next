@@ -8,6 +8,7 @@ const usePost = () => {
 
   const post = async (url: string, postData: any) => {
     setIsLoading(true);
+    console.clear();
     setError(null);
     setData(null);
     try {
@@ -23,7 +24,8 @@ const usePost = () => {
           ? err.response.data.message
           : err.response.data.error,
       );
-    } finally {
+    } 
+    finally {
       setIsLoading(false);
     }
   };

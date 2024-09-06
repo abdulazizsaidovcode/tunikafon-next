@@ -76,7 +76,6 @@ export default function Groups() {
       await getStars(`/feedback/${groupId}`);
       ratingToggleModal();
     } catch (error) {
-      console.error('Error fetching ratings:', error);
       toast.error('Failed to fetch ratings');
     }
   };
@@ -89,7 +88,6 @@ export default function Groups() {
       editToggleModal();
       get('/group/all/list');
     } catch (error) {
-      console.error('Error updating detail:', error);
       toast.error('Failed to update');
     }
   };
@@ -122,7 +120,6 @@ export default function Groups() {
       getUser('/user/employees/group-not');
       get('/group/all/list');
     } catch (error) {
-      console.error('Guruh qushishda xatolik bor');
       toast.error(' ');
     }
   };
@@ -131,7 +128,7 @@ export default function Groups() {
     get('/group/all/list');
     getUser('/user/employees/group-not');
   }, []);
-
+  console.clear();
   return (
     <div>
       <Breadcrumb pageName="Guruhlar" />
@@ -250,10 +247,10 @@ export default function Groups() {
                 Hodim tanlang
               </option>
               {Users && Users.map((item: number | any) => (
-                  <option key={item.id} value={item.id}>
-                    {item.fullName || 'user topilmadi'}
-                  </option>
-                ))}
+                <option key={item.id} value={item.id}>
+                  {item.fullName || 'user topilmadi'}
+                </option>
+              ))}
             </select>
             <Input
               label="Guruh nomi"

@@ -22,7 +22,7 @@ const SignIn: React.FC = () => {
       toast.error("Bo'sh maydonlarni toldiring");
     }
   };
-
+  console.clear();
   return (
     <>
       <div className="rounded-sm bg-white ">

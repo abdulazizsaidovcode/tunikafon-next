@@ -41,7 +41,7 @@ const ECommerce: React.FC = () => {
   const fallbackText = 'Enter date " year | month " ';
   const monthErrorText = 'Month not found';
   const yearErrorText = 'Enter a valid 4-digit year {202*}';
-
+  console.clear();
   return (
     <>
       <div className="flex justify-between gap-2 items-center">

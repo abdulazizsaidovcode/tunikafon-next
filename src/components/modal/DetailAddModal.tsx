@@ -95,8 +95,9 @@ export default function DetailAddModal({ onClose }: DetailAddModalProps) {
 
   useEffect(() => {
     get('/detail-category/list');
+    console.clear();
   }, []);
-
+  console.clear();
   return (
     <div>
       <div className="p-4">

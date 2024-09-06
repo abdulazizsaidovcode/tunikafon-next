@@ -7,6 +7,7 @@ const useGet = () => {
   const [error, setError] = useState<any>(null);
 
   const get = async (url: string, page?: any, setDatas?: (data: any) => void) => {
+    console.clear();
     setIsLoading(true);
 
     try {
@@ -25,10 +26,11 @@ const useGet = () => {
         err.response.data.message
           ? err.response.data.message
           : err.response.data.error,
-      );
+      );console.clear();
     } finally {
       setIsLoading(false);
     }
+    console.clear();
   };
 
   return { data, isLoading, error, get };

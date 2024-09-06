@@ -140,7 +140,7 @@ const Product = () => {
       toggleDeleteModal();
       toast.success("Mufaqiyatli o'chirildi");
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error("");
     }
   };
 
@@ -155,7 +155,6 @@ const Product = () => {
       setDetailIds(update.detailIds ? update.detailIds : []);
     }
   }, [update, editModal]);
-
   return (
     <>
       <Breadcrumb pageName="Mahsulotlar" />
@@ -207,10 +206,10 @@ const Product = () => {
                 <div className="w-full cursor-pointer rounded flex gap-2 border overflow-y-auto border-black text-black px-6 py-3 text-start font-normal">
                   {detailsName && detailsName.length
                     ? detailsName.map((item: any) => (
-                        <p className="border rounded p-1 line-clamp-1">
-                          {item.name}
-                        </p>
-                      ))
+                      <p className="border rounded p-1 line-clamp-1">
+                        {item.name}
+                      </p>
+                    ))
                     : 'Detalni tanlang'}
                 </div>
               </MenuHandler>
@@ -296,10 +295,10 @@ const Product = () => {
                 <div className="w-full rounded cursor-pointer flex gap-2 border overflow-y-auto border-black text-black px-6 py-3 text-start font-normal">
                   {detailsName && detailsName.length
                     ? detailsName.map((item: any) => (
-                        <p className="border rounded p-1 line-clamp-1">
-                          {item.name}
-                        </p>
-                      ))
+                      <p className="border rounded p-1 line-clamp-1">
+                        {item.name}
+                      </p>
+                    ))
                     : 'Detalni tanlang'}
                 </div>
               </MenuHandler>

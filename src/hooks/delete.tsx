@@ -7,6 +7,7 @@ const useDelete = () => {
   const [data, setData] = useState<any>(null);
 
   const remove = async (url: string, id: any) => {
+    console.clear();
     setIsLoading(true);
     setError(null);
     setData(null);
