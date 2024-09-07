@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-// import Logo from '../../images/logo/logo.svg';
 import { BsBarChart, BsBlockquoteRight, BsBoxSeam, BsFileSpreadsheet } from 'react-icons/bs';
 import { FaRegUser } from "react-icons/fa";
 import { PiUsersLight } from "react-icons/pi";
 import { LuListOrdered } from "react-icons/lu";
-
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -60,20 +58,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   }, [sidebarExpanded]);
 
   const styles = {
-    sidemenu: 'group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray'
-  }
+    sidemenu: 'group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out border border-transparent hover:border-[#B2C0CE] hover:bg-[#F5F9FD]'
+  };
 
   return (
     <aside
       ref={sidebar}
       className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white duration-300 ease-linear  lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        }`} 
     >
-      {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/dashboard" className="text-3xl text-black">
           Tunikafon
-          {/* <img src={Logo} alt="Logo" /> */}
         </NavLink>
 
         <button
@@ -83,7 +79,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           aria-expanded={sidebarOpen}
           className="block lg:hidden"
         >
-          <svg
+          <svg 
             className="fill-current"
             width="20"
             height="18"
@@ -115,7 +111,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/dashboard"
-                  className={`${styles.sidemenu} ${pathname.includes('/dashboard') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/dashboard') && 'bg-gray border-[#003543]'}`}
                 >
                   <BsBarChart />
                   Statistika
@@ -125,42 +121,39 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/orders"
-                  className={`${styles.sidemenu} ${pathname.includes('/orders') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/orders') && 'bg-gray border-[#003543]'}`}
                 >
                   <LuListOrdered />
                   Buyurtmalar
                 </NavLink>
               </li>
-              {/* <!-- Menu Item Dashboard --> */}
+              {/* <!-- Menu Item Groups --> */}
               <li>
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/groups"
-                  className={`${styles.sidemenu} ${pathname.includes('/groups') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/groups') && 'bg-gray border-[#003543]'}`}
                 >
-                  <PiUsersLight     />
+                  <PiUsersLight />
                   Guruhlar
                 </NavLink>
               </li>
-              {/* <!-- Menu Item Profile --> */}
+              {/* <!-- Menu Item Details --> */}
               <li>
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/categor-detail"
-                  className={`${styles.sidemenu} ${pathname.includes('/categor-detail') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/categor-detail') && 'bg-gray border-[#003543]'}`}
                 >
                   <BsBlockquoteRight />
                   Detal bo'limlari
                 </NavLink>
               </li>
-              {/* <!-- Menu Item Profile --> */}
-
-              {/* <!-- Menu Item Tables --> */}
               <li>
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/detail"
-                  className={`${styles.sidemenu} ${pathname.includes('/detail') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/detail') && 'bg-gray border-[#003543]'}`}
                 >
                   <svg
                     className="fill-current"
@@ -172,7 +165,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   >
                     <g clipPath="url(#clip0_130_9756)">
                       <path
-                        d="M15.7501 0.55835H2.2501C1.29385 0.55835 0.506348 1.34585 0.506348 2.3021V15.8021C0.506348 16.7584 1.29385 17.574 2.27822 17.574H15.7782C16.7345 17.574 17.5501 16.7865 17.5501 15.8021V2.3021C17.522 1.34585 16.7063 0.55835 15.7501 0.55835ZM6.69385 10.599V6.4646H11.3063V10.5709H6.69385V10.599ZM11.3063 11.8646V16.3083H6.69385V11.8646H11.3063ZM1.77197 6.4646H5.45635V10.5709H1.77197V6.4646ZM12.572 6.4646H16.2563V10.5709H12.572V6.4646ZM2.2501 1.82397H15.7501C16.0313 1.82397 16.2563 2.04897 16.2563 2.33022V5.2271H1.77197V2.3021C1.77197 2.02085 1.96885 1.82397 2.2501 1.82397ZM1.77197 15.8021V11.8646H5.45635V16.3083H2.2501C1.96885 16.3083 1.77197 16.0834 1.77197 15.8021ZM15.7501 16.3083H12.572V11.8646H16.2563V15.8021C16.2563 16.0834 16.0313 16.3083 15.7501 16.3083Z"
+                        d="M15.7501 0.55835H2.2501C1.29385 0.55835 0.506348 1.34585 0.506348 2.3021V15.8021C0.506348 16.7584 1.29385 17.574 2.27822 17.574H15.7782C16.7345 17.574 17.5501 16.7865 17.5501 15.8021V2.3021C17.522 1.34585 16.7063 0.55835 15.7501 0.55835ZM6.69385 10.599V6.4646H11.3063V10.5709H6.69385V10.599ZM11.3063 11.8646V16.3083H6.69385V11.8646H11.3063ZM1.77197 6.4646H5.45635V10.5709H1.77197V6.4646ZM12.572 6.4646H16.2563V10.5709H12.572V6.4646ZM2.2501 1.82397H15.7501C16.0313 1.82397 16.2563 2.04897 16.2563 2.33022V5.2271H1.77197V2.3021C1.77197 2.02085 1.96885 1.82397 2.2501 1.82397ZM1.77197 16.2538V11.8646H5.45635V16.3083H2.27822C2.02297 16.2802 1.77197 16.0584 1.77197 16.2538ZM15.7782 16.3083H12.572V11.8646H16.2563V15.7784C16.2563 16.0346 16.0345 16.2802 15.7782 16.3083Z"
                         fill=""
                       />
                     </g>
@@ -182,7 +175,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           width="18"
                           height="18"
                           fill="white"
-                          transform="translate(0 0.052124)"
+                          transform="translate(0 0.55835)"
                         />
                       </clipPath>
                     </defs>
@@ -190,24 +183,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Detallar
                 </NavLink>
               </li>
-              {/* <!-- Menu Item Tables --> */}
-
-              {/* <!-- Menu Item Settings --> */}
               <li>
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/product"
-                  className={`${styles.sidemenu} ${pathname.includes('/product') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/product') && 'bg-gray border-[#003543]'}`}
                 >
                   <BsBoxSeam />
-                  Mahsulot
+                  Mahsulotlar
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/calculation"
-                  className={`${styles.sidemenu} ${pathname.includes('/calculation') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/reports') && 'bg-gray border-[#003543]'}`}
                 >
                   <BsFileSpreadsheet />
                   Hisoblash
@@ -217,7 +207,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/employees"
-                  className={`${styles.sidemenu} ${pathname.includes('/employees') && 'bg-gray '}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/employes') && 'bg-gray border-[#003543]'}`}
                 >
                   <FaRegUser />
                   Hodimlar
