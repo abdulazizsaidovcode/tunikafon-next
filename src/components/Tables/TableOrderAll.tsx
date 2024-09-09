@@ -175,7 +175,11 @@ export default function TableOrderAll() {
     else if (name === 'IN_PROGRESS') return 'Ish jarayonida';
     else if (name === 'CONFIRMED') return 'Tasdiqlangan';
   };
-
+  const formatResidual = (residual: any) => {
+    return residual.replace(/\d+\.\d+/g, (match : any) => {
+      return parseFloat(match).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    });
+  };
   const statusColor = (status: any) => {
     if (status === 'WAIT') return 'bg-yellow-300';
     else if (status === 'REJECTED') return 'bg-red-500';
@@ -446,11 +450,14 @@ export default function TableOrderAll() {
                                   </p>
                                   <p className="flex justify-between border-b">
                                     Detal kvadarati:{' '}
-                                    <span className='truncate'>{detail.detailKv || '-'}</span>
+                                    <span className='truncate'>
+                                      {detail?.detailKv ? detail.detailKv.toFixed(2) : '-'}
+                                    </span>
                                   </p>
+
                                   {detail.residual && (
                                     <p className="hidden lg:block">
-                                      Qolgan atxod: {detail.residual || '-'}
+                                      Qolgan atxod: {formatResidual(detail.residual)}
                                     </p>
                                   )}
                                 </div>

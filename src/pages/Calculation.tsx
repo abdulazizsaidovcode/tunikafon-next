@@ -19,7 +19,7 @@ import {
 } from '@material-tailwind/react';
 import usePost from '../hooks/post';
 import { toast } from 'sonner';
-import { FaRegFolderOpen } from 'react-icons/fa6';
+import { FaLeftLong, FaRegFolderOpen } from 'react-icons/fa6';
 import { RiShareForwardFill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { FaMinus, FaPlus } from 'react-icons/fa';
@@ -669,8 +669,8 @@ const Calculation = () => {
                         ))
                       ) : (
                         <div className="w-full flex flex-col justify-center items-center py-10">
-                          <h1 className="text-gray-600 font-semibold text-lg text-center">
-                            Bu qismda siz tanlagan detallar ko'rinadi.
+                          <h1 className="text-gray-600 font-semibold text-lg text-center flex gap-2 items-center justify-center ">
+                            <FaLeftLong className='hidden lg:block'/> <span>Bu qismda siz tanlagan detallar ko'rinadi.</span>
                           </h1>
                         </div>
                       )}

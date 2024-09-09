@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import Logo from '../../images/logo/logo.svg';
 import { BsBarChart, BsFileSpreadsheet } from 'react-icons/bs';
+import { LuListOrdered } from 'react-icons/lu';
 
 interface SidebarProps {
     sidebarOpen: boolean;
@@ -63,7 +64,7 @@ const EmployeeSidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         >
             {/* <!-- SIDEBAR HEADER --> */}
             <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-                <NavLink to="/" className='text-3xl text-white'>
+                <NavLink to="/" className='text-3xl text-white' onClick={() => setSidebarOpen(false)}>
                     Tunikafon
                     {/* <img src={Logo} alt="Logo" /> */}
                 </NavLink>
@@ -106,30 +107,39 @@ const EmployeeSidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                                 <NavLink
                                     to="/dashboard"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                                        pathname.includes('/dashboard') &&
+                                    onClick={() => setSidebarOpen(false)} // Close sidebar on click
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${pathname.includes('/dashboard') &&
                                         'bg-gray '
-                                      }`}
+                                        }`}
                                 >
                                     <BsBarChart />
                                     Statistika
                                 </NavLink>
                             </li>
-                            {/* <!-- Menu Item Dashboard --> */}
-
+                            <li>
+                                <NavLink
+                                    to="/orders"
+                                    onClick={() => setSidebarOpen(false)} // Close sidebar on click
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${pathname.includes('/orders') &&
+                                        'bg-gray '
+                                        }`}>    
+                                    <LuListOrdered />
+                                    Buyurtmalar
+                                </NavLink>
+                            </li>
                             <li>
                                 <NavLink
                                     to="/calculation"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${
-                                        pathname.includes('/calculation') &&
+                                    onClick={() => setSidebarOpen(false)} // Close sidebar on click
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-gray  ${pathname.includes('/calculation') &&
                                         'bg-gray '
-                                      }`}
-                                    >
-                                      <BsFileSpreadsheet />
-                                      Hisoblash
-                                    </NavLink>
+                                        }`}
+                                >
+                                    <BsFileSpreadsheet />
+                                    Hisoblash
+                                </NavLink>
                             </li>
-                          
+
                         </ul>
                     </div>
                 </nav>
