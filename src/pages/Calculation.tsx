@@ -670,7 +670,7 @@ const Calculation = () => {
                       ) : (
                         <div className="w-full flex flex-col justify-center items-center py-10">
                           <h1 className="text-gray-600 font-semibold text-lg text-center flex gap-2 items-center justify-center ">
-                            <FaLeftLong className='hidden lg:block'/> <span>Bu qismda siz tanlagan detallar ko'rinadi.</span>
+                            <FaLeftLong className='hidden lg:block' /> <span>Bu qismda siz tanlagan detallar ko'rinadi.</span>
                           </h1>
                         </div>
                       )}
@@ -682,15 +682,15 @@ const Calculation = () => {
                     <Input
                       placeholder="Bo'yini kiriting"
                       onChange={(e: any) =>
-                        handleChange(index, 'height', e.target.value) 
-                      } 
-                      value={orderProductDto[index]?.height || ''} 
+                        handleChange(index, 'height', e.target.value)
+                      }
+                      value={orderProductDto[index]?.height || ''}
                       label="Bo'yi"
                       type="number"
                     />
                     <Input
                       placeholder="Enini kiriting"
-                      onChange={(e: any) => 
+                      onChange={(e: any) =>
                         handleChange(index, 'width', e.target.value)
                       }
                       value={orderProductDto[index]?.width || ''}

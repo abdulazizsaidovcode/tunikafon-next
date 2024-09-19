@@ -65,7 +65,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     <aside
       ref={sidebar}
       className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white duration-300 ease-linear  lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`} 
+        }`}
     >
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/dashboard" className="text-3xl text-black">
@@ -79,7 +79,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           aria-expanded={sidebarOpen}
           className="block lg:hidden"
         >
-          <svg 
+          <svg
             className="fill-current"
             width="20"
             height="18"
@@ -197,7 +197,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/calculation"
-                  className={`${styles.sidemenu} ${pathname.includes('/reports') && 'bg-gray border-[#003543]'}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/calculation') && 'bg-gray border-[#003543]'}`}
                 >
                   <BsFileSpreadsheet />
                   Hisoblash
@@ -207,7 +207,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/employees"
-                  className={`${styles.sidemenu} ${pathname.includes('/employes') && 'bg-gray border-[#003543]'}`}
+                  className={`${styles.sidemenu} ${pathname.includes('/employees') && 'bg-gray border-[#003543]'}`}
                 >
                   <FaRegUser />
                   Hodimlar
