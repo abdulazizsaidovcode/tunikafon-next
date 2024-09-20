@@ -305,7 +305,7 @@ const Product = () => {
                 {details && !detailIsloading ? (
                   <>
                     {details.map((item: any) => (
-                      <MenuItem
+                      <MenuItem 
                         onClick={() => sortDetailIds(item)}
                         key={item.id}
                         className="p-0 !bg-white !text-black active:bg-white/50 hover:bg-white/50 hover:text-black flex items-center w-full"

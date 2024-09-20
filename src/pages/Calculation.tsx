@@ -153,7 +153,6 @@ const Calculation = () => {
       });
     });
   };
-
   const formatNumberWithSpaces = (number: number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
@@ -249,6 +248,7 @@ const Calculation = () => {
       if (!areDimensionsValid) throw new Error('Malumotlar tuliq emas');
       await post('/order/calculation', orderProductDto);
       setTotalPrice(total);
+      console.log(total)
       isClose && toggleModal();
     } catch (error) {
       toast.error('Hisoblashda xatolik yuz berdi');
@@ -350,7 +350,7 @@ const Calculation = () => {
       setGroupssName([...groupssName, item]);
     }
   };
-  console.clear();
+  // console.clear();
   return (
     <>
       <Breadcrumb pageName="Hisoblash" />
@@ -1036,9 +1036,29 @@ const Calculation = () => {
                 )}
               </div>
             </div>
-            <h1 className="text-lg">
-              {totalPrice ? formatNumberWithSpaces(totalPrice) : '0'} sum
-            </h1>
+            <div className="flex flex-col my-4">
+              <h1 className="text-lg">
+                {total ? total.result : '0'} sum
+              </h1>
+              <div className="">
+                {/* Header */}
+                <div className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
+                  <h2 className="w-1/3 text-sm font-bold text-gray-800">Nomi</h2>
+                  <h2 className="w-1/3 text-sm font-bold text-gray-800">KV</h2>
+                  <h2 className="w-1/3 text-sm font-bold text-gray-800">Soni</h2>
+                </div>
+
+                {/* Data Rows */}
+                {total && total.resOrderDetails.map((item: any) => (
+                  <div key={item.id} className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
+                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>
+                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv || '-'}</h2>
+                    <h2 className="w-1/3 text-sm text-gray-600">{item.amount}, {item.amountType || '0'}</h2>
+                  </div>
+                ))}
+              </div>
+
+            </div>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
                 Yopish
@@ -1050,7 +1070,7 @@ const Calculation = () => {
                 }}
                 color="green"
               >
-                {saveLoading ? 'Yuklanmoqda...' : 'Hisoblash'}
+                {saveLoading ? 'Yuklanmoqda...' : 'Hisoblashh'}
               </Button>
             </div>
           </div>
