@@ -32,7 +32,6 @@ const Product = () => {
   const { post: addAttechmet, isLoading: attechmentLoading } = usePost();
   const { put, isLoading: putLoading } = usePut();
 
-  // states
   const [page, setPage] = useState<number>(0);
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -145,8 +144,8 @@ const Product = () => {
   };
 
   useEffect(() => {
-    get('/product', page);  
-    getDetail('/detail');
+    get('/product', page);
+    getDetail('/detail/list');
   }, []);
 
   useEffect(() => {
@@ -216,7 +215,7 @@ const Product = () => {
               <MenuList className="z-[1000000] bg-white border relative max-h-50 w-60 sm:w-96 text-black">
                 {details && !detailIsloading ? (
                   <>
-                    {details.object.map((item: any) => (
+                    {details.map((item: any) => (
                       <MenuItem
                         onClick={() => sortDetailIds(item)}
                         key={item.id}
@@ -305,7 +304,7 @@ const Product = () => {
               <MenuList className="z-[1000000] bg-white border relative max-h-50 w-60 sm:w-96 text-black">
                 {details && !detailIsloading ? (
                   <>
-                    {details.object.map((item: any) => (
+                    {details.map((item: any) => (
                       <MenuItem
                         onClick={() => sortDetailIds(item)}
                         key={item.id}
