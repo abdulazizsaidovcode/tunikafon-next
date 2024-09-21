@@ -258,7 +258,7 @@ export default function TableOrderAll() {
                       <td className="px-6 py-4">{item.employeeName}</td>
                       <td className="px-6 py-4">{item.clientFullName}</td>
                       <td className="px-6 py-4">{item.clientPhoneNumber}</td>
-                      <td className="px-6 py-4 ">
+                      <td className="px-6 py-4 "> 
                         <a
                           href={`${item.location}`}
                           target="blank"
