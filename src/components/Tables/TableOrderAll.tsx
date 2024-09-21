@@ -176,7 +176,7 @@ export default function TableOrderAll() {
     else if (name === 'CONFIRMED') return 'Tasdiqlangan';
   };
   const formatResidual = (residual: any) => {
-    return residual.replace(/\d+\.\d+/g, (match : any) => {
+    return residual.replace(/\d+\.\d+/g, (match: any) => {
       return parseFloat(match).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
     });
   };

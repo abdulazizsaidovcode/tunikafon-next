@@ -1047,12 +1047,10 @@ const Calculation = () => {
                   <h2 className="w-1/3 text-sm font-bold text-gray-800">KV</h2>
                   <h2 className="w-1/3 text-sm font-bold text-gray-800">Soni</h2>
                 </div>
-
-                {/* Data Rows */}
                 {total && total.resOrderDetails.map((item: any) => (
                   <div key={item.id} className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>
-                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv || '-'}</h2>
+                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item.detailKv.toFixed(2) || '-'}</h2>
                     <h2 className="w-1/3 text-sm text-gray-600">{item.amount}, {item.amountType || '0'}</h2>
                   </div>
                 ))}
