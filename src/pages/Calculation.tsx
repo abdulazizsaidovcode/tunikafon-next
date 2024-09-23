@@ -31,7 +31,7 @@ const Calculation = () => {
   const { get: getcategoryDetail, data: categorydetail } = useGet();
   const { get: getDetailCategory, data: detailCategory } = useGet();
   const { get: getGroup, data: groups, isLoading: groupIsloading } = useGet();
-  const { post, isLoading: countLoading, data: total } = usePost();
+  const { post, data: total } = usePost();
   const { post: save, isLoading: saveLoading } = usePost();
 
   const [req, setReq] = useState<any>({
