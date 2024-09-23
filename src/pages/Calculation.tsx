@@ -248,7 +248,6 @@ const Calculation = () => {
       if (!areDimensionsValid) throw new Error('Malumotlar tuliq emas');
       await post('/order/calculation', orderProductDto);
       setTotalPrice(total);
-      console.log(total)
       isClose && toggleModal();
     } catch (error) {
       toast.error('Hisoblashda xatolik yuz berdi');
@@ -350,7 +349,7 @@ const Calculation = () => {
       setGroupssName([...groupssName, item]);
     }
   };
-  // console.clear();
+  console.clear();
   return (
     <>
       <Breadcrumb pageName="Hisoblash" />
