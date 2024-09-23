@@ -448,11 +448,11 @@ export default function TableOrderAll() {
                                   <p className="flex justify-between border-b">
                                     Rangi: <span>{detail.color || '-'}</span>
                                   </p>
-                                  <p className="flex justify-between border-b">
+                                  <p className="flex justify-between border-b"> 
                                     Detal kvadarati:{' '}
                                     <span className='truncate'>
                                       {detail?.detailKv ? detail.detailKv.toFixed(2) : '-'}
-                                    </span>
+                                    </span> 
                                   </p>
 
                                   {detail.residual && (
