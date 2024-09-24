@@ -1047,12 +1047,17 @@ const Calculation = () => {
                     <h2 className="w-1/3 text-sm font-bold text-gray-800">Soni</h2>
                   </div>
                 }
-                {total && total.resOrderDetails.map((item: { id: number | string, detailName: string, detailKv: number, amount: string, amountType: number | string }) => (
+                {total && total.resOrderDetails.map((item: { id: number | string, residual: string, detailName: string, detailKv: number, amount: string, amountType: number | string }) => (
 
                   <div key={item.id} className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item.detailKv.toFixed(4) || '-'}</h2>
-                    <h2 className="w-1/3 text-sm text-gray-600">{item.amount}, {item.amountType || '0'}</h2>
+                    <h2 className="w-1/3 text-sm text-gray-600">
+                      {item.amount} {item.amountType || '0'}
+                      <br />
+                      {item.residual?.slice(0, 5) === "Hovuz" && item.residual}
+                    </h2>
+
                   </div>
                 ))}
               </div>
