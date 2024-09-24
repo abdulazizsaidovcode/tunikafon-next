@@ -22,9 +22,9 @@ const DetailCategory = () => {
   const [toggle, setToggle] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number>();
-  const [update, setUpdate] = useState<any>();
-  const [file, setFile] = useState<any>(null);
-  const [val, setVal] = useState<any>('');
+  const [update, setUpdate] = useState<File>();
+  const [file, setFile] = useState<File>();
+  const [val, setVal] = useState<string | number>('');
   const [name, setName] = useState<string>('');
   const [editModal, setEditModal] = useState(false);
   const [isValid, setIsValid] = useState<boolean>(false);

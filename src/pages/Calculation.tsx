@@ -1051,7 +1051,7 @@ const Calculation = () => {
 
                   <div key={item.id} className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>
-                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item.detailKv.toFixed(2) || '-'}</h2>
+                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item.detailKv.toFixed(4) || '-'}</h2>
                     <h2 className="w-1/3 text-sm text-gray-600">{item.amount}, {item.amountType || '0'}</h2>
                   </div>
                 ))}
@@ -1059,7 +1059,7 @@ const Calculation = () => {
               {total && (
                 <div className="mt-4">
                   <h2 className="text-lg font-bold text-gray-800">
-                    Yig'indi KV: {total.resOrderDetails.reduce((acc: any, item: { detailKv: number }) => acc + (item.detailKv || 0), 0).toFixed(2)}
+                    Yig'indi KV: {total.resOrderDetails.reduce((acc: any, item: { detailKv: number }) => acc + (item.detailKv || 0), 0).toFixed(4)}
                   </h2>
                 </div>
               )}

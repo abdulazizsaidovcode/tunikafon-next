@@ -177,7 +177,7 @@ export default function TableOrderAll() {
   };
   const formatResidual = (residual: any) => {
     return residual.replace(/\d+\.\d+/g, (match: any) => {
-      return parseFloat(match).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+      return parseFloat(match).toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
     });
   };
   const statusColor = (status: any) => {
@@ -269,7 +269,7 @@ export default function TableOrderAll() {
                         </a>
                       </td>
                       <td className="px-6 py-4">
-                        {formatNumberWithSpaces(item.price.toFixed())}
+                        {formatNumberWithSpaces(item.price.toFixed(4))}
                       </td>
                       <td className="px-6 py-4">
                         <p
@@ -377,7 +377,7 @@ export default function TableOrderAll() {
             <p className="flex justify-between">
               Narxi:{' '}
               <span>
-                {formatNumberWithSpaces(dateOne.price.toFixed()) || '0'}
+                {formatNumberWithSpaces(dateOne.price.toFixed(4)) || '0'}
               </span>
             </p>
             <p className="flex justify-between">
@@ -448,11 +448,11 @@ export default function TableOrderAll() {
                                   <p className="flex justify-between border-b">
                                     Rangi: <span>{detail.color || '-'}</span>
                                   </p>
-                                  <p className="flex justify-between border-b"> 
+                                  <p className="flex justify-between border-b">
                                     Detal kvadarati:{' '}
                                     <span className='truncate'>
-                                      {detail?.detailKv ? detail.detailKv.toFixed(2) : '-'}
-                                    </span> 
+                                      {detail?.detailKv ? detail.detailKv.toFixed(4) : '-'}
+                                    </span>
                                   </p>
 
                                   {detail.residual && (
