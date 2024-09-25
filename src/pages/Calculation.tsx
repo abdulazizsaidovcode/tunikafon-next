@@ -82,7 +82,6 @@ const Calculation = () => {
             (detail: any) => detail.detailId === item.id,
           );
           if (isSelected) {
-            // If the item is already selected, remove it
             return {
               ...product,
               orderDetails: product.orderDetails.filter(
@@ -90,7 +89,6 @@ const Calculation = () => {
               ),
             };
           } else {
-            // If the item is not selected, add it
             return {
               ...product,
               orderDetails: [
@@ -216,6 +214,36 @@ const Calculation = () => {
       });
     });
   };
+
+  const incrementItem = (index: number) => {
+    // orderProductDto[0] ni olish va orderDetails ni yangilash
+    const updatedOrderProductDto = [...orderProductDto]; // Deep clone qilish
+    const product = updatedOrderProductDto[0];
+
+    if (product?.orderDetails?.length) {
+      product.orderDetails.splice(index + 1, 0, {
+        ...product.orderDetails[index],
+        id: new Date().getTime(),
+      });
+
+      setOrderProductDto(updatedOrderProductDto); // Yangilangan massivni set qilish
+    }
+  };
+
+  const decrementItem = (index: number) => {
+    const updatedOrderProductDto = [...orderProductDto];
+    const product = updatedOrderProductDto[0];
+
+    if (product?.orderDetails?.length > 1) {
+      product.orderDetails.splice(index, 1); // Elementni o'chirish
+      setOrderProductDto(updatedOrderProductDto); // Yangilangan massivni set qilish
+    }
+  };
+
+
+
+
+
 
   const resetAll = () => {
     setReq({ width: null, tall: null });
@@ -508,7 +536,7 @@ const Calculation = () => {
                           </AccordionHeader>
                           <AccordionBody>
                             {categorydetail ? (
-                              categorydetail.map((detail: any, i: number) => (
+                              categorydetail.map((detail: any,) => (
                                 <div
                                   key={detail.id}
                                   className="flex items-center justify-between gap-3 sm:gap-10 border border-[#64748B] rounded-lg p-0 sm:px-5 sm:py-1 mb-4 mx-3 sm:mx-10"
@@ -927,59 +955,56 @@ const Calculation = () => {
                     <Option className="my-1" value="INTERIOR_VIEW_OF_THE_HOUSE">
                       Uyning ichki ko'rinishi
                     </Option>
-                    <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
-                      Darvoza xona
-                    </Option>
+                    <Option value="THE_GATE_IS_INSIDE_THE_ROOM">Darvoza xona</Option>
                   </Select>
                   <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">
-                    {orderProductDto[0].orderDetails.map(
-                      (item: any, i: number) => (
-                        <div
-                          key={item.id}
-                          className="flex flex-col lg:flex-row items-start lg:items-center justify-between  border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
-                        >
-                          <img
-                            className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
-                            src={
-                              item.attachmentId
-                                ? attechment + item.attachmentId
-                                : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
-                            }
-                            alt={item.name}
-                          />
-                          <div className="flex-1 px-0">
-                            <h1 className="text-sm sm:text-md text-center">
-                              {item.name}
-                            </h1>
-                          </div>
-                          <input
-                            onChange={(e) =>
-                              handleInputChange(i, 0, 'count', e.target.value)
-                            }
-                            type="number"
-                            placeholder="Soni"
-                            className="rounded outline-none px-1 py-0.5 lg:w-20"
-                          />
-                          <input
-                            onChange={(e) =>
-                              handleInputChange(i, 0, 'number', e.target.value)
-                            }
-                            type="number"
-                            placeholder="Raqam"
-                            className="rounded outline-none px-1 py-0.5 lg:w-20"
-                          />
-                          <input
-                            onChange={(e) =>
-                              handleInputChange(i, 0, 'color', e.target.value)
-                            }
-                            type="text"
-                            placeholder="Rang"
-                            className="rounded outline-none px-1 py-0.5 lg:w-20"
-                          />
+                    {orderProductDto[0].orderDetails.map((item: any, i: number) => (
+                      <div key={item.id} className="flex flex-col lg:flex-row items-start lg:items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3">
+                        <img
+                          className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                          src={item.attachmentId ? attechment + item.attachmentId : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'}
+                          alt={item.name}
+                        />
+                        <div className="flex-1 px-0">
+                          <h1 className="text-sm sm:text-md text-center">{item.name}</h1>
                         </div>
-                      ),
-                    )}
+
+                        <input
+                          onChange={(e) => handleInputChange(i, 0, 'count', e.target.value)}
+                          type="number"
+                          placeholder="Soni"
+                          // value={item.count ?? ''}
+                          className="rounded outline-none px-1 py-0.5 lg:w-20"
+                        />
+                        <input
+                          onChange={(e) => handleInputChange(i, 0, 'number', e.target.value)}
+                          type="number"
+                          placeholder="Raqam"
+                          // value={item.number ?? ''}
+                          className="rounded outline-none px-1 py-0.5 lg:w-20"
+                        />
+                        <input
+                          onChange={(e) => handleInputChange(i, 0, 'color', e.target.value)}
+                          type="text"
+                          placeholder="Rang"
+                          // value={item.color ?? ''}
+                          className="rounded outline-none px-1 py-0.5 lg:w-20"
+                        />
+                        <button onClick={() => incrementItem(i)} className="px-2 py-1 bg-green-500 text-white rounded">
+                          +
+                        </button>
+                        {orderProductDto[0].orderDetails.filter((detail: any) => detail.detailId === item.detailId).length > 1 && (
+                          <button
+                            onClick={() => decrementItem(i)}
+                            className="px-2 py-1 bg-red-500 text-white rounded"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
+
                 </div>
               ) : (
                 <div className="flex flex-col justify-center items-center">
@@ -996,6 +1021,7 @@ const Calculation = () => {
                 </div>
               )}
             </div>
+
             <div className="flex justify-between my-5 items-center gap-4">
               <div className="flex items-center gap-5">
                 <Input
@@ -1037,7 +1063,7 @@ const Calculation = () => {
             </div>
             <div className="flex flex-col my-4">
               <h1 className="text-lg">
-                {total ? total.result : '0'} sum
+                {total ? total.result && total.result.toFixed() : '0'} sum
               </h1>
               <div className="">
                 {total &&
