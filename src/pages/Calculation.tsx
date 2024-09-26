@@ -990,15 +990,15 @@ const Calculation = () => {
                           // value={item.color ?? ''}
                           className="rounded outline-none px-1 py-0.5 lg:w-20"
                         />
-                        <button onClick={() => incrementItem(i)} className="px-2 py-1 bg-green-500 text-white rounded">
-                          +
+                        <button onClick={() => incrementItem(i)} className="px-2 py-1 border text-boxdark rounded">
+                          <FaPlus/>
                         </button>
                         {orderProductDto[0].orderDetails.filter((detail: any) => detail.detailId === item.detailId).length > 1 && (
                           <button
                             onClick={() => decrementItem(i)}
-                            className="px-2 py-1 bg-red-500 text-white rounded"
+                            className="px-2 py-1 border text-boxdark rounded"
                           >
-                            -
+                            <FaMinus/>
                           </button>
                         )}
                       </div>
@@ -1103,20 +1103,20 @@ const Calculation = () => {
                 Yopish
               </Button>
               <Button
-                disabled={saveLoading} 
-                onClick={() => { 
-                  handleClick(), true; 
-                }} 
-                color="green" 
-              > 
+                disabled={saveLoading}
+                onClick={() => {
+                  handleClick(), true;
+                }}
+                color="green"
+              >
                 {saveLoading ? 'Yuklanmoqda...' : 'Hisoblash'}
-              </Button> 
-            </div> 
-          </div> 
-        } 
-      /> 
-    </> 
-  ); 
-}; 
- 
+              </Button>
+            </div>
+          </div>
+        }
+      />
+    </>
+  );
+};
+
 export default Calculation; 
