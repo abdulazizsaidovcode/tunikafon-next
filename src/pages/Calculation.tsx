@@ -1103,20 +1103,20 @@ const Calculation = () => {
                 Yopish
               </Button>
               <Button
-                disabled={saveLoading}
-                onClick={() => {
-                  handleClick(), true;
-                }}
-                color="green"
-              >
+                disabled={saveLoading} 
+                onClick={() => { 
+                  handleClick(), true; 
+                }} 
+                color="green" 
+              > 
                 {saveLoading ? 'Yuklanmoqda...' : 'Hisoblash'}
-              </Button>
-            </div>
-          </div>
-        }
-      />
-    </>
-  );
-};
-
-export default Calculation;
+              </Button> 
+            </div> 
+          </div> 
+        } 
+      /> 
+    </> 
+  ); 
+}; 
+ 
+export default Calculation; 
