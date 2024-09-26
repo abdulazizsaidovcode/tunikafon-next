@@ -73,7 +73,11 @@ const Calculation = () => {
     setToggle(!toggle);
     resetAll();
   };
-
+  const formatHovuz = (residual: any) => {
+    return residual.replace(/\d+\.\d+/g, (match: any) => {
+      return parseFloat(match).toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
+    });
+  };
   const handleCheckboxChange = (item: any, index: number) => {
     setOrderProductDto((prevState: any) => {
       return prevState.map((product: any, i: number) => {
@@ -109,7 +113,9 @@ const Calculation = () => {
       });
     });
   };
-
+  const formatNumberWithSpaces = (number: number | null) => {
+    return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
   const addDetail = (item: any, index: number) => {
     setOrderProductDto((prevState: any) => {
       return prevState.map((product: any, i: number) => {
@@ -151,10 +157,6 @@ const Calculation = () => {
       });
     });
   };
-  const formatNumberWithSpaces = (number: number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  };
-
   const handleInputChange = (
     id: number,
     index: number,
@@ -760,7 +762,7 @@ const Calculation = () => {
               <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
                 <div className="flex">
                   <h1 className="text-lg">
-                    {totalPrice ? formatNumberWithSpaces(totalPrice) : '0'}
+                    {totalPrice ? formatNumberWithSpaces(totalPrice.result.toFixed()) : '0'}
                   </h1>
                   <h1 className="text-lg ms-2">{`so'm`}</h1>
                 </div>
@@ -991,14 +993,14 @@ const Calculation = () => {
                           className="rounded outline-none px-1 py-0.5 lg:w-20"
                         />
                         <button onClick={() => incrementItem(i)} className="px-2 py-1 border text-boxdark rounded">
-                          <FaPlus/>
+                          <FaPlus />
                         </button>
                         {orderProductDto[0].orderDetails.filter((detail: any) => detail.detailId === item.detailId).length > 1 && (
                           <button
                             onClick={() => decrementItem(i)}
                             className="px-2 py-1 border text-boxdark rounded"
                           >
-                            <FaMinus/>
+                            <FaMinus />
                           </button>
                         )}
                       </div>
@@ -1063,7 +1065,7 @@ const Calculation = () => {
             </div>
             <div className="flex flex-col my-4">
               <h1 className="text-lg">
-                {total ? total.result && total.result.toFixed() : '0'} sum
+                {total ? total.result && formatNumberWithSpaces(total.result.toFixed()) : '0'} so'm
               </h1>
               <div className="">
                 {total &&
@@ -1079,9 +1081,9 @@ const Calculation = () => {
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item.detailKv.toFixed(4) || '-'}</h2>
                     <h2 className="w-1/3 text-sm text-gray-600">
-                      {item.amount} {item.amountType || '0'}
+                      {item.amount && item.amount.toFixed(4)} {item.amountType || '0'}
                       <br />
-                      {item.residual?.slice(0, 5) === "Hovuz" && item.residual}
+                      {item.residual?.slice(0, 5) === "Hovuz" && formatHovuz(item.residual)}
                     </h2>
 
                   </div>
