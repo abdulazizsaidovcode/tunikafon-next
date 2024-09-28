@@ -47,7 +47,7 @@ const Calculation = () => {
   });
   const [select, setSelect] = useState(true);
   const [toggle, setToggle] = useState(false);
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(0); 
   const [gropusId, setGropusId] = useState<any>([]);
   const [groupssName, setGroupssName] = useState<any>([]);
   const [totalPrice, setTotalPrice] = useState(total);
