@@ -34,10 +34,10 @@ const Calculation = () => {
   const { post, data: total } = usePost();
   const { post: save, isLoading: saveLoading } = usePost();
 
-  const [req, setReq] = useState<any>({
-    width: null,
-    tall: null,
-  });
+  // const [req, setReq] = useState<any>({
+  //   width: null,
+  //   tall: null,
+  // });
   const [orderData, setOrderData] = useState<any>({
     date: null,
     address: null,
@@ -242,13 +242,8 @@ const Calculation = () => {
     }
   };
 
-
-
-
-
-
   const resetAll = () => {
-    setReq({ width: null, tall: null });
+    // setReq({ width: null, tall: null });
     setOrderData({
       date: null,
       address: null,
@@ -335,7 +330,7 @@ const Calculation = () => {
   };
 
   useEffect(() => {
-    get('/product');
+    get('/product/all');
     getGroup('/group/all');
   }, []);
 
@@ -418,8 +413,8 @@ const Calculation = () => {
                   </div>
                 </div>
               ))
-            ) : data && data.object.length ? (
-              data.object.map((item: any) => (
+            ) : data && data.length ? (
+              data.map((item: any) => (
                 <div
                   key={item.id}
                   className="cursor-pointer shadow-2xl p-5 rounded-xl"
@@ -1075,7 +1070,7 @@ const Calculation = () => {
                     <h2 className="w-1/3 text-sm font-bold text-gray-800">Soni</h2>
                   </div>
                 }
-                {total && total.resOrderDetails.map((item: { id: number | string, residual: string, detailName: string, detailKv: number, amount: string, amountType: number | string }) => (
+                {total && total.resOrderDetails.map((item: { id: number | string, residual: string, detailName: string, detailKv: number, amount: number, amountType: number | string }) => (
 
                   <div key={item.id} className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>

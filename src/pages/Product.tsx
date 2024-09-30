@@ -149,11 +149,16 @@ const Product = () => {
   }, []);
 
   useEffect(() => {
+    get('/product', page);
+  }, [page]);
+
+  useEffect(() => {
     if (update) {
       setName(update.name);
       setDetailIds(update.detailIds ? update.detailIds : []);
     }
   }, [update, editModal]);
+
   return (
     <>
       <Breadcrumb pageName="Mahsulotlar" />
@@ -171,6 +176,7 @@ const Product = () => {
         isLoading={isLoading}
         data={data && data.object}
         deleteModal={toggleDeleteModal}
+        page={page}
       />
       {!isLoading && data && data.object ? (
         <ReactPaginate
