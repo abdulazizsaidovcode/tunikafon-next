@@ -1078,7 +1078,7 @@ const Calculation = () => {
                     <h2 className="w-1/3 text-sm text-gray-600">
                       {item.amount && item.amount.toFixed(4)} {item.amountType || '0'}
                       <br />
-                      {item.residual?.slice(0, 5) === "Hovuz" && formatHovuz(item.residual)}
+                      {item.residual?.slice(0, 5) === "Hovuz" || item.residual?.slice(0, 3) =="MDF" && formatHovuz(item.residual)}
                     </h2>
 
                   </div>
