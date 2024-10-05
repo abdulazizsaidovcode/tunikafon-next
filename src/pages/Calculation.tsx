@@ -47,7 +47,7 @@ const Calculation = () => {
   });
   const [select, setSelect] = useState(true);
   const [toggle, setToggle] = useState(false);
-  const [open, setOpen] = useState(0); 
+  const [open, setOpen] = useState(0);
   const [gropusId, setGropusId] = useState<any>([]);
   const [groupssName, setGroupssName] = useState<any>([]);
   const [totalPrice, setTotalPrice] = useState(total);
@@ -1078,7 +1078,7 @@ const Calculation = () => {
                     <h2 className="w-1/3 text-sm text-gray-600">
                       {item.amount && item.amount.toFixed(4)} {item.amountType || '0'}
                       <br />
-                      {item.residual?.slice(0, 5) === "Hovuz" || item.residual?.slice(0, 3) =="MDF" && formatHovuz(item.residual)}
+                      {(item.residual?.slice(0, 5) === "Hovuz" || item.residual?.slice(0, 3) === "MDF") && formatHovuz(item.residual)}
                     </h2>
 
                   </div>
