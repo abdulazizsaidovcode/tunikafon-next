@@ -59,6 +59,8 @@ const Calculation = () => {
       orderDetails: [],
       width: 0,
       height: 0,
+      dropOffTwo: 0,
+      dropOffOne: 0,
       howManySidesOfTheHouseAreMade: 0,
       orderProductStatus: 'THE_GATE_IS_INSIDE_THE_ROOM',
     },
@@ -485,6 +487,9 @@ const Calculation = () => {
                       <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
                         Darvoza xona
                       </Option>
+                      <Option value="THE_RAGEL">
+                        RAGEL
+                      </Option>
                     </Select>
                   </div>
                   <button
@@ -721,21 +726,55 @@ const Calculation = () => {
                       label="Eni"
                       type="number"
                     />
-                    {orderProductDto[index]?.orderProductStatus ===
-                      'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
-                      <Input
-                        placeholder="Uyning tomonlari"
-                        onChange={(e: any) =>
-                          handleChange(
-                            index,
-                            'howManySidesOfTheHouseAreMade',
-                            e.target.value,
-                          )
-                        }
-                        label="Tomon"
-                        type="number"
-                      />
+                    {orderProductDto[index]?.orderProductStatus === 'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                      <>
+                        {orderProductDto[index]?.orderProductStatus === 'THE_RAGEL' ? (
+                          <>
+                            <Input
+                              placeholder="Drop Off One"
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                handleChange(
+                                  index,
+                                  'dropOffOne',
+                                  e.target.value,
+                                )
+                              }
+                              value={orderProductDto[index]?.dropOffOne || ''}
+                              label="Drop Off One"
+                              type="text"
+                            />
+                            <Input
+                              placeholder="Drop Off Two"
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                handleChange(
+                                  index,
+                                  'dropOffTwo',
+                                  e.target.value,
+                                )
+                              }
+                              value={orderProductDto[index]?.dropOffTwo || ''}
+                              label="Drop Off Two"
+                              type="text"
+                            />
+                          </>
+                        ) : (
+                          <Input
+                            placeholder="Uyning tomonlari"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              handleChange(
+                                index,
+                                'howManySidesOfTheHouseAreMade',
+                                e.target.value,
+                              )
+                            }
+                            label="Tomon"
+                            type="number"
+                            value={orderProductDto[index]?.howManySidesOfTheHouseAreMade || ''}
+                          />
+                        )}
+                      </>
                     )}
+
                   </div>
                 </div>
               </div>
@@ -953,6 +992,9 @@ const Calculation = () => {
                       Uyning ichki ko'rinishi
                     </Option>
                     <Option value="THE_GATE_IS_INSIDE_THE_ROOM">Darvoza xona</Option>
+                    <Option value="THE_RAGEL">
+                      RAGEL
+                    </Option>
                   </Select>
                   <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">
                     {orderProductDto[0].orderDetails.map((item: any, i: number) => (
@@ -1039,23 +1081,54 @@ const Calculation = () => {
                   label="Eni"
                   type="number"
                 />
-                {orderProductStatus === 'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
-                  <Input
-                    placeholder="Tomon"
-                    onChange={(e: any) =>
-                      handleChange(
-                        0,
-                        'howManySidesOfTheHouseAreMade',
-                        e.target.value,
-                      )
-                    }
-                    value={
-                      orderProductDto[0]?.howManySidesOfTheHouseAreMade || ''
-                    }
-                    label="Uyning tomonlari"
-                    type="number"
-                  />
-                )}
+                <>
+                  {orderProductStatus === 'THE_RAGEL' ? (
+                    <>
+                      <Input
+                        placeholder="Drop Off One"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleChange(
+                            0,
+                            'dropOffOne',
+                            e.target.value,
+                          )
+                        }
+                        value={orderProductDto[0]?.dropOffOne || ''}
+                        label="Drop Off One"
+                        type="text"
+                      />
+                      <Input
+                        placeholder="Drop Off Two"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleChange(
+                            0,
+                            'dropOffTwo',
+                            e.target.value,
+                          )
+                        }
+                        value={orderProductDto[0]?.dropOffTwo || ''}
+                        label="Drop Off Two"
+                        type="text"
+                      />
+                    </>
+                  ) : orderProductStatus === 'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                    <Input
+                      placeholder="Tomon"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChange(
+                          0,
+                          'howManySidesOfTheHouseAreMade',
+                          e.target.value,
+                        )
+                      }
+                      value={orderProductDto[0]?.howManySidesOfTheHouseAreMade || ''}
+                      label="Uyning tomonlari"
+                      type="number"
+                    />
+                  )}
+
+                </>
+
               </div>
             </div>
             <div className="flex flex-col my-4">
