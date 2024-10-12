@@ -197,7 +197,7 @@ const Calculation = () => {
         if (index === i) {
           return {
             ...product,
-            [field]: +value,
+            [field]: value,
           };
         }
         return product;
@@ -218,6 +218,7 @@ const Calculation = () => {
       });
     });
   };
+
 
   const incrementItem = (index: number) => {
     // orderProductDto[0] ni olish va orderDetails ni yangilash
@@ -274,6 +275,30 @@ const Calculation = () => {
     try {
       if (!areDimensionsValid) throw new Error('Malumotlar tuliq emas');
       await post('/order/calculation', orderProductDto);
+      setTotalPrice(total);
+      isClose && toggleModal();
+    } catch (error) {
+      toast.error('Hisoblashda xatolik yuz berdi');
+    }
+  };
+
+  const handleClick2 = async (isClose?: boolean) => {
+    const areDimensionsValid = orderProductDto.every(
+      (product: any) => product.width > 0 && product.height > 0,
+    );
+    try {
+      if (!areDimensionsValid) throw new Error('Malumotlar tuliq emas');
+      await post('/order/calculation', [
+        {
+          orderDetails: orderProductDto[0]?.orderDetails,
+          width: orderProductDto[0]?.width,
+          height: orderProductDto[0]?.height,
+          dropOffTwo: orderProductDto[0]?.dropOffTwo,
+          dropOffOne: orderProductDto[0]?.dropOffOne,
+          howManySidesOfTheHouseAreMade: orderProductDto[0]?.howManySidesOfTheHouseAreMade,
+          orderProductStatus: orderProductStatus,
+        },
+      ]);
       setTotalPrice(total);
       isClose && toggleModal();
     } catch (error) {
@@ -731,7 +756,7 @@ const Calculation = () => {
                         {orderProductDto[index]?.orderProductStatus === 'THE_RAGEL' ? (
                           <>
                             <Input
-                              placeholder="Drop Off One"
+                              placeholder="Balandlik bir"
                               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                 handleChange(
                                   index,
@@ -740,11 +765,11 @@ const Calculation = () => {
                                 )
                               }
                               value={orderProductDto[index]?.dropOffOne || ''}
-                              label="Drop Off One"
-                              type="text"
+                              label="Balandlik bir"
+                              type="number"
                             />
                             <Input
-                              placeholder="Drop Off Two"
+                              placeholder="Balandlik ikki"
                               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                 handleChange(
                                   index,
@@ -753,8 +778,8 @@ const Calculation = () => {
                                 )
                               }
                               value={orderProductDto[index]?.dropOffTwo || ''}
-                              label="Drop Off Two"
-                              type="text"
+                              label="Balandlik ikki"
+                              type="number"
                             />
                           </>
                         ) : (
@@ -983,7 +1008,8 @@ const Calculation = () => {
                   <h2>Detal</h2>
                   <Select
                     value={orderProductStatus}
-                    onChange={(val: any) => setOrderProductStatus(val)}
+                    onChange={(val: any) => {
+                      setOrderProductStatus(val)}}
                   >
                     <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
                       Uyning tashqi ko'rinishi
@@ -1085,7 +1111,7 @@ const Calculation = () => {
                   {orderProductStatus === 'THE_RAGEL' ? (
                     <>
                       <Input
-                        placeholder="Drop Off One"
+                        placeholder="Balandlik bir"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           handleChange(
                             0,
@@ -1094,11 +1120,11 @@ const Calculation = () => {
                           )
                         }
                         value={orderProductDto[0]?.dropOffOne || ''}
-                        label="Drop Off One"
-                        type="text"
+                        label="Balandlik bir"
+                        type="number"
                       />
                       <Input
-                        placeholder="Drop Off Two"
+                        placeholder="Balandlik ikki"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           handleChange(
                             0,
@@ -1106,9 +1132,9 @@ const Calculation = () => {
                             e.target.value,
                           )
                         }
-                        value={orderProductDto[0]?.dropOffTwo || ''}
-                        label="Drop Off Two"
-                        type="text"
+                        value={orderProductDto[0].dropOffTwo || ''}
+                        label="Balandlik ikki"
+                        type="number"
                       />
                     </>
                   ) : orderProductStatus === 'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
@@ -1143,13 +1169,13 @@ const Calculation = () => {
                     <h2 className="w-1/3 text-sm font-bold text-gray-800">Soni</h2>
                   </div>
                 }
-                {total && total.resOrderDetails.map((item: { id: number | string, residual: string, detailName: string, detailKv: number, amount: number, amountType: number | string }) => (
+                {total && total?.resOrderDetails?.map((item: { id: number | string, residual: string, detailName: string, detailKv: number, amount: number, amountType: number | string }) => (
 
                   <div key={item.id} className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
                     <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>
-                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item.detailKv.toFixed(4) || '-'}</h2>
+                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item?.detailKv || '-'}</h2>
                     <h2 className="w-1/3 text-sm text-gray-600">
-                      {item.amount && item.amount.toFixed(4)} {item.amountType || '0'}
+                      {item.amount && item.amount} {item.amountType || '0'}
                       <br />
                       {(item.residual?.slice(0, 5) === "Hovuz" || item.residual?.slice(0, 3) === "MDF") && formatHovuz(item.residual)}
                     </h2>
@@ -1160,13 +1186,10 @@ const Calculation = () => {
               {total && (
                 <div className="mt-4">
                   <h2 className="text-lg font-bold text-gray-800">
-                    Yig'indi KV: {total.resOrderDetails.reduce((acc: any, item: { detailKv: number }) => acc + (item.detailKv || 0), 0).toFixed(4)}
+                    Yig'indi KV: {total.resOrderDetails.reduce((acc: any, item: { detailKv: number }) => acc + (item.detailKv || 0), 0)}
                   </h2>
                 </div>
               )}
-
-
-
             </div>
             <div className="w-full flex justify-end gap-5">
               <Button onClick={toggleModal} color="red">
@@ -1175,7 +1198,7 @@ const Calculation = () => {
               <Button
                 disabled={saveLoading}
                 onClick={() => {
-                  handleClick(), true;
+                  handleClick2(), true;
                 }}
                 color="green"
               >

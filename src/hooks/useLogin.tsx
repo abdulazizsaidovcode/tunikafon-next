@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from '../service/api'; // Adjust this path according to your folder structure
+import axios from '../service/api'; 
 import { toast } from 'sonner';
 
 const useLogin = () => {
