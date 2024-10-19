@@ -112,7 +112,7 @@ export default function TableOrderAll() {
     try {
       await post('/feedback', feedbackData);
       await put(`/order/update-status/${orderID}?status=COMPLETED`);
-      await get('/order/all', page, setData); // Adjust the endpoint and parameters as needed
+      await get('/order/all', page, setData); 
 
       toast.success('Baholash kiritildi va buyurtma tugatildi');
       closeModalFeedback();
@@ -220,7 +220,7 @@ export default function TableOrderAll() {
                     Mijoz lokatsiyasi
                   </th>
                   <th scope="col" className="px-6 min-w-[160px] py-3">
-                    Narxi
+                    Detal kvadrati
                   </th>
                   <th scope="col" className="px-6 min-w-[200px] py-3">
                     Buyurtma holati

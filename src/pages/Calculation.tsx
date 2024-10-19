@@ -823,7 +823,7 @@ const Calculation = () => {
                   <h1 className="text-lg">
                     {totalPrice ? formatNumberWithSpaces(totalPrice.result.toFixed()) : '0'}
                   </h1>
-                  <h1 className="text-lg ms-2">{`so'm`}</h1>
+                  <h1 className="text-lg ms-2">{`Detal kvadrati`}</h1>
                 </div>
               </div>
             </div>
