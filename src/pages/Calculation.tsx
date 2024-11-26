@@ -77,7 +77,9 @@ const Calculation = () => {
   };
   const formatHovuz = (residual: any) => {
     return residual.replace(/\d+\.\d+/g, (match: any) => {
-      return parseFloat(match).toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
+      return parseFloat(match)
+        .toString()
+        .match(/^-?\d+(?:\.\d{0,4})?/)[0];
     });
   };
   const handleCheckboxChange = (item: any, index: number) => {
@@ -219,7 +221,6 @@ const Calculation = () => {
     });
   };
 
-
   const incrementItem = (index: number) => {
     // orderProductDto[0] ni olish va orderDetails ni yangilash
     const updatedOrderProductDto = [...orderProductDto]; // Deep clone qilish
@@ -295,7 +296,8 @@ const Calculation = () => {
           height: orderProductDto[0]?.height,
           dropOffTwo: orderProductDto[0]?.dropOffTwo,
           dropOffOne: orderProductDto[0]?.dropOffOne,
-          howManySidesOfTheHouseAreMade: orderProductDto[0]?.howManySidesOfTheHouseAreMade,
+          howManySidesOfTheHouseAreMade:
+            orderProductDto[0]?.howManySidesOfTheHouseAreMade,
           orderProductStatus: orderProductStatus,
         },
       ]);
@@ -512,9 +514,7 @@ const Calculation = () => {
                       <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
                         Darvoza xona
                       </Option>
-                      <Option value="THE_RAGEL">
-                        RAGEL
-                      </Option>
+                      <Option value="THE_RAGEL">RAGEL</Option>
                     </Select>
                   </div>
                   <button
@@ -563,7 +563,7 @@ const Calculation = () => {
                           </AccordionHeader>
                           <AccordionBody>
                             {categorydetail ? (
-                              categorydetail.map((detail: any,) => (
+                              categorydetail.map((detail: any) => (
                                 <div
                                   key={detail.id}
                                   className="flex items-center justify-between gap-3 sm:gap-10 border border-[#64748B] rounded-lg p-0 sm:px-5 sm:py-1 mb-4 mx-3 sm:mx-10"
@@ -724,7 +724,10 @@ const Calculation = () => {
                       ) : (
                         <div className="w-full flex flex-col justify-center items-center py-10">
                           <h1 className="text-gray-600 font-semibold text-lg text-center flex gap-2 items-center justify-center ">
-                            <FaLeftLong className='hidden lg:block' /> <span>Bu qismda siz tanlagan detallar ko'rinadi.</span>
+                            <FaLeftLong className="hidden lg:block" />{' '}
+                            <span>
+                              Bu qismda siz tanlagan detallar ko'rinadi.
+                            </span>
                           </h1>
                         </div>
                       )}
@@ -751,13 +754,17 @@ const Calculation = () => {
                       label="Eni"
                       type="number"
                     />
-                    {orderProductDto[index]?.orderProductStatus === 'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                    {orderProductDto[index]?.orderProductStatus ===
+                    'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
                       <>
-                        {orderProductDto[index]?.orderProductStatus === 'THE_RAGEL' ? (
+                        {orderProductDto[index]?.orderProductStatus ===
+                        'THE_RAGEL' ? (
                           <>
                             <Input
                               placeholder="Balandlik bir"
-                              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>,
+                              ) =>
                                 handleChange(
                                   index,
                                   'dropOffOne',
@@ -770,7 +777,9 @@ const Calculation = () => {
                             />
                             <Input
                               placeholder="Balandlik ikki"
-                              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>,
+                              ) =>
                                 handleChange(
                                   index,
                                   'dropOffTwo',
@@ -785,7 +794,9 @@ const Calculation = () => {
                         ) : (
                           <Input
                             placeholder="Uyning tomonlari"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>,
+                            ) =>
                               handleChange(
                                 index,
                                 'howManySidesOfTheHouseAreMade',
@@ -794,12 +805,14 @@ const Calculation = () => {
                             }
                             label="Tomon"
                             type="number"
-                            value={orderProductDto[index]?.howManySidesOfTheHouseAreMade || ''}
+                            value={
+                              orderProductDto[index]
+                                ?.howManySidesOfTheHouseAreMade || ''
+                            }
                           />
                         )}
                       </>
                     )}
-
                   </div>
                 </div>
               </div>
@@ -821,7 +834,9 @@ const Calculation = () => {
               <div className="flex flex-col sm:items-end items-center sm:justify-between w-full sm:flex-row ">
                 <div className="flex">
                   <h1 className="text-lg">
-                    {totalPrice ? formatNumberWithSpaces(totalPrice.result.toFixed()) : '0'}
+                    {totalPrice
+                      ? formatNumberWithSpaces(totalPrice.result.toFixed())
+                      : '0'}
                   </h1>
                   <h1 className="text-lg ms-2">{`Detal kvadrati`}</h1>
                 </div>
@@ -847,7 +862,10 @@ const Calculation = () => {
               <div className="w-full">
                 <Input
                   onChange={(e) => {
-                    const formattedPhoneNumber = e.target.value.replace(/[^0-9+]/g, '');
+                    const formattedPhoneNumber = e.target.value.replace(
+                      /[^0-9+]/g,
+                      '',
+                    );
                     if (formattedPhoneNumber.length <= 13) {
                       setOrderData((prevState: any) => ({
                         ...prevState,
@@ -863,7 +881,6 @@ const Calculation = () => {
                   label="Mijoz telifon raqami"
                   placeholder="Mijoz telifon raqamini kiriting"
                 />
-
               </div>
               <div className="w-full">
                 <Input
@@ -908,7 +925,7 @@ const Calculation = () => {
                 />
               </div>
               <div className="w-full mb-2">
-                <h1 className='mb-2'>Guruh</h1>
+                <h1 className="mb-2">Guruh</h1>
                 <Menu
                   dismiss={{
                     itemPress: false,
@@ -918,10 +935,10 @@ const Calculation = () => {
                     <div className="w-full cursor-pointer rounded flex gap-2 border overflow-y-auto border-black text-black p-2 text-start font-normal">
                       {groupssName && groupssName.length
                         ? groupssName.map((item: any) => (
-                          <p className="border rounded line-clamp-1">
-                            {item.name}
-                          </p>
-                        ))
+                            <p className="border rounded line-clamp-1">
+                              {item.name}
+                            </p>
+                          ))
                         : 'Gruhni tanlang'}
                     </div>
                   </MenuHandler>
@@ -1009,7 +1026,8 @@ const Calculation = () => {
                   <Select
                     value={orderProductStatus}
                     onChange={(val: any) => {
-                      setOrderProductStatus(val)}}
+                      setOrderProductStatus(val);
+                    }}
                   >
                     <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
                       Uyning tashqi ko'rinishi
@@ -1017,59 +1035,80 @@ const Calculation = () => {
                     <Option className="my-1" value="INTERIOR_VIEW_OF_THE_HOUSE">
                       Uyning ichki ko'rinishi
                     </Option>
-                    <Option value="THE_GATE_IS_INSIDE_THE_ROOM">Darvoza xona</Option>
-                    <Option value="THE_RAGEL">
-                      RAGEL
+                    <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
+                      Darvoza xona
                     </Option>
+                    <Option value="THE_RAGEL">RAGEL</Option>
                   </Select>
                   <div className="flex flex-col gap-5 py-3 rounded max-h-44 overflow-y-auto">
-                    {orderProductDto[0].orderDetails.map((item: any, i: number) => (
-                      <div key={item.id} className="flex flex-col lg:flex-row items-start lg:items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3">
-                        <img
-                          className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
-                          src={item.attachmentId ? attechment + item.attachmentId : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'}
-                          alt={item.name}
-                        />
-                        <div className="flex-1 px-0">
-                          <h1 className="text-sm sm:text-md text-center">{item.name}</h1>
-                        </div>
+                    {orderProductDto[0].orderDetails.map(
+                      (item: any, i: number) => (
+                        <div
+                          key={item.id}
+                          className="flex flex-col lg:flex-row items-start lg:items-center justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                        >
+                          <img
+                            className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                            src={
+                              item.attachmentId
+                                ? attechment + item.attachmentId
+                                : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                            }
+                            alt={item.name}
+                          />
+                          <div className="flex-1 px-0">
+                            <h1 className="text-sm sm:text-md text-center">
+                              {item.name}
+                            </h1>
+                          </div>
 
-                        <input
-                          onChange={(e) => handleInputChange(i, 0, 'count', e.target.value)}
-                          type="number"
-                          placeholder="Soni"
-                          // value={item.count ?? ''}
-                          className="rounded outline-none px-1 py-0.5 lg:w-20"
-                        />
-                        <input
-                          onChange={(e) => handleInputChange(i, 0, 'number', e.target.value)}
-                          type="number"
-                          placeholder="Raqam"
-                          // value={item.number ?? ''}
-                          className="rounded outline-none px-1 py-0.5 lg:w-20"
-                        />
-                        <input
-                          onChange={(e) => handleInputChange(i, 0, 'color', e.target.value)}
-                          type="text"
-                          placeholder="Rang"
-                          // value={item.color ?? ''}
-                          className="rounded outline-none px-1 py-0.5 lg:w-20"
-                        />
-                        <button onClick={() => incrementItem(i)} className="px-2 py-1 border text-boxdark rounded">
-                          <FaPlus />
-                        </button>
-                        {orderProductDto[0].orderDetails.filter((detail: any) => detail.detailId === item.detailId).length > 1 && (
+                          <input
+                            onChange={(e) =>
+                              handleInputChange(i, 0, 'count', e.target.value)
+                            }
+                            type="number"
+                            placeholder="Soni"
+                            // value={item.count ?? ''}
+                            className="rounded outline-none px-1 py-0.5 lg:w-20"
+                          />
+                          <input
+                            onChange={(e) =>
+                              handleInputChange(i, 0, 'number', e.target.value)
+                            }
+                            type="number"
+                            placeholder="Raqam"
+                            // value={item.number ?? ''}
+                            className="rounded outline-none px-1 py-0.5 lg:w-20"
+                          />
+                          <input
+                            onChange={(e) =>
+                              handleInputChange(i, 0, 'color', e.target.value)
+                            }
+                            type="text"
+                            placeholder="Rang"
+                            // value={item.color ?? ''}
+                            className="rounded outline-none px-1 py-0.5 lg:w-20"
+                          />
                           <button
-                            onClick={() => decrementItem(i)}
+                            onClick={() => incrementItem(i)}
                             className="px-2 py-1 border text-boxdark rounded"
                           >
-                            <FaMinus />
+                            <FaPlus />
                           </button>
-                        )}
-                      </div>
-                    ))}
+                          {orderProductDto[0].orderDetails.filter(
+                            (detail: any) => detail.detailId === item.detailId,
+                          ).length > 1 && (
+                            <button
+                              onClick={() => decrementItem(i)}
+                              className="px-2 py-1 border text-boxdark rounded"
+                            >
+                              <FaMinus />
+                            </button>
+                          )}
+                        </div>
+                      ),
+                    )}
                   </div>
-
                 </div>
               ) : (
                 <div className="flex flex-col justify-center items-center">
@@ -1113,11 +1152,7 @@ const Calculation = () => {
                       <Input
                         placeholder="Balandlik bir"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleChange(
-                            0,
-                            'dropOffOne',
-                            e.target.value,
-                          )
+                          handleChange(0, 'dropOffOne', e.target.value)
                         }
                         value={orderProductDto[0]?.dropOffOne || ''}
                         label="Balandlik bir"
@@ -1126,18 +1161,15 @@ const Calculation = () => {
                       <Input
                         placeholder="Balandlik ikki"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleChange(
-                            0,
-                            'dropOffTwo',
-                            e.target.value,
-                          )
+                          handleChange(0, 'dropOffTwo', e.target.value)
                         }
                         value={orderProductDto[0].dropOffTwo || ''}
                         label="Balandlik ikki"
                         type="number"
                       />
                     </>
-                  ) : orderProductStatus === 'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                  ) : orderProductStatus ===
+                    'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
                     <Input
                       placeholder="Tomon"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -1147,46 +1179,84 @@ const Calculation = () => {
                           e.target.value,
                         )
                       }
-                      value={orderProductDto[0]?.howManySidesOfTheHouseAreMade || ''}
+                      value={
+                        orderProductDto[0]?.howManySidesOfTheHouseAreMade || ''
+                      }
                       label="Uyning tomonlari"
                       type="number"
                     />
                   )}
-
                 </>
-
               </div>
             </div>
             <div className="flex flex-col my-4">
               <h1 className="text-lg">
-                {total ? total.result && formatNumberWithSpaces(total.result.toFixed()) : '0'} so'm
+                {total
+                  ? total.result &&
+                    formatNumberWithSpaces(total.result.toFixed())
+                  : '0'}{' '}
+                so'm
               </h1>
-              <div className="">
-                {total &&
+              <div className="overflow-auto">
+                {total && (
                   <div className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
-                    <h2 className="w-1/3 text-sm font-bold text-gray-800">Nomi</h2>
-                    <h2 className="w-1/3 text-sm font-bold text-gray-800">KV</h2>
-                    <h2 className="w-1/3 text-sm font-bold text-gray-800">Soni</h2>
-                  </div>
-                }
-                {total && total?.resOrderDetails?.map((item: { id: number | string, residual: string, detailName: string, detailKv: number, amount: number, amountType: number | string }) => (
-
-                  <div key={item.id} className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
-                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailName}</h2>
-                    <h2 className="w-1/3 text-sm text-gray-600">{item.detailKv && item?.detailKv || '-'}</h2>
-                    <h2 className="w-1/3 text-sm text-gray-600">
-                      {item.amount && item.amount} {item.amountType || '0'}
-                      <br />
-                      {(item.residual?.slice(0, 5) === "Hovuz" || item.residual?.slice(0, 3) === "MDF") && formatHovuz(item.residual)}
+                    <h2 className="w-1/3 text-sm font-bold text-gray-800">
+                      Nomi
                     </h2>
-
+                    <h2 className="w-1/3 text-sm font-bold text-gray-800">
+                      KV
+                    </h2>
+                    <h2 className="w-1/3 text-sm font-bold text-gray-800">
+                      Soni
+                    </h2>
                   </div>
-                ))}
+                )}
+
+                {total && (
+                  <div className="">
+                    {total?.resOrderDetails?.map(
+                      (item: {
+                        id: number | string;
+                        residual: string;
+                        detailName: string;
+                        detailKv: number;
+                        amount: number;
+                        amountType: number | string;
+                      }) => (
+                        <div
+                          key={item.id}
+                          className="flex gap-2 items-center justify-between border-b border-gray-200 py-2"
+                        >
+                          <h2 className="w-1/3 min-w-[100px] text-sm text-gray-600">
+                            {item.detailName}
+                          </h2>
+                          <h2 className="w-1/3 min-w-[100px] text-sm text-gray-600">
+                            {item.detailKv ? item.detailKv.toFixed(5) : '-'}
+                          </h2>
+                          <h2 className="w-1/3 min-w-[200px] text-sm text-gray-600">
+                            {item.amount && item.amount.toFixed(5)}{' '}
+                            {item.amountType || '0'}
+                            <br />
+                            {(item.residual?.slice(0, 5) === 'Hovuz' ||
+                              item.residual?.slice(0, 3) === 'MDF') &&
+                              formatHovuz(item.residual)}
+                          </h2>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                )}
               </div>
+
               {total && (
                 <div className="mt-4">
                   <h2 className="text-lg font-bold text-gray-800">
-                    Yig'indi KV: {total.resOrderDetails.reduce((acc: any, item: { detailKv: number }) => acc + (item.detailKv || 0), 0)}
+                    Yig'indi KV:{' '}
+                    {total.resOrderDetails.reduce(
+                      (acc: any, item: { detailKv: number }) =>
+                        acc + (item.detailKv || 0),
+                      0,
+                    )}
                   </h2>
                 </div>
               )}
@@ -1212,4 +1282,4 @@ const Calculation = () => {
   );
 };
 
-export default Calculation; 
+export default Calculation;
