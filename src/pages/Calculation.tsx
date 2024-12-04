@@ -31,9 +31,9 @@ const Calculation = () => {
   const { get: getcategoryDetail, data: categorydetail } = useGet();
   const { get: getDetailCategory, data: detailCategory } = useGet();
   const { get: getGroup, data: groups, isLoading: groupIsloading } = useGet();
-  const { post, data: total } = usePost();
+  const { post, data: total, error: totalError } = usePost();
   const { post: save, isLoading: saveLoading } = usePost();
-
+  const [kvData,setKvData] = useState<any>(null) 
   // const [req, setReq] = useState<any>({
   //   width: null,
   //   tall: null,
@@ -70,8 +70,17 @@ const Calculation = () => {
     getDetailCategoryDetail(value);
     setOpen(open === value ? 0 : value);
   };
-
+  console.log(total);
+  
+  useEffect(() => {
+    if (total) {
+      setKvData(total)
+    } else if(totalError) {
+      setKvData(null)
+    }
+  },[total])
   const toggleModal = () => {
+    setKvData(null)
     setToggle(!toggle);
     resetAll();
   };
@@ -414,7 +423,7 @@ const Calculation = () => {
             resetAll();
             setSelect(true);
           }}
-          className="rounded-lg my-2 sm:my-5 text-white bg-boxdark shadow px-6 py-3"
+          className="rounded-lg  my-2 sm:my-5 text-white bg-boxdark shadow px-6 py-3"
         >
           Shablon bo’yicha
         </Button>
@@ -432,11 +441,11 @@ const Calculation = () => {
 
       <div>
         {select ? (
-          <div className="grid gap-5 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 place-items-center">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3  sm:grid-cols-2 grid-cols-1 place-items-center">
             {isLoading ? (
               Array.from({ length: 8 }).map((_, i) => (
-                <div key={i}>
-                  <div className="w-60 h-60 rounded-xl animate-pulse bg-[#e3e3e3]" />
+                <div key={i} className="flex flex-col  items-center w-60 h-full">
+                  <div className="w-full h-60 rounded-xl animate-pulse bg-[#e3e3e3]" />
                   <div className="w-full rounded-lg animate-pulse border mt-5 py-2">
                     <span className="w-24 h-5 mx-auto block rounded-lg animate-pulse bg-[#e3e3e3]"></span>
                   </div>
@@ -446,14 +455,14 @@ const Calculation = () => {
               data.map((item: any) => (
                 <div
                   key={item.id}
-                  className="cursor-pointer shadow-2xl p-5 rounded-xl"
+                  className="cursor-pointer shadow-2xl p-5 mb-3 rounded-xl flex flex-col justify-between w-60 h-[calc(100%-20px)]"
                   onClick={() => {
                     getProductDetails(item.id);
                     toggleModal();
                   }}
                 >
                   <img
-                    className="w-60 h-60 bg-cover object-cover rounded-xl"
+                    className="w-full h-60 bg-cover object-cover rounded-xl"
                     src={attechment + item.attachmentId}
                     alt={item.name}
                   />
@@ -463,7 +472,7 @@ const Calculation = () => {
                 </div>
               ))
             ) : (
-              <div className="w-full">
+              <div className="w-full text-center">
                 <FaRegFolderOpen size={80} />
               </div>
             )}
@@ -494,329 +503,333 @@ const Calculation = () => {
               </div>
             )}
             {/* orderProductDto start */}
-            {orderProductDto.map((item: any, index: number) => (
-              <div className="border rounded-lg p-2 my-5" key={item.id}>
-                <div className="flex justify-between items-center ">
-                  <div className="w-72 mb-5">
-                    <Select
-                      value={orderProductDto[index]?.orderProductStatus || ''}
-                      onChange={(val: any) => handleSelectType(index, val)}
-                    >
-                      <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
-                        Uyning tashqi ko'rinishi
-                      </Option>
-                      <Option
-                        className="my-1"
-                        value="INTERIOR_VIEW_OF_THE_HOUSE"
+            {orderProductDto &&
+              orderProductDto.map((item: any, index: number) => (
+                <div className="border rounded-lg p-2 my-5" key={item.id}>
+                  <div className="flex justify-between items-center ">
+                    <div className="w-72 mb-5">
+                      <Select
+                        value={orderProductDto[index]?.orderProductStatus || ''}
+                        onChange={(val: any) => handleSelectType(index, val)}
                       >
-                        Uyning ichki ko'rinishi
-                      </Option>
-                      <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
-                        Darvoza xona
-                      </Option>
-                      <Option value="THE_RAGEL">RAGEL</Option>
-                    </Select>
-                  </div>
-                  <button
-                    disabled={orderProductDto.length <= 1}
-                    onClick={() => removeOrderProduct(index)}
-                  >
-                    <MdDelete
-                      size={32}
-                      className={
-                        orderProductDto.length <= 1
-                          ? 'text-red-500/50 cursor-not-allowed'
-                          : 'text-red-500'
-                      }
-                    />
-                  </button>
-                </div>
-                <div className="flex flex-col lg:flex-row gap-10 mb-4">
-                  {detailCategory ? (
-                    <div className="w-full lg:w-1/2 h-[260px] md:h-[350px] overflow-y-auto">
-                      {detailCategory.map((item: any) => (
-                        <Accordion
-                          key={item.id}
-                          open={open === item.id}
-                          className="mb-3"
+                        <Option value="EXTERIOR_VIEW_OF_THE_HOUSE">
+                          Uyning tashqi ko'rinishi
+                        </Option>
+                        <Option
+                          className="my-1"
+                          value="INTERIOR_VIEW_OF_THE_HOUSE"
                         >
-                          <AccordionHeader
-                            className="border w-full border-[#64748B] rounded-xl flex gap-10 items-center p-1 sm:p-3"
-                            onClick={() => handleOpen(item.id)}
-                          >
-                            <div className="flex gap-10 items-center sm:px-10">
-                              <img
-                                className="sm:w-11 sm:h-11 w-10 h-10 bg-cover object-cover rounded-xl "
-                                src={
-                                  item.attachmentId
-                                    ? attechment + item.attachmentId
-                                    : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
-                                }
-                                alt={item.name}
-                              />
-                              {/* <div className="w-full flex items-center rounded-lg mt-5 text-center py-2"> */}
-                              <h1 className="text-sm sm:text-lg">
-                                {item.name}
-                              </h1>
-                              {/* </div> */}
-                            </div>
-                          </AccordionHeader>
-                          <AccordionBody>
-                            {categorydetail ? (
-                              categorydetail.map((detail: any) => (
-                                <div
-                                  key={detail.id}
-                                  className="flex items-center justify-between gap-3 sm:gap-10 border border-[#64748B] rounded-lg p-0 sm:px-5 sm:py-1 mb-4 mx-3 sm:mx-10"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <Checkbox
-                                      className="bg-blue-gray-300 sm:w-6 sm:h-6"
-                                      checked={
-                                        orderProductDto &&
-                                        Array.isArray(orderProductDto) &&
-                                        orderProductDto.some(
-                                          (
-                                            product: any,
-                                            productIndex: number,
-                                          ) =>
-                                            index === productIndex &&
-                                            product.orderDetails.some(
-                                              (d: any) =>
-                                                d.detailId === detail.id,
-                                            ),
-                                        )
-                                      }
-                                      onChange={() =>
-                                        handleCheckboxChange(detail, index)
-                                      }
-                                    />
-
-                                    <img
-                                      className="w-10 h-10 bg-cover object-cover rounded-xl"
-                                      src={
-                                        detail.attachmentId
-                                          ? attechment + detail.attachmentId
-                                          : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
-                                      }
-                                      alt={detail.name}
-                                    />
-
-                                    <h1 className="text-sm sm:text-lg">
-                                      {detail.name}
-                                    </h1>
-                                  </div>
-
-                                  <div className="cursor-pointer flex gap-2">
-                                    <button
-                                      onClick={() => addDetail(detail, index)}
-                                    >
-                                      <FaPlus />
-                                    </button>
-                                  </div>
-                                </div>
-                              ))
-                            ) : (
-                              <div className="flex flex-col justify-center items-center">
-                                <h4 className="text-red-400 text-center">
-                                  Detal topilmadi. Siz oldin detal qo'shishingiz
-                                  kerak
-                                </h4>
-                                <Link
-                                  to={'/detail'}
-                                  className="flex gap-2 justify-center items-center"
-                                >
-                                  <h4 className="text-gray-700">
-                                    Detal qo'shish
-                                  </h4>
-                                  <RiShareForwardFill />
-                                </Link>
-                              </div>
-                            )}
-                          </AccordionBody>
-                        </Accordion>
-                      ))}
+                          Uyning ichki ko'rinishi
+                        </Option>
+                        <Option value="THE_GATE_IS_INSIDE_THE_ROOM">
+                          Darvoza xona
+                        </Option>
+                        <Option value="THE_RAGEL">RAGEL</Option>
+                      </Select>
                     </div>
-                  ) : (
-                    <div className="w-full flex flex-col justify-center items-center">
-                      <h4 className="text-red-400 text-center">
-                        ❗Detal topilmadi. Siz oldin detal kategoriya
-                        qo'shishingiz kerak
-                      </h4>
-                      <Link
-                        to={'/categor-detail'}
-                        className="flex gap-2 justify-center items-center border-b border-blue-700"
-                      >
-                        <h4 className="text-blue-700">
-                          Detal kategoriya qo'shish
-                        </h4>
-                        <RiShareForwardFill />
-                      </Link>
-                    </div>
-                  )}
-                  {detailCategory && (
-                    <div className="w-full lg:w-1/2 h-[350px] overflow-y-auto flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
-                      {item.orderDetails.length > 0 ? (
-                        item.orderDetails.map((detail: any, i: number) => (
-                          <div
-                            key={detail.id}
-                            className="flex flex-col lg:flex-row lg:items-center lg:justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                    <button
+                      disabled={orderProductDto.length <= 1}
+                      onClick={() => removeOrderProduct(index)}
+                    >
+                      <MdDelete
+                        size={32}
+                        className={
+                          orderProductDto.length <= 1
+                            ? 'text-red-500/50 cursor-not-allowed'
+                            : 'text-red-500'
+                        }
+                      />
+                    </button>
+                  </div>
+                  <div className="flex flex-col lg:flex-row gap-10 mb-4">
+                    {detailCategory ? (
+                      <div className="w-full lg:w-1/2 h-[260px] md:h-[350px] overflow-y-auto">
+                        {detailCategory.map((item: any) => (
+                          <Accordion
+                            key={item.id}
+                            open={open === item.id}
+                            className="mb-3"
                           >
-                            <div className="flex gap-2 items-center justify-start">
-                              <img
-                                className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
-                                src={
-                                  detail.attachmentId
-                                    ? attechment + detail.attachmentId
-                                    : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
-                                }
-                                alt={detail.name}
-                              />
-                              <div className="flex-1 px-0">
-                                <h1 className="text-sm sm:text-md text-center">
-                                  {detail.name}
+                            <AccordionHeader
+                              className="border w-full border-[#64748B] rounded-xl flex gap-10 items-center p-1 sm:p-3"
+                              onClick={() => handleOpen(item.id)}
+                            >
+                              <div className="flex gap-10 items-center sm:px-10">
+                                <img
+                                  className="sm:w-11 sm:h-11 w-10 h-10 bg-cover object-cover rounded-xl "
+                                  src={
+                                    item.attachmentId
+                                      ? attechment + item.attachmentId
+                                      : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                                  }
+                                  alt={item.name}
+                                />
+                                {/* <div className="w-full flex items-center rounded-lg mt-5 text-center py-2"> */}
+                                <h1 className="text-sm sm:text-lg">
+                                  {item.name}
                                 </h1>
+                                {/* </div> */}
                               </div>
+                            </AccordionHeader>
+                            <AccordionBody>
+                              {categorydetail ? (
+                                categorydetail.map((detail: any) => (
+                                  <div
+                                    key={detail.id}
+                                    className="flex items-center justify-between gap-3 sm:gap-10 border border-[#64748B] rounded-lg p-0 sm:px-5 sm:py-1 mb-4 mx-3 sm:mx-10"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <Checkbox
+                                        className="bg-blue-gray-300 sm:w-6 sm:h-6"
+                                        checked={
+                                          orderProductDto &&
+                                          Array.isArray(orderProductDto) &&
+                                          orderProductDto.some(
+                                            (
+                                              product: any,
+                                              productIndex: number,
+                                            ) =>
+                                              index === productIndex &&
+                                              product.orderDetails.some(
+                                                (d: any) =>
+                                                  d.detailId === detail.id,
+                                              ),
+                                          )
+                                        }
+                                        onChange={() =>
+                                          handleCheckboxChange(detail, index)
+                                        }
+                                      />
+
+                                      <img
+                                        className="w-10 h-10 bg-cover object-cover rounded-xl"
+                                        src={
+                                          detail.attachmentId
+                                            ? attechment + detail.attachmentId
+                                            : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                                        }
+                                        alt={detail.name}
+                                      />
+
+                                      <h1 className="text-sm sm:text-lg">
+                                        {detail.name}
+                                      </h1>
+                                    </div>
+
+                                    <div className="cursor-pointer flex gap-2">
+                                      <button
+                                        onClick={() => addDetail(detail, index)}
+                                      >
+                                        <FaPlus />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="flex flex-col justify-center items-center">
+                                  <h4 className="text-red-400 text-center">
+                                    Detal topilmadi. Siz oldin detal
+                                    qo'shishingiz kerak
+                                  </h4>
+                                  <Link
+                                    to={'/detail'}
+                                    className="flex gap-2 justify-center items-center"
+                                  >
+                                    <h4 className="text-gray-700">
+                                      Detal qo'shish
+                                    </h4>
+                                    <RiShareForwardFill />
+                                  </Link>
+                                </div>
+                              )}
+                            </AccordionBody>
+                          </Accordion>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="w-full flex flex-col justify-center items-center">
+                        <h4 className="text-red-400 text-center">
+                          ❗Detal topilmadi. Siz oldin detal kategoriya
+                          qo'shishingiz kerak
+                        </h4>
+                        <Link
+                          to={'/categor-detail'}
+                          className="flex gap-2 justify-center items-center border-b border-blue-700"
+                        >
+                          <h4 className="text-blue-700">
+                            Detal kategoriya qo'shish
+                          </h4>
+                          <RiShareForwardFill />
+                        </Link>
+                      </div>
+                    )}
+                    {detailCategory && (
+                      <div className="w-full lg:w-1/2 h-[350px] overflow-y-auto flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
+                        {item.orderDetails.length > 0 ? (
+                          item.orderDetails.map((detail: any, i: number) => (
+                            <div
+                              key={detail.id}
+                              className="flex flex-col lg:justify-between border border-[#64748B] rounded-lg px-5 py-2 w-full gap-3"
+                            >
+                              <div className="flex gap-2 items-center justify-start">
+                                <img
+                                  className="w-8 h-8 sm:w-10 sm:h-10 bg-cover object-cover rounded-xl"
+                                  src={
+                                    detail.attachmentId
+                                      ? attechment + detail.attachmentId
+                                      : 'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
+                                  }
+                                  alt={detail.name}
+                                />
+                                <div className="flex-1 px-0">
+                                  <h1 className="text-sm sm:text-md text-center">
+                                    {detail.name}
+                                  </h1>
+                                </div>
+                              </div>
+                              <input
+                                type="number"
+                                placeholder="Soni"
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    i,
+                                    index,
+                                    'count',
+                                    e.target.value,
+                                  )
+                                }
+                                className="rounded outline-none px-1 py-0.5"
+                              />
+                              <input
+                                type="number"
+                                placeholder="Raqam"
+                                className="rounded outline-none px-1 py-0.5"
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    i,
+                                    index,
+                                    'number',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <input
+                                type="text"
+                                placeholder="Rang"
+                                className="rounded outline-none px-1 py-0.50"
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    i,
+                                    index,
+                                    'color',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <button
+                                className=""
+                                onClick={() => removeDetail(i, index)}
+                              >
+                                <FaMinus className="text-red-500" />
+                              </button>
                             </div>
-                            <input
-                              type="number"
-                              placeholder="Soni"
-                              onChange={(e) =>
-                                handleInputChange(
-                                  i,
-                                  index,
-                                  'count',
-                                  e.target.value,
-                                )
-                              }
-                              className="rounded outline-none px-1 py-0.5 lg:w-20"
-                            />
-                            <input
-                              type="number"
-                              placeholder="Raqam"
-                              className="rounded outline-none px-1 py-0.5 lg:w-20"
-                              onChange={(e) =>
-                                handleInputChange(
-                                  i,
-                                  index,
-                                  'number',
-                                  e.target.value,
-                                )
-                              }
-                            />
-                            <input
-                              type="text"
-                              placeholder="Rang"
-                              className="rounded outline-none px-1 py-0.50 lg:w-20"
-                              onChange={(e) =>
-                                handleInputChange(
-                                  i,
-                                  index,
-                                  'color',
-                                  e.target.value,
-                                )
-                              }
-                            />
-                            <button onClick={() => removeDetail(i, index)}>
-                              <FaMinus className="text-red-500" />
-                            </button>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="w-full flex flex-col justify-center items-center py-10">
-                          <h1 className="text-gray-600 font-semibold text-lg text-center flex gap-2 items-center justify-center ">
-                            <FaLeftLong className="hidden lg:block" />{' '}
-                            <span>
-                              Bu qismda siz tanlagan detallar ko'rinadi.
-                            </span>
-                          </h1>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-col md:flex-row md:gap-5 xl:gap-0 justify-between py-5 items-center">
-                  <div className="flex flex-col sm:flex-row sm:gap-5 w-full justify-center items-center xl:justify-start">
-                    <Input
-                      placeholder="Bo'yini kiriting"
-                      onChange={(e: any) =>
-                        handleChange(index, 'height', e.target.value)
-                      }
-                      value={orderProductDto[index]?.height || ''}
-                      label="Bo'yi"
-                      type="number"
-                    />
-                    <Input
-                      placeholder="Enini kiriting"
-                      onChange={(e: any) =>
-                        handleChange(index, 'width', e.target.value)
-                      }
-                      value={orderProductDto[index]?.width || ''}
-                      label="Eni"
-                      type="number"
-                    />
-                    {orderProductDto[index]?.orderProductStatus ===
-                    'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
-                      <>
-                        {orderProductDto[index]?.orderProductStatus ===
-                        'THE_RAGEL' ? (
-                          <>
-                            <Input
-                              placeholder="Balandlik bir"
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) =>
-                                handleChange(
-                                  index,
-                                  'dropOffOne',
-                                  e.target.value,
-                                )
-                              }
-                              value={orderProductDto[index]?.dropOffOne || ''}
-                              label="Balandlik bir"
-                              type="number"
-                            />
-                            <Input
-                              placeholder="Balandlik ikki"
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) =>
-                                handleChange(
-                                  index,
-                                  'dropOffTwo',
-                                  e.target.value,
-                                )
-                              }
-                              value={orderProductDto[index]?.dropOffTwo || ''}
-                              label="Balandlik ikki"
-                              type="number"
-                            />
-                          </>
+                          ))
                         ) : (
-                          <Input
-                            placeholder="Uyning tomonlari"
-                            onChange={(
-                              e: React.ChangeEvent<HTMLInputElement>,
-                            ) =>
-                              handleChange(
-                                index,
-                                'howManySidesOfTheHouseAreMade',
-                                e.target.value,
-                              )
-                            }
-                            label="Tomon"
-                            type="number"
-                            value={
-                              orderProductDto[index]
-                                ?.howManySidesOfTheHouseAreMade || ''
-                            }
-                          />
+                          <div className="w-full flex flex-col justify-center items-center py-10">
+                            <h1 className="text-gray-600 font-semibold text-lg text-center flex gap-2 items-center justify-center ">
+                              <FaLeftLong className="hidden lg:block" />{' '}
+                              <span>
+                                Bu qismda siz tanlagan detallar ko'rinadi.
+                              </span>
+                            </h1>
+                          </div>
                         )}
-                      </>
+                      </div>
                     )}
                   </div>
+                  <div className="flex flex-col md:flex-row md:gap-5 xl:gap-0 justify-between py-5 items-center">
+                    <div className="flex flex-col sm:flex-row sm:gap-5 w-full justify-center items-center xl:justify-start">
+                      <Input
+                        placeholder="Bo'yini kiriting"
+                        onChange={(e: any) =>
+                          handleChange(index, 'height', e.target.value)
+                        }
+                        value={orderProductDto[index]?.height || ''}
+                        label="Bo'yi"
+                        type="number"
+                      />
+                      <Input
+                        placeholder="Enini kiriting"
+                        onChange={(e: any) =>
+                          handleChange(index, 'width', e.target.value)
+                        }
+                        value={orderProductDto[index]?.width || ''}
+                        label="Eni"
+                        type="number"
+                      />
+                      {orderProductDto[index]?.orderProductStatus ===
+                      'THE_GATE_IS_INSIDE_THE_ROOM' ? null : (
+                        <>
+                          {orderProductDto[index]?.orderProductStatus ===
+                          'THE_RAGEL' ? (
+                            <>
+                              <Input
+                                placeholder="Balandlik bir"
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLInputElement>,
+                                ) =>
+                                  handleChange(
+                                    index,
+                                    'dropOffOne',
+                                    e.target.value,
+                                  )
+                                }
+                                value={orderProductDto[index]?.dropOffOne || ''}
+                                label="Balandlik bir"
+                                type="number"
+                              />
+                              <Input
+                                placeholder="Balandlik ikki"
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLInputElement>,
+                                ) =>
+                                  handleChange(
+                                    index,
+                                    'dropOffTwo',
+                                    e.target.value,
+                                  )
+                                }
+                                value={orderProductDto[index]?.dropOffTwo || ''}
+                                label="Balandlik ikki"
+                                type="number"
+                              />
+                            </>
+                          ) : (
+                            <Input
+                              placeholder="Uyning tomonlari"
+                              onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>,
+                              ) =>
+                                handleChange(
+                                  index,
+                                  'howManySidesOfTheHouseAreMade',
+                                  e.target.value,
+                                )
+                              }
+                              label="Tomon"
+                              type="number"
+                              value={
+                                orderProductDto[index]
+                                  ?.howManySidesOfTheHouseAreMade || ''
+                              }
+                            />
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
             <div className="flex gap-10 items-center">
               <Button
                 disabled={
@@ -1198,7 +1211,7 @@ const Calculation = () => {
                 so'm
               </h1>
               <div className="overflow-auto">
-                {total && (
+                {kvData && (
                   <div className="flex gap-2 items-center justify-between border-b border-gray-200 py-2">
                     <h2 className="w-1/3 text-sm font-bold text-gray-800">
                       Nomi
@@ -1212,9 +1225,9 @@ const Calculation = () => {
                   </div>
                 )}
 
-                {total && (
+                {kvData && (
                   <div className="">
-                    {total?.resOrderDetails?.map(
+                    {kvData?.resOrderDetails?.map(
                       (item: {
                         id: number | string;
                         residual: string;
@@ -1248,11 +1261,11 @@ const Calculation = () => {
                 )}
               </div>
 
-              {total && (
+              {kvData && (
                 <div className="mt-4">
                   <h2 className="text-lg font-bold text-gray-800">
                     Yig'indi KV:{' '}
-                    {total.resOrderDetails.reduce(
+                    {kvData.resOrderDetails.reduce(
                       (acc: any, item: { detailKv: number }) =>
                         acc + (item.detailKv || 0),
                       0,
