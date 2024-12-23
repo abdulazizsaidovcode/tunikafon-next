@@ -44,7 +44,7 @@ const Employees = () => {
     phoneNumber: '+998',
     password: '',
   });
-  console.clear();
+ //  console.clear();
   const toggleModal = () => {
     setToggle(!toggle);
     setAll({
@@ -73,7 +73,7 @@ const Employees = () => {
   }
 
   const handleDelete = async () => {
-    console.clear();
+   //  console.clear();
     try {
       await remove('/user?userId=', deleteId);
       deleteToggleModal();
@@ -95,7 +95,7 @@ const Employees = () => {
   };
 
   const handleClick = async () => {
-    console.clear();
+   //  console.clear();
     try {
       if (all.phoneNumber.length !== 13) {
         throw new Error('Raqam mos kelmadi');
@@ -132,7 +132,7 @@ const Employees = () => {
   };
 
   const handleEdit = async () => {
-    console.clear();
+   //  console.clear();
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -188,7 +188,7 @@ const Employees = () => {
       });
     }
   }, [edit, editModal]);
-  console.clear();
+ //  console.clear();
   return (
     <>
       <div className="mx-auto">

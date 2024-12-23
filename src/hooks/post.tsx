@@ -8,7 +8,7 @@ const usePost = () => {
 
   const post = async (url: string, postData: any) => {
     setIsLoading(true);
-    console.clear();
+   //  console.clear();
     setError(null);
     setData(null);
     try {

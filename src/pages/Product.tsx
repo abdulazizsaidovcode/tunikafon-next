@@ -33,7 +33,7 @@ const Product = () => {
   const { put, isLoading: putLoading } = usePut();
 
   const [page, setPage] = useState<number>(0);
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(true);
   const [deleteModal, setDeleteModal] = useState(false);
   const [detailsIds, setDetailIds] = useState<number[]>([]);
   const [deleteId, setDeleteId] = useState<number>();
@@ -42,6 +42,10 @@ const Product = () => {
   const [update, setUpdate] = useState<any>();
   const [editModal, setEditModal] = useState(false);
   const [detailsName, setDeatilsName] = useState<any>([]);
+  const [detailsRowData, setDetailsRowData] = useState<any>(null);
+  const [productDetails, setProductDetails] = useState([]); 
+  const [detail, setDetail] = useState(""); 
+  const [row, setRow] = useState(0); 
 
   const toggleModal = () => {
     setToggle(!toggle);
@@ -83,7 +87,28 @@ const Product = () => {
     }
   };
 
+  // const handleInputChange = (id: number, value: string) => {
+  //   if (/^\d{0,2}$/.test(value)) {
+  //     setDetailsRowData((prev: {} ) => ({
+  //       ...prev,
+  //       [id]: value,
+  //     }));
+  //   }
+  // };
+
   const addProduct = async () => {
+    if (detail.trim() && row) {
+      setProductDetails((prevData: any) => {
+        const existingItem = prevData.find((item: any) => item.row === row); 
+        if (existingItem) {
+          return prevData.map((item: any) =>
+            item.row === row ? { ...item, count: item.count + 1 } : item
+          );
+        } else {
+          return [...prevData, { detail, row, count: 1 }]; 
+        }
+      });
+    }
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -92,7 +117,7 @@ const Product = () => {
 
       await post('/product', {
         name,
-        detailIds: detailsIds,
+        detailIds: productDetails,
         attachmentId,
       });
       get('/product', page);
@@ -101,10 +126,13 @@ const Product = () => {
       setDetailIds([]);
       setFile(null);
       toggleModal();
+      setDetail(""); 
+      setRow(0); 
     } catch (error: any) {
       toast.error(error.message);
     }
   };
+  // console.log(productDetails);
 
   const editProduct = async () => {
     try {
@@ -118,7 +146,12 @@ const Product = () => {
 
       await put('/product', update.id, {
         name,
-        detailIds: detailsIds,
+        productDetails: [
+          {
+            detailId: detailsIds,
+            row: detailsRowData,
+          },
+        ],
         attachmentId: update.attachmentId,
       });
       get('/product', page);
@@ -151,6 +184,7 @@ const Product = () => {
   useEffect(() => {
     get('/product', page);
   }, [page]);
+  console.log(detailsRowData);
 
   useEffect(() => {
     if (update) {
@@ -158,14 +192,13 @@ const Product = () => {
       setDetailIds(update.detailIds ? update.detailIds : []);
     }
   }, [update, editModal]);
-
   return (
     <>
       <Breadcrumb pageName="Mahsulotlar" />
 
       <Button
-        onClick={toggleModal}
-        className="rounded-lg !bg-boxdark shadow my-5 bg-gary-600 px-6 py-3"
+        onClick={() => toggleModal}
+        className={"rounded-lg !bg-boxdark shadow my-5 bg-gary-600 px-6 py-3"}
       >
         Qo'shish
       </Button>
@@ -239,8 +272,15 @@ const Product = () => {
                             containerProps={{ className: 'p-0' }}
                             className="hover:before:content-none"
                           />
-
                           {item.name}
+                          <input
+                            type="number"
+                            placeholder="Soni"
+                            className="rounded outline-none px-1 py-0.5 lg:w-20"
+                            aria-label={`Count for ${item.name}`}
+                            // value={detailsRowData[item.id] || ''}
+                            onChange={(e) => setDetailsRowData(e.target.value)}
+                          />
                         </label>
                       </MenuItem>
                     ))}
@@ -311,7 +351,7 @@ const Product = () => {
                 {details && !detailIsloading ? (
                   <>
                     {details.map((item: any) => (
-                      <MenuItem 
+                      <MenuItem
                         onClick={() => sortDetailIds(item)}
                         key={item.id}
                         className="p-0 !bg-white !text-black active:bg-white/50 hover:bg-white/50 hover:text-black flex items-center w-full"
@@ -328,7 +368,6 @@ const Product = () => {
                             containerProps={{ className: 'p-0' }}
                             className="hover:before:content-none"
                           />
-
                           {item.name}
                         </label>
                       </MenuItem>

@@ -191,7 +191,7 @@ export default function TableOrderAll() {
     )
       return 'bg-blue-500';
   };
-  console.clear();
+ //  console.clear();
   return (
     <div>
       <h1 className="text-2xl  text-boxdark font-semibold ">

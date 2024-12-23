@@ -7,7 +7,7 @@ const useGet = () => {
   const [error, setError] = useState<any>(null);
 
   const get = async (url: string, page?: any, setDatas?: (data: any) => void) => {
-    console.clear();
+   //  console.clear();
     setIsLoading(true);
 
     try {

@@ -128,7 +128,7 @@ export default function Groups() {
     get('/group/all/list');
     getUser('/user/employees/group-not');
   }, []);
-  console.clear();
+ //  console.clear();
   return (
     <div>
       <Breadcrumb pageName="Guruhlar" />

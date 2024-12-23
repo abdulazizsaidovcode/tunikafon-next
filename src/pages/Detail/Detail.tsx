@@ -102,7 +102,7 @@ const Detail = () => {
       else if (bIndex === 0 && aIndex !== 0) return 1;
       else return aIndex - bIndex;
     });
-    console.clear();
+   //  console.clear();
   return (
     <div className="select-none">
       <Breadcrumb pageName="Detallar" />
