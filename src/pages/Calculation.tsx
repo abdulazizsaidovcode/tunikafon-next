@@ -61,35 +61,27 @@ const Calculation = () => {
     return number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
 
-  const handleInputChange = (
-    id: number,
-    index: number,
-    value: string,
-  ) => {
-    setOrderProductDto((prev: any) => {
-      return prev.map((product: any, i: number) => {
-        if (index === i) {
-          return {
-            ...product,
-            orderDetails: product.orderDetails.map((data: any, idx: number) => {
-              if (id === idx) {
-                console.log("hghghghhgghhghghghghghghghghhghghhhhg" , data);
-                
-                return {
-                  "detailId": data.detailId || 0,
-                  "count": +value,
-                  "number": data.row || 0,
-                  "color": "string"
-                };
-              }
-              return data;
-            }),
-          };
-        }
-        return product;
-      });
-    });
+  const handleInputChange = (id: number, index: number, value: string) => {
+    setOrderProductDto((prev : any) =>
+      prev.map((product : any, i : number)  =>
+        i === index
+          ? {
+              ...product,
+              orderDetails: product.orderDetails.map((data : any, idx : any) =>
+                idx === id
+                  ? {
+                      ...data,
+                      count: +value,
+                      color: 'string', 
+                    }
+                  : data
+              ),
+            }
+          : product
+      )
+    );
   };
+  
 
   const handleChange = (
     index: number,
