@@ -18,6 +18,7 @@ import EmployeeRoute from './layout/Employee';
 import useGet from './hooks/get';
 import Groups from './pages/Groups/Groups';
 import Orders from './pages/Orders/Orders';
+import CalculationDefault from './pages/CalculationDefault';
 
 function App() {
   const { pathname } = useLocation();
@@ -125,6 +126,15 @@ function App() {
                     <>
                       <PageTitle title="Calculation" />
                       <Calculation />
+                    </>
+                  }
+                />
+                <Route
+                  path="/calculationSome"
+                  element={
+                    <>
+                      <PageTitle title="Calculation" />
+                      <CalculationDefault />
                     </>
                   }
                 />

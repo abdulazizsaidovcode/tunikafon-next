@@ -21,8 +21,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
-
-  // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
@@ -200,7 +198,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   className={`${styles.sidemenu} ${pathname.includes('/calculation') && 'bg-gray border-[#003543]'}`}
                 >
                   <BsFileSpreadsheet />
-                  Hisoblash
+                  Shablon bo'yicha Hisoblash
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  to="/calculationSome"
+                  className={`${styles.sidemenu} ${pathname.includes('/calculation') && 'bg-gray border-[#003543]'}`}
+                >
+                  <BsFileSpreadsheet />
+                  Qo'lda Hisoblash
                 </NavLink>
               </li>
               <li>
