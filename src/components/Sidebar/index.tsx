@@ -194,8 +194,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  to="/calculation"
-                  className={`${styles.sidemenu} ${pathname.includes('/calculation') && 'bg-gray border-[#003543]'}`}
+                  to="/Calculation"
+                  className={`${styles.sidemenu} ${pathname.includes('/Calculation') && 'bg-gray border-[#003543]'}`}
                 >
                   <BsFileSpreadsheet />
                   Shablon bo'yicha Hisoblash

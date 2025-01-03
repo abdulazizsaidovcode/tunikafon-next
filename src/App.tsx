@@ -121,7 +121,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/calculation"
+                  path="/Calculation"
                   element={
                     <>
                       <PageTitle title="Calculation" />

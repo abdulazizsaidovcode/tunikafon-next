@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useLogin from '../../hooks/useLogin';
 import { toast } from 'sonner';
-import { Button } from '@material-tailwind/react';
+import { Button } from '../../components/Button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignIn: React.FC = () => {
