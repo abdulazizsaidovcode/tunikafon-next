@@ -559,7 +559,7 @@ const CalculationDefault = () => {
                             </div>
                             <input
                               type="number"
-                              placeholder="Soni"
+                              placeholder="Ishlatiladigan soni"
                               onChange={(e) =>
                                 handleInputChange(
                                   i,
@@ -572,7 +572,7 @@ const CalculationDefault = () => {
                             />
                             <input
                               type="number"
-                              placeholder="Raqam"
+                              placeholder="Tartib raqami"
                               className="rounded outline-none px-1 py-0.5"
                               onChange={(e) =>
                                 handleInputChange(
