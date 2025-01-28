@@ -533,7 +533,7 @@ const CalculationDefault = () => {
                       </Link>
                     </div>
                   )}
-                  {detailCategory && (
+                  {detailCategory && ( 
                     <div className="w-full lg:w-1/2 h-[350px] overflow-y-auto flex flex-col items-center gap-2 border border-[#64748B] rounded-lg p-5">
                       {item.orderDetails.length > 0 ? (
                         item.orderDetails.map((detail: any, i: number) => (
